@@ -50,3 +50,4 @@ Screen capture shows the views available.
 I would expect you might use this class in your APP to allow a quick way to view files before import. You probably will want to remove some of the features that would confuse end users, like the Picture thing and Menu.
 
 There is also a SystemStringClass version. That class has no ability to deal with CSV type quoted values.
+
