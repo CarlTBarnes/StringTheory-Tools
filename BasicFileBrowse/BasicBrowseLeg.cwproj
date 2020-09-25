@@ -1,0 +1,50 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{BF593E8A-B42E-4228-BC35-685C814D2114}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>BasicBrowseLeg</RootNamespace>
+    <AssemblyName>BasicBrowseLeg</AssemblyName>
+    <OutputName>BasicBrowseLeg</OutputName>
+    <CWOutputType>Exe</CWOutputType>
+    <DefineConstants>
+    </DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <vid>full</vid>
+    <check_stack>True</check_stack>
+    <check_index>True</check_index>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <vid>off</vid>
+    <check_stack>False</check_stack>
+    <check_index>False</check_index>
+  </PropertyGroup>
+  <ItemGroup>
+    <FileDriver Include="BASIC" />
+    <Compile Include="BasicBrowseLeg.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="BasicBrowseLeg001.clw">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="BasicBrowseLeg_RD.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="BasicBrowseLeg_RU.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="BasicBrowseLeg_SF.CLW">
+      <Generated>true</Generated>
+    </Compile>
+    <Compile Include="ResCode.Clw">
+      <Generated>true</Generated>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(ClarionBinPath)\SoftVelocity.Build.Clarion.targets" />
+</Project>

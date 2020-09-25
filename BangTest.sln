@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+# Clarion 2.1.0.2447
+Project("{12B76EC0-1D7B-4FA7-A7D0-C524288B48A1}") = "BangTest", "BangTest.cwproj", "{6C393FFC-E9F2-474F-8FB7-493BD1E0AA10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C393FFC-E9F2-474F-8FB7-493BD1E0AA10}.Debug|Win32.Build.0 = Debug|Win32
+		{6C393FFC-E9F2-474F-8FB7-493BD1E0AA10}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6C393FFC-E9F2-474F-8FB7-493BD1E0AA10}.Release|Win32.Build.0 = Release|Win32
+		{6C393FFC-E9F2-474F-8FB7-493BD1E0AA10}.Release|Win32.ActiveCfg = Release|Win32
+	EndGlobalSection
+EndGlobal

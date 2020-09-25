@@ -1,0 +1,4275 @@
+[APPLICATION]
+VERSION 34
+TODO Clarion ToDo
+DICTIONARY 'BasicFiles.dct'
+PROCEDURE Main
+[COMMON]
+FROM Clarion
+MODIFIED '2020/09/24' '20:43:58'
+[PROMPTS]
+%GlobalUseABCClasess LONG  (0)
+%ClassItem UNIQUE DEFAULT  ('ClientSideTriggers:EmpPosCSV')
+%DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 0
+
+%ActualDefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 0
+
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+
+%ExternalSource DEFAULT  ('Statically Linked Library (LIB)')
+%ProgramAuthor DEFAULT  ('')
+%ProgramIcon DEFAULT  ('')
+%MessageDescription LONG  (0)
+%GlobalExternal LONG  (0)
+%DefaultExportGlobalData LONG  (1)
+%GenerateEmbedComments LONG  (0)
+%INIActive LONG  (0)
+%INIFile DEFAULT  ('Program Name.INI')
+%ININame DEFAULT  ('')
+%INIProgramIniLocation DEFAULT  ('APPDIR')
+%INICSIDLDirectory DEFAULT  ('SV:CSIDL_PERSONAL')
+%CSIDLCompanyDir DEFAULT  ('')
+%CSIDLProductDir DEFAULT  ('')
+%CSIDLCreate LONG  (0)
+%INIInAppDirectory LONG  (0)
+%ButtonMarginsCompatibility LONG  (0)
+%UseDefaultXPManifest LONG  (0)
+%GenerateXPManifest LONG  (0)
+%LinkGenerateXPManifest LONG  (0)
+%AddVistaXPManifest LONG  (0)
+%VistaManifestExecutionLevel DEFAULT  ('asInvoker')
+%VistaManifestUIAccess LONG  (0)
+%NoThemedControlsDependency LONG  (0)
+%VistaManifestdpiAware LONG  (1)
+%VistaManifestDependentAssembly MULTI LONG  ()
+%VistaManifestDependentAssemblyName DEPEND %VistaManifestDependentAssembly DEFAULT TIMES 0
+
+%VistaManifestDependentAssemblyVersion DEPEND %VistaManifestDependentAssembly DEFAULT TIMES 0
+
+%VistaManifestDependentAssemblyType DEPEND %VistaManifestDependentAssembly DEFAULT TIMES 0
+
+%VistaManifestDependentAssemblyPublicKeyToken DEPEND %VistaManifestDependentAssembly DEFAULT TIMES 0
+
+%VistaManifestDependentAssemblyLanguage DEPEND %VistaManifestDependentAssembly DEFAULT TIMES 0
+
+%VistaManifestDependentAssemblyProcessorArchitecture DEPEND %VistaManifestDependentAssembly LONG TIMES 0
+
+%W7ManifestVista LONG  (1)
+%W7ManifestW7 LONG  (1)
+%W7ManifestW8 LONG  (1)
+%W7ManifestW81 LONG  (1)
+%W7ManifestW10 LONG  (1)
+%ForceMakeTransparentXPManifest LONG  (0)
+%ForceMakeColorXPManifest LONG  (0)
+%ForceSHEETNoTheme LONG  (0)
+%ExtUIXPMenuEnableGlobal LONG  (0)
+%ExtUIXPMenuColorTypeGlobal DEFAULT  ('OFF')
+%ExtUIXPMenuDisableImageBar LONG  (1)
+%ExtUIXPMenuEnableRuntime LONG  (0)
+%ExtUIXPMenuRuntimeVar DEFAULT  ('')
+%ExtUIXPMenuColorLeftGlobal LONG  (15920364)
+%ExtUIXPMenuColorRightGlobal LONG  (12560039)
+%ExtUIXPMenuColorSelectionBarLeftGlobal LONG  (15920364)
+%ExtUIXPMenuColorSelectionBarRightGlobal LONG  (15920364)
+%ExtUIXPMenuSelVertical LONG  (1)
+%ExtUIXPMenuColorSelectionBorderGlobal LONG  (15920364)
+%ExtUIXPMenuColorHotLeftGlobal LONG  (15920364)
+%ExtUIXPMenuColorHotRightGlobal LONG  (15920364)
+%ExtUIXPMenuColorSelectedLeftGlobal LONG  (15920364)
+%ExtUIXPMenuColorSelectedRightGlobal LONG  (15920364)
+%ExtUIXPMenuColorNormalBarLeftGlobal LONG  (15920364)
+%ExtUIXPMenuColorNormalBarRightGlobal LONG  (15920364)
+%ExtUIXPMenuColorItemBackgroundGlobal LONG  (-2147483644)
+%ExtUIXPMenuColorNormalText LONG  (0)
+%ExtUIXPMenuColorSelectedText LONG  (0)
+%ExtUIXPMenuColorHotText LONG  (0)
+%ExtUIXPMenuFlat LONG  (1)
+%ExtUIXPMenuShowImageBar LONG  (0)
+%ExtUIXPMenuSeparator3D LONG  (1)
+%ExtUIXPMenuSeparatorFull LONG  (0)
+%ExtUIXPMenuVerticalLine LONG  (1)
+%ExtUIMDITabGlobal DEFAULT  ('DISABLE')
+%ExtUIMDITabStyleGlobal DEFAULT  ('Default')
+%ExtUITabStyleGlobal DEFAULT  ('Default')
+%WindowEnableEnhanceFocus LONG  (0)
+%SelectedText LONG  (1)
+%SelectedRadio LONG  (1)
+%SelectedSpin LONG  (1)
+%SelectedCheck LONG  (1)
+%SelectedDropList LONG  (1)
+%SelectedList LONG  (1)
+%SelectedDisplayChangeColor LONG  (1)
+%SelectedColor LONG  (65535)
+%SelectedStyle LONG  (1)
+%SelectedRequired LONG  (0)
+%SelectedRequiredColor LONG  (65535)
+%SelectedDisplayBox LONG  (1)
+%SelectedDisplayBoxFillColor LONG  (65535)
+%SelectedDisplayBoxBorderColor LONG  (0)
+%SelectedDisplayBoxBorderSize DEFAULT  ('2')
+%SelectedRequiredBox LONG  (0)
+%SelectedRequiredDisplayBoxFillColor LONG  (255)
+%SelectedRequiredDisplayBoxBorderColor LONG  (0)
+%SelectedCaret LONG  (1)
+%SelectedCaretColor LONG  (8421504)
+%SelectedCaretCharacter DEFAULT  ('»')
+%SelectedCaretCharacterSeparation DEFAULT  ('8')
+%ExcludeSelectedDropList LONG  (0)
+%EnableOSK DEFAULT  ('OFF')
+%GlobalUseEnterInsteadTab LONG  (0)
+%GlobalUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%GlobalUseEnterInsteadTabEnable DEFAULT  ('Enable')
+%GlobalUseEnterInsteadTabEnableValue DEFAULT  ('True')
+%GlobalReportPreviewMode DEFAULT  ('Procedure')
+%GlobalReportPreview DEFAULT  ('ReportPreview')
+%GlobalInterLine DEFAULT  ('0')
+%GlobalEnableAutoSizeColumn LONG  (0)
+%GlobalEnableListFormatManager LONG  (0)
+%GlobalUserFieldListFormatManager DEFAULT  ('1')
+%TableOrigin DEFAULT  ('Application')
+%FileEquate DEFAULT  ('LFM_CFile')
+%ConfigFilePRE DEFAULT  ('CFG')
+%ConfigFileOEM LONG  (0)
+%ConfigFileTHREAD LONG  (1)
+%ConfigFileENCRYPT LONG  (0)
+%ConfigFilePASSWORD DEFAULT  ('')
+%FormatNameSize DEFAULT  ('30')
+%FormatBufferSize DEFAULT  ('5120')
+%VariableBufferSize DEFAULT  ('2048')
+%ConfigFilePath DEFAULT  ('')
+%UseConfigFileName DEFAULT  ('Default')
+%ConfigFileNAME DEFAULT  ('Formats.FDB')
+%ColonCounter DEFAULT  ('')
+%WrongSymbol DEFAULT  ('')
+%DictionaryTableOrigin FILE  ()
+%GlobalLFMSortOrderMenuText DEFAULT  ('SortOrder')
+%GlobalBrowseActiveInvisible LONG  (1)
+%GlobalEnableRebase LONG  (0)
+%RBDMethod DEFAULT  ('Specify manually')
+%RBDImageBase DEFAULT  ('10000000')
+%DefaultGenerate LONG  (0)
+%DefaultCloseFile DEFAULT  ('Close the File')
+%DefaultRILogout LONG  (1)
+%WarnOnLogoutError LONG  (1)
+%LockRecoverTime DEFAULT  ('10')
+%DefaultThreaded DEFAULT  ('Use File Setting')
+%DefaultCreate DEFAULT  ('Use File Setting')
+%DefaultExternal DEFAULT  ('None External')
+%DefaultLocalExternal LONG  (0)
+%DefaultExternalSource DEFAULT  ('')
+%DefaultExternalAPP LONG  (0)
+%DefaultExport LONG  (0)
+%TriggersSupportEnableGlobal LONG  (0)
+%TriggersManagerType DEFAULT  ('TriggerManager')
+%GlobalObject DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('ClientSideTriggers:EmpPosCSV') ('YES')
+
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 0
+
+%UseDefaultABCBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('ClientSideTriggers:EmpPosCSV') (1)
+
+%UseABCBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('ClientSideTriggers:EmpPosCSV') (1)
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('ClientSideTriggers:EmpPosCSV') ('')
+
+%ExtBaseClass DEPEND %ClassItem DEFAULT TIMES 0
+
+%BaseClassIncludeFile DEPEND %ClassItem DEFAULT TIMES 0
+
+%DeriveFromBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('ClientSideTriggers:EmpPosCSV') (0)
+
+%NewMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewMethodName DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewMethodPrototype DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewClassProperty DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataType DEPEND %NewClassPropertyItems DEFAULT TIMES 1
+WHEN  ('ClientSideTriggers:EmpPosCSV')TIMES 0
+
+%NewClassOtherType DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataIsRef DEPEND %NewClassPropertyItems LONG TIMES 0
+
+%NewClassDataSize DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim1 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim2 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim3 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim4 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%ClassMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassMethodName DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassMethodPrototype DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassProperty DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataType DEPEND %ClassPropertyItems DEFAULT TIMES 1
+WHEN  ('ClientSideTriggers:EmpPosCSV')TIMES 0
+
+%ClassOtherType DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataIsRef DEPEND %ClassPropertyItems LONG TIMES 0
+
+%ClassDataSize DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim1 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim2 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim3 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%DefaultOpenMode DEFAULT  ('Share')
+%DefaultUserAccess DEFAULT  ('Read/Write')
+%DefaultOtherAccess DEFAULT  ('Deny None')
+%GeneratePropDataPath LONG  (0)
+%PropDataPathLocation DEFAULT  ('CSIDLLIKEINI')
+%DataPathCSIDLDirectory DEFAULT  ('SV:CSIDL_PERSONAL')
+%DataPathCSIDLCompanyDir DEFAULT  ('')
+%DataPathCSIDLProductDir DEFAULT  ('')
+%DataPathCSIDLCreate LONG  (0)
+%DataPathOtherDirectory DEFAULT  ('')
+%DataPathOtherDirectoryCreate LONG  (0)
+%OverrideGenerate DEPEND %File LONG TIMES 0
+
+%OverrideCloseFile DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%OverrideRILogout DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%OverrideThreaded DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%OverrideCreate DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%OverrideExternal DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%OverrideLocalExternal DEPEND %File LONG TIMES 0
+
+%OverrideExternalSource DEPEND %File DEFAULT TIMES 0
+
+%OverrideExternalAPP DEPEND %File LONG TIMES 0
+
+%OverrideExport DEPEND %File LONG TIMES 0
+
+%OverrideOpenMode DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%OverrideUserAccess DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%OverrideOtherAccess DEPEND %File DEFAULT TIMES 2
+WHEN  ('') ('Use Default')
+WHEN  ('EmpPosCSV') ('Use Default')
+
+%NoGenerateGlobals LONG  (0)
+%OverrideAbcSettings LONG  (0)
+%AbcSourceLocation DEFAULT  ('LINK')
+%AbcLibraryName DEFAULT  ('')
+%CWBrowseEIPManagerType DEFAULT  ('CWEIPManager')
+%EditInPlaceEntryType DEFAULT  ('EditEntryClass')
+%EditInPlaceTextType DEFAULT  ('EditTextClass')
+%EditInPlaceCheckType DEFAULT  ('EditCheckClass')
+%EditInPlaceSpinType DEFAULT  ('EditSpinClass')
+%EditInPlaceDropListType DEFAULT  ('EditDropListClass')
+%EditInPlaceDropComboType DEFAULT  ('EditDropComboClass')
+%EditInPlaceColorType DEFAULT  ('EditColorClass')
+%EditInPlaceFileType DEFAULT  ('EditFileClass')
+%EditInPlaceFontType DEFAULT  ('EditFontClass')
+%EditInPlaceMultiSelectType DEFAULT  ('EditMultiSelectClass')
+%EditInPlaceCalendarType DEFAULT  ('EditCalendarClass')
+%EditInPlaceLookupType DEFAULT  ('EditLookupClass')
+%EditInPlaceOtherType DEFAULT  ('EditEntryClass')
+%PrintPreviewType DEFAULT  ('PrintPreviewClass')
+%ReportTargetSelectorManagerType DEFAULT  ('ReportTargetSelectorClass')
+%CalendarManagerType DEFAULT  ('CalendarClass')
+%GlobalChangeColor LONG  (0)
+%GlobalColorSunday LONG  (255)
+%GlobalColorSaturday LONG  (255)
+%GlobalColorHoliday LONG  (32768)
+%GlobalColorOther LONG  (0)
+%GlobalSelectOnClose DEFAULT  ('Select and Close')
+%AppTemplateFamily DEFAULT  ('CLARION')
+%CWTemplateVersion DEFAULT  ('v11.0')
+[PERSIST]
+%GenerationCompleted DEPEND %Module DEFAULT TIMES 2
+WHEN  ('BasicBrowseLeg.clw') ('1')
+WHEN  ('BasicBrowseLeg001.clw') ('1')
+
+%LastTarget32 DEFAULT  ('1')
+%LastProgramExtension DEFAULT  ('EXE')
+%LastApplicationDebug DEFAULT  ('1')
+%LastApplicationLocalLibrary DEFAULT  ('')
+[PROJECT]
+-- OUTPUTPATH D:\Dev10\CapeSoft\StringTheory\BasicBrwApp
+#system win32 exe
+#model clarion dll
+#pragma debug(vid=>full)
+#compile "BasicBrowseLeg.clw" -- GENERATED
+#compile "BasicBrowseLeg001.clw" -- GENERATED
+#compile "BasicBrowseLeg_RD.CLW" -- GENERATED
+#compile "BasicBrowseLeg_RU.CLW" -- GENERATED
+#compile "BasicBrowseLeg_SF.CLW" -- GENERATED
+#link "BasicBrowseLeg.EXE"
+[PROGRAM]
+[COMMON]
+FROM Clarion Clarion
+MODIFIED '2020/09/24' '20:43:58'
+[END]
+[MODULE]
+[COMMON]
+FROM Clarion GENERATED
+MODIFIED '2020/09/24' '20:43:58'
+[PROCEDURE]
+NAME Main
+[COMMON]
+DESCRIPTION 'Clarion for Windows Wizard Application for BasicFiles.dct'
+FROM Clarion Frame
+MODIFIED '2020/09/25' '11:55:35'
+[DATA]
+LocalRequest             LONG
+!!> GUID('a0d74bb2-971a-4629-939c-53e3c28f688f')
+OriginalRequest          LONG
+!!> GUID('80fc6291-f3f4-4866-972d-55c180763ae5')
+LocalResponse            LONG
+!!> GUID('33f9ec9c-3ce8-4c77-9127-a0cdd4928dfc')
+FilesOpened              LONG
+!!> GUID('a2bfcc97-28a7-463b-8f71-de74bcb4abc9')
+WindowOpened             LONG
+!!> GUID('fcdcd372-ea8a-4037-8d52-e16ad60bd8ca')
+WindowInitialized        LONG
+!!> GUID('e6bb85a8-cc45-46c2-b40e-4a10fde14c4b')
+ForceRefresh             LONG
+!!> GUID('535739e1-4e07-4ab1-bb42-6dbc6dd7a444')
+CurrentTab               STRING(80)
+!!> GUID('239fadbb-b39b-4c33-a38e-a4fe03ff6fe5')
+[PROMPTS]
+%ButtonAction DEPEND %Control DEFAULT TIMES 14
+WHEN  ('?Arrange') ('No Special Action')
+WHEN  ('?BrowseEmpPosCSV') ('Call a Procedure')
+WHEN  ('?Cascade') ('No Special Action')
+WHEN  ('?Copy') ('No Special Action')
+WHEN  ('?Cut') ('No Special Action')
+WHEN  ('?Exit') ('No Special Action')
+WHEN  ('?HelpOnHelp') ('No Special Action')
+WHEN  ('?HelpSearch') ('No Special Action')
+WHEN  ('?Helpindex') ('No Special Action')
+WHEN  ('?Paste') ('No Special Action')
+WHEN  ('?PrintSetup') ('No Special Action')
+WHEN  ('?ProcessEmpPosCSV') ('Call a Procedure')
+WHEN  ('?ReportEmpPosCSV') ('Call a Procedure')
+WHEN  ('?Tile') ('No Special Action')
+
+%ButtonRunName DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?BrowseEmpPosCSV') ('')
+WHEN  ('?ProcessEmpPosCSV') ('')
+WHEN  ('?ReportEmpPosCSV') ('')
+
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?BrowseEmpPosCSV') ('')
+WHEN  ('?ProcessEmpPosCSV') ('')
+WHEN  ('?ReportEmpPosCSV') ('')
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 3
+WHEN  ('?BrowseEmpPosCSV') (BrowseEmpPosCSV)
+WHEN  ('?ProcessEmpPosCSV') (ProcessEmpPosCSV)
+WHEN  ('?ReportEmpPosCSV') (ReportEmpPosCSV)
+
+%ButtonThread DEPEND %Control LONG TIMES 3
+WHEN  ('?BrowseEmpPosCSV') (1)
+WHEN  ('?ProcessEmpPosCSV') (1)
+WHEN  ('?ReportEmpPosCSV') (1)
+
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 14
+WHEN  ('?Arrange') ('25000')
+WHEN  ('?BrowseEmpPosCSV') ('050000')
+WHEN  ('?Cascade') ('25000')
+WHEN  ('?Copy') ('25000')
+WHEN  ('?Cut') ('25000')
+WHEN  ('?Exit') ('25000')
+WHEN  ('?HelpOnHelp') ('25000')
+WHEN  ('?HelpSearch') ('25000')
+WHEN  ('?Helpindex') ('25000')
+WHEN  ('?Paste') ('25000')
+WHEN  ('?PrintSetup') ('25000')
+WHEN  ('?ProcessEmpPosCSV') ('25000')
+WHEN  ('?ReportEmpPosCSV') ('050000')
+WHEN  ('?Tile') ('25000')
+
+%ButtonParameters DEPEND %Control DEFAULT TIMES 3
+WHEN  ('?BrowseEmpPosCSV') ('')
+WHEN  ('?ProcessEmpPosCSV') ('')
+WHEN  ('?ReportEmpPosCSV') ('')
+
+%ButtonRequest DEPEND %Control DEFAULT TIMES 14
+WHEN  ('?Arrange') ('None')
+WHEN  ('?BrowseEmpPosCSV') ('')
+WHEN  ('?Cascade') ('None')
+WHEN  ('?Copy') ('None')
+WHEN  ('?Cut') ('None')
+WHEN  ('?Exit') ('None')
+WHEN  ('?HelpOnHelp') ('None')
+WHEN  ('?HelpSearch') ('None')
+WHEN  ('?Helpindex') ('None')
+WHEN  ('?Paste') ('None')
+WHEN  ('?PrintSetup') ('None')
+WHEN  ('?ProcessEmpPosCSV') ('None')
+WHEN  ('?ReportEmpPosCSV') ('')
+WHEN  ('?Tile') ('None')
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+
+%ReturnValue FIELD  ()
+%WindowOperationMode DEFAULT  ('Use WINDOW setting')
+%INISaveWindow LONG  (1)
+%ProcedureDisableEnhanceFocus LONG  (0)
+%ProcedureUseEnterInsteadTabOverride LONG  (0)
+%WindowUseEnterInsteadTab LONG  (1)
+%ProcedureUseEnterInsteadTabExcludeListCombo LONG  (0)
+%ProcedureUseEnterInsteadTabEnableNextTabStop LONG  (0)
+%ProcedureUseEnterInsteadTabExcludeG LONG  (1)
+%WindowUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%WindowStyles MULTI LONG  ()
+%WindowStyleFontName DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontSize DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontStyle DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontColor DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontCharSet DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStylePicture DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleOtherListboxes MULTI DEFAULT  ()
+%ProcedureAutoBindFields MULTI LONG  ()
+%ProcedureAutoBindField DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldTPL DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedures MULTI LONG  ()
+%ProcedureAutoBindProcedure DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedureTPL DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldsIgnored MULTI LONG  ()
+%ProcedureAutoBindFieldIgnored DEPEND %ProcedureAutoBindFieldsIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindProceduresIgnored MULTI LONG  ()
+%ProcedureAutoBindProcedureIgnored DEPEND %ProcedureAutoBindProceduresIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindValidToAddField LONG  (1)
+%ProcedureUserBindFields MULTI LONG  ()
+%ProcedureUserBindField DEPEND %ProcedureUserBindFields FIELD TIMES 0
+
+%ProcedureAutoBindFieldIgnore DEPEND %ProcedureAutoBindFields LONG TIMES 0
+
+%ProcedureUserBindProcedures MULTI LONG  ()
+%ProcedureUserBindProcedure DEPEND %ProcedureUserBindProcedures PROCEDURE TIMES 0
+
+%ProcedureAutoBindProcedureIgnore DEPEND %ProcedureAutoBindProcedures LONG TIMES 0
+
+%ProcedureUserBindExpressions MULTI LONG  ()
+%ProcedureUserBindExpressionName DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ProcedureUserBindExpression DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%SplashProcedure PROCEDURE  ()
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ()
+
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ('')
+
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ()
+
+%PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (1)
+
+%LookupAssign DEPEND %Control MULTI LONG TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%CheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedAssignVariable DEPEND %CheckedAssigns FIELD TIMES 0
+
+%CheckedAssignValue DEPEND %CheckedAssigns DEFAULT TIMES 0
+
+%CheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV')TIMES 0
+
+%CheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV')TIMES 0
+
+%UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%UncheckedAssignVariable DEPEND %UncheckedAssigns FIELD TIMES 0
+
+%UncheckedAssignValue DEPEND %UncheckedAssigns DEFAULT TIMES 0
+
+%UnCheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV')TIMES 0
+
+%UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV')TIMES 0
+
+%ExtUITabIcon DEPEND %Control DEFAULT TIMES 0
+
+%ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
+
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ('Default')
+
+%ActiveImageEnable DEPEND %Control LONG TIMES 0
+
+%AIObjectName DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ('AIBtn15')
+
+%AIEnableMimicControl DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (1)
+
+%AIMimicControl DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ('?MENUBAR1')
+
+%AIImgRound DEPEND %Control LONG TIMES 0
+
+%AIOverrideImg DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+%AIDisableImg DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+%AIHotImg DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+%AIPressedImg DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ('Off')
+
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?ProcessEmpPosCSV') ('')
+
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (-1)
+
+%FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+%FieldGradientColorTo DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (-1)
+
+%FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?ProcessEmpPosCSV') (0)
+
+[EMBED]
+EMBED %PostWindowEventHandling
+[INSTANCES]
+WHEN 'OpenWindow'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+POST(EVENT:Accepted,?BrowseEmpPosCSV)
+[END]
+[END]
+[END]
+[WINDOW]
+AppFrame APPLICATION('Browse of Basic File Example'),AT(,,750,318),FONT('Microsoft Sans Serif', |
+          8,,FONT:regular),RESIZE,CENTER,ICON('WAFRAME.ICO'),MAX,STATUS(-1,80,120,45),SYSTEM
+          MENUBAR,USE(?MENUBAR1),#ORDINAL(1)
+            MENU('&File'),USE(?FileMenu),#ORDINAL(2)
+              ITEM('&Print Setup ...'),USE(?PrintSetup),MSG('Setup printer'),STD(STD:PrintSetup), |
+                #ORDINAL(3)
+              ITEM,USE(?SEPARATOR1),SEPARATOR,#ORDINAL(4)
+              ITEM('E&xit'),USE(?Exit),MSG('Exit this application'),STD(STD:Close),#ORDINAL(5)
+            END
+            MENU('&Edit'),USE(?EditMenu),#ORDINAL(6)
+              ITEM('Cu&t'),USE(?Cut),MSG('Cut Selection To Clipboard'),STD(STD:Cut),#ORDINAL(7)
+              ITEM('&Copy'),USE(?Copy),MSG('Copy Selection To Clipboard'),STD(STD:Copy),#ORDINAL(8)
+              ITEM('&Paste'),USE(?Paste),MSG('Paste From Clipboard'),STD(STD:Paste),#ORDINAL(9)
+            END
+            MENU('&Browse'),USE(?BrowseMenu),#ORDINAL(10)
+              ITEM('Browse the EmpPosCSV file'),USE(?BrowseEmpPosCSV),MSG('Browse EmpPosCSV'), |
+                #ORDINAL(11)
+            END
+            MENU('&Reports'),USE(?ReportMenu),MSG('Report data'),#ORDINAL(12)
+              ITEM('Print the EmpPosCSV file'),USE(?ReportEmpPosCSV),MSG('Print in record order'), |
+                #ORDINAL(13)
+            END
+            MENU('&Process'),USE(?ProcessMenu),#ORDINAL(14)
+              ITEM('Proccess Template on EmpPosCSV file'),USE(?ProcessEmpPosCSV),#ORDINAL(15)
+            END
+            MENU('&Window'),USE(?WindowMenu),STD(STD:WindowList),#ORDINAL(16)
+              ITEM('T&ile'),USE(?Tile),MSG('Arrange multiple opened windows'),STD(STD:TileWindow), |
+                #ORDINAL(17)
+              ITEM('&Cascade'),USE(?Cascade),MSG('Arrange multiple opened windows'),STD(STD:CascadeWindow), |
+                #ORDINAL(18)
+              ITEM('&Arrange Icons'),USE(?Arrange),MSG('Arrange the icons for minimized windows'), |
+                STD(STD:ArrangeIcons),#ORDINAL(19)
+            END
+            MENU('&Help'),USE(?HelpMenu),#ORDINAL(20)
+              ITEM('&Contents'),USE(?Helpindex),MSG('View the contents of the help file'), |
+                STD(STD:HelpIndex),#ORDINAL(21)
+              ITEM('&Search for Help On...'),USE(?HelpSearch),MSG('Search for help on a subject'), |
+                STD(STD:HelpSearch),#ORDINAL(22)
+              ITEM('&How to Use Help'),USE(?HelpOnHelp),MSG('Provides general instructi' & |
+                'ons on using help'),STD(STD:HelpOnHelp),#ORDINAL(23)
+            END
+          END
+        END
+
+[PROCEDURE]
+NAME BrowseEmpPosCSV
+[COMMON]
+DESCRIPTION 'Browse the EmpPosCSV file'
+FROM Clarion Browse
+CATEGORY 'Browse'
+MODIFIED '2020/09/25' '11:09:04'
+[DATA]
+CurrentTab               STRING(80)
+!!> GUID('02babf47-bff3-4b2c-999b-75fde46e065d')
+LocalRequest             LONG
+!!> GUID('65696f9c-1e4b-409d-9836-797054fae8c1')
+OriginalRequest          LONG
+!!> GUID('73888646-d4b7-4dce-9e2c-1b46ff3d0978')
+LocalResponse            LONG
+!!> GUID('10cf2d22-1328-4746-8ff7-ee1c6abc6e6f')
+FilesOpened              LONG
+!!> GUID('a4b2f492-05ed-47ed-bcfb-371ecdbd798b')
+WindowOpened             LONG
+!!> GUID('ab590357-6aae-401e-a38e-7cabfd62a48c')
+WindowInitialized        LONG
+!!> GUID('dac814c6-f150-4e3f-8e11-03a3a903da3b')
+ForceRefresh             LONG
+!!> GUID('62dcdafe-79e5-4ff5-8c0d-7aadc372934c')
+RecordFiltered           LONG
+!!> GUID('dd920ba6-78ed-4b6d-92ed-8978f92de3d0')
+[SCREENCONTROLS]
+! CHECK('Row One Hide'),USE(RowOneHide)
+[REPORTCONTROLS]
+! CHECK('Row One Hide'),USE(RowOneHide)
+RowOneHide               BYTE
+!!> GUID('bbf934bc-ffb0-4dff-99d4-fdbac7a24ad0'),VALID(BOOLEAN),PROMPT('Row One Hide'),HEADER('Row One Hide'),PICTURE(@n3),TYPEMODE(INS)
+[FILES]
+[PRIMARY]
+EmpPosCSV
+[INSTANCE]
+1
+[PROMPTS]
+%ButtonAction DEPEND %Control DEFAULT TIMES 5
+WHEN  ('') ('No Special Action')
+WHEN  ('?Close') ('No Special Action')
+WHEN  ('?Insert:3') ('No Special Action')
+WHEN  ('?RowOneHide') ('No Special Action')
+WHEN  ('?View:2') ('No Special Action')
+
+%ButtonRunName DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ButtonThread DEPEND %Control LONG TIMES 0
+
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 5
+WHEN  ('') ('25000')
+WHEN  ('?Close') ('25000')
+WHEN  ('?Insert:3') ('25000')
+WHEN  ('?RowOneHide') ('25000')
+WHEN  ('?View:2') ('25000')
+
+%ButtonParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRequest DEPEND %Control DEFAULT TIMES 5
+WHEN  ('') ('None')
+WHEN  ('?Close') ('None')
+WHEN  ('?Insert:3') ('None')
+WHEN  ('?RowOneHide') ('None')
+WHEN  ('?View:2') ('None')
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+
+%ReturnValue FIELD  ()
+%WindowOperationMode DEFAULT  ('Use WINDOW setting')
+%INISaveWindow LONG  (1)
+%ProcedureDisableEnhanceFocus LONG  (0)
+%ProcedureUseEnterInsteadTabOverride LONG  (0)
+%WindowUseEnterInsteadTab LONG  (1)
+%ProcedureUseEnterInsteadTabExcludeListCombo LONG  (0)
+%ProcedureUseEnterInsteadTabEnableNextTabStop LONG  (0)
+%ProcedureUseEnterInsteadTabExcludeG LONG  (1)
+%WindowUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%WindowStyles MULTI LONG  ()
+%WindowStyleFontName DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontSize DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontStyle DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontColor DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontCharSet DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStylePicture DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleOtherListboxes MULTI DEFAULT  ()
+%ProcedureAutoBindFields MULTI LONG  ()
+%ProcedureAutoBindField DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldTPL DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedures MULTI LONG  ()
+%ProcedureAutoBindProcedure DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedureTPL DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldsIgnored MULTI LONG  ()
+%ProcedureAutoBindFieldIgnored DEPEND %ProcedureAutoBindFieldsIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindProceduresIgnored MULTI LONG  ()
+%ProcedureAutoBindProcedureIgnored DEPEND %ProcedureAutoBindProceduresIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindValidToAddField LONG  (1)
+%ProcedureUserBindFields MULTI LONG  ()
+%ProcedureUserBindField DEPEND %ProcedureUserBindFields FIELD TIMES 0
+
+%ProcedureAutoBindFieldIgnore DEPEND %ProcedureAutoBindFields LONG TIMES 0
+
+%ProcedureUserBindProcedures MULTI LONG  ()
+%ProcedureUserBindProcedure DEPEND %ProcedureUserBindProcedures PROCEDURE TIMES 0
+
+%ProcedureAutoBindProcedureIgnore DEPEND %ProcedureAutoBindProcedures LONG TIMES 0
+
+%ProcedureUserBindExpressions MULTI LONG  ()
+%ProcedureUserBindExpressionName DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ProcedureUserBindExpression DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 0
+
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 2
+WHEN  ('') (1)
+WHEN  ('?RowOneHide') (1)
+
+%LookupAssign DEPEND %Control MULTI LONG TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%CheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedAssignVariable DEPEND %CheckedAssigns FIELD TIMES 0
+
+%CheckedAssignValue DEPEND %CheckedAssigns DEFAULT TIMES 0
+
+%CheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?RowOneHide')TIMES 0
+
+%CheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?RowOneHide')TIMES 0
+
+%UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%UncheckedAssignVariable DEPEND %UncheckedAssigns FIELD TIMES 0
+
+%UncheckedAssignValue DEPEND %UncheckedAssigns DEFAULT TIMES 0
+
+%UnCheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?RowOneHide')TIMES 0
+
+%UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?RowOneHide')TIMES 0
+
+%ExtUITabIcon DEPEND %Control DEFAULT TIMES 0
+
+%ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
+
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('Default')
+WHEN  ('?RowOneHide') ('Default')
+
+%ActiveImageEnable DEPEND %Control LONG TIMES 0
+
+%AIObjectName DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('AIBtn0')
+WHEN  ('?RowOneHide') ('AIBtn6')
+
+%AIEnableMimicControl DEPEND %Control LONG TIMES 2
+WHEN  ('') (1)
+WHEN  ('?RowOneHide') (1)
+
+%AIMimicControl DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('?Browse:1')
+WHEN  ('?RowOneHide') ('?Browse:1')
+
+%AIImgRound DEPEND %Control LONG TIMES 0
+
+%AIOverrideImg DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?RowOneHide') (0)
+
+%AIDisableImg DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?RowOneHide') (0)
+
+%AIHotImg DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?RowOneHide') (0)
+
+%AIPressedImg DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?RowOneHide') (0)
+
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('Off')
+WHEN  ('?RowOneHide') ('Off')
+
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('')
+WHEN  ('?RowOneHide') ('')
+
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?RowOneHide') (0)
+
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 2
+WHEN  ('') (-1)
+WHEN  ('?RowOneHide') (-1)
+
+%FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?RowOneHide') (0)
+
+%FieldGradientColorTo DEPEND %Control LONG TIMES 2
+WHEN  ('') (-1)
+WHEN  ('?RowOneHide') (-1)
+
+%FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?RowOneHide') (0)
+
+[EMBED]
+EMBED %BrowseBoxDoubleClickHandler
+[INSTANCES]
+WHEN '1'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+POST(EVENT:Accepted,?View:2) 
+[END]
+[END]
+EMBED %ControlPreEventHandling
+[INSTANCES]
+WHEN '?RowOneHide'
+[INSTANCES]
+WHEN 'Accepted'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+ForceRefresh=1 ; DO RefreshWindow ; SELECT(?Browse:1)
+[END]
+[END]
+[END]
+EMBED %RecordFilter
+[INSTANCES]
+WHEN '1'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+IF RowOneHide AND POINTER(EmpPosCSV)=1 THEN EXIT.
+[END]
+[END]
+[END]
+[ADDITION]
+NAME Clarion BrowseBox
+[INSTANCE]
+INSTANCE 1
+PROCPROP
+[PROMPTS]
+%AcceptToolBarControl LONG  (0)
+%EnableQuickScan LONG  (0)
+%LocatorType DEFAULT  ('')
+%OverrideDefaultLocator LONG  (0)
+%OverrideLocator DEFAULT  ('')
+%RecordFilter DEFAULT  ('')
+%RangeField COMPONENT  ()
+%RangeLimitType DEFAULT  ('')
+%RangeLimit FIELD  ()
+%RangeLow FIELD  ()
+%RangeHigh FIELD  ()
+%RangeFile FILE  ()
+%ScrollBehavior DEFAULT  ('Movable Thumb')
+%ScrollKeyDistribution DEFAULT  ('Runtime')
+%CustomKeyDistribution MULTI LONG  ()
+%KeyDistributionValue DEPEND %CustomKeyDistribution DEFAULT TIMES 0
+
+%ScrollAlpha LONG  (1)
+%ScrollNumeric LONG  (0)
+%ScrollAlt LONG  (0)
+%SortOrder MULTI LONG  ()
+%SortCondition DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortKey DEPEND %SortOrder KEY TIMES 0
+
+%SortLocatorType DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortOverrideDefaultLocator DEPEND %SortOrder LONG TIMES 0
+
+%SortOverrideLocator DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortRecordFilter DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortRangeField DEPEND %SortOrder COMPONENT TIMES 0
+
+%SortRangeLimit DEPEND %SortOrder FIELD TIMES 0
+
+%SortRangeLow DEPEND %SortOrder FIELD TIMES 0
+
+%SortRangeHigh DEPEND %SortOrder FIELD TIMES 0
+
+%SortRangeFile DEPEND %SortOrder FILE TIMES 0
+
+%SortRangeLimitType DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortScrollBehavior DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortScrollKeyDistribution DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortCustomKeyDistribution DEPEND %SortOrder MULTI LONG TIMES 0
+
+%SortKeyDistributionValue DEPEND %SortCustomKeyDistribution DEFAULT TIMES 0
+
+%SortScrollAlpha DEPEND %SortOrder LONG TIMES 0
+
+%SortScrollNumeric DEPEND %SortOrder LONG TIMES 0
+
+%SortScrollAlt DEPEND %SortOrder LONG TIMES 0
+
+%TableSchematicsDescription DEFAULT  ('')
+%InterLine DEFAULT  ('0')
+%FindDefaultAnywhere LONG  (0)
+%HigherKeys MULTI LONG  ()
+%HigherKey DEPEND %HigherKeys COMPONENT TIMES 0
+
+%HigherKeyField DEPEND %HigherKeys FIELD TIMES 0
+
+%HigherKeyValueType DEPEND %HigherKeys DEFAULT TIMES 0
+
+%HigherKeyValueVariable DEPEND %HigherKeys FIELD TIMES 0
+
+%HigherKeyValueFixed DEPEND %HigherKeys DEFAULT TIMES 0
+
+%AdditionalSortType DEFAULT  ('Manual')
+%AddSortFields DEFAULT  ('')
+%AddSortFieldsAssisted MULTI LONG  ()
+%AddSortFieldAssisted DEPEND %AddSortFieldsAssisted FIELD TIMES 0
+
+%AddSortFieldAssistedOrder DEPEND %AddSortFieldsAssisted DEFAULT TIMES 0
+
+%AddSortFieldAssistedNoCase DEPEND %AddSortFieldsAssisted LONG TIMES 0
+
+%ResetFields MULTI LONG  ()
+%ResetField DEPEND %ResetFields FIELD TIMES 0
+
+%SortFindDefaultAnywhere DEPEND %SortOrder LONG TIMES 0
+
+%SortHigherKeys DEPEND %SortOrder MULTI LONG TIMES 0
+
+%SortHigherKey DEPEND %SortHigherKeys COMPONENT TIMES 0
+
+%SortHigherKeyField DEPEND %SortOrder DEPEND %SortHigherKeys FIELD TIMES 0
+
+%SortHigherKeyValueType DEPEND %SortOrder DEPEND %SortHigherKeys DEFAULT TIMES 0
+
+%SortHigherKeyValueVariable DEPEND %SortOrder DEPEND %SortHigherKeys FIELD TIMES 0
+
+%SortHigherKeyValueFixed DEPEND %SortOrder DEPEND %SortHigherKeys DEFAULT TIMES 0
+
+%SortAdditionalSortType DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortAddSortFields DEPEND %SortOrder DEFAULT TIMES 0
+
+%SortAddSortFieldsAssisted DEPEND %SortOrder MULTI LONG TIMES 0
+
+%SortAddSortFieldAssisted DEPEND %SortAddSortFieldsAssisted FIELD TIMES 0
+
+%SortAddSortFieldAssistedOrder DEPEND %SortAddSortFieldsAssisted DEFAULT TIMES 0
+
+%SortResetFields DEPEND %SortOrder MULTI LONG TIMES 0
+
+%SortResetField DEPEND %SortResetFields FIELD TIMES 0
+
+%HotFields MULTI LONG  ()
+%HotField DEPEND %HotFields FIELD TIMES 0
+
+%HotFieldBound DEPEND %HotFields LONG TIMES 0
+
+%UseSameColorForAll LONG  (0)
+%ControlGreenBarColor DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%ControlFieldForegroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%ControlFieldBackgroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%ControlFieldForegroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%ControlFieldBackgroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%ConditionalColors DEPEND %Control DEPEND %ControlField MULTI LONG TIMES 0
+
+%ColorCondition DEPEND %ConditionalColors DEFAULT TIMES 0
+
+%ConditionalControlFieldForegroundNormal DEPEND %ConditionalColors LONG TIMES 1
+WHEN  ('')TIMES 1
+WHEN  ('')TIMES 0
+
+%ConditionalControlFieldBackgroundNormal DEPEND %ConditionalColors LONG TIMES 1
+WHEN  ('')TIMES 1
+WHEN  ('')TIMES 0
+
+%ConditionalControlFieldForegroundSelected DEPEND %ConditionalColors LONG TIMES 1
+WHEN  ('')TIMES 1
+WHEN  ('')TIMES 0
+
+%ConditionalControlFieldBackgroundSelected DEPEND %ConditionalColors LONG TIMES 1
+WHEN  ('')TIMES 1
+WHEN  ('')TIMES 0
+
+%GreenBarOnForegroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%GreenBarOnBackgroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%GreenBarOnForegroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%GreenBarOnBackgroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%GreenBarOffForegroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%GreenBarOffBackgroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%GreenBarOffForegroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%GreenBarOffBackgroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%AllControlGreenBarColor LONG  (0)
+%AllControlGreenBarColorAlternate LONG  (0)
+%AllControlFieldForegroundNormal LONG  (-1)
+%AllControlFieldBackgroundNormal LONG  (-1)
+%AllControlFieldForegroundSelected LONG  (-1)
+%AllControlFieldBackgroundSelected LONG  (-1)
+%ConditionalColorsAll MULTI LONG  ()
+%ColorConditionAll DEPEND %ConditionalColorsAll DEFAULT TIMES 0
+
+%ConditionalAllControlFieldForegroundNormal DEPEND %ConditionalColorsAll LONG TIMES 0
+
+%ConditionalAllControlFieldBackgroundNormal DEPEND %ConditionalColorsAll LONG TIMES 0
+
+%ConditionalAllControlFieldForegroundSelected DEPEND %ConditionalColorsAll LONG TIMES 0
+
+%ConditionalAllControlFieldBackgroundSelected DEPEND %ConditionalColorsAll LONG TIMES 0
+
+%AllGreenBarOnForegroundNormal LONG  (-1)
+%AllGreenBarOnBackgroundNormal LONG  (-1)
+%AllGreenBarOnForegroundSelected LONG  (-1)
+%AllGreenBarOnBackgroundSelected LONG  (-1)
+%AllGreenBarOffForegroundNormal LONG  (-1)
+%AllGreenBarOffBackgroundNormal LONG  (-1)
+%AllGreenBarOffForegroundSelected LONG  (-1)
+%AllGreenBarOffBackgroundSelected LONG  (-1)
+%ControlFieldIcon DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%ControlFieldIconIsNumber DEPEND %Control DEPEND %ControlField LONG TIMES 0
+
+%ConditionalIcons DEPEND %Control DEPEND %ControlField MULTI LONG TIMES 0
+
+%IconCondition DEPEND %ConditionalIcons DEFAULT TIMES 0
+
+%ConditionalControlFieldIcon DEPEND %ConditionalIcons DEFAULT TIMES 0
+
+%ConditionalControlFieldIconIsNumber DEPEND %ConditionalIcons LONG TIMES 0
+
+%UseSameStyleForAll LONG  (0)
+%ControlGreenBarStyle DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%GreenBarOnStyleType DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Local List')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Local List')
+WHEN  ('EmpPos:BilingualCodeReq') ('Local List')
+WHEN  ('EmpPos:DataType') ('Local List')
+WHEN  ('EmpPos:Ed360Role') ('Local List')
+WHEN  ('EmpPos:FirstYearReq') ('Local List')
+WHEN  ('EmpPos:FundingSourceReq') ('Local List')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Local List')
+WHEN  ('EmpPos:MaxFTESalary') ('Local List')
+WHEN  ('EmpPos:MinFTESalary') ('Local List')
+WHEN  ('EmpPos:Position') ('Local List')
+WHEN  ('EmpPos:PositionCode') ('Local List')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Local List')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Local List')
+
+%GreenBarOnStyleLocalList DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('')
+WHEN  ('EmpPos:BilingualCodeReq') ('')
+WHEN  ('EmpPos:DataType') ('')
+WHEN  ('EmpPos:Ed360Role') ('')
+WHEN  ('EmpPos:FirstYearReq') ('')
+WHEN  ('EmpPos:FundingSourceReq') ('')
+WHEN  ('EmpPos:GradeAssignmentReq') ('')
+WHEN  ('EmpPos:MaxFTESalary') ('')
+WHEN  ('EmpPos:MinFTESalary') ('')
+WHEN  ('EmpPos:Position') ('')
+WHEN  ('EmpPos:PositionCode') ('')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('')
+
+%GreenBarOnStyle DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%GreenBarOffStyleType DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Local List')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Local List')
+WHEN  ('EmpPos:BilingualCodeReq') ('Local List')
+WHEN  ('EmpPos:DataType') ('Local List')
+WHEN  ('EmpPos:Ed360Role') ('Local List')
+WHEN  ('EmpPos:FirstYearReq') ('Local List')
+WHEN  ('EmpPos:FundingSourceReq') ('Local List')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Local List')
+WHEN  ('EmpPos:MaxFTESalary') ('Local List')
+WHEN  ('EmpPos:MinFTESalary') ('Local List')
+WHEN  ('EmpPos:Position') ('Local List')
+WHEN  ('EmpPos:PositionCode') ('Local List')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Local List')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Local List')
+
+%GreenBarOffStyleLocalList DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('')
+WHEN  ('EmpPos:BilingualCodeReq') ('')
+WHEN  ('EmpPos:DataType') ('')
+WHEN  ('EmpPos:Ed360Role') ('')
+WHEN  ('EmpPos:FirstYearReq') ('')
+WHEN  ('EmpPos:FundingSourceReq') ('')
+WHEN  ('EmpPos:GradeAssignmentReq') ('')
+WHEN  ('EmpPos:MaxFTESalary') ('')
+WHEN  ('EmpPos:MinFTESalary') ('')
+WHEN  ('EmpPos:Position') ('')
+WHEN  ('EmpPos:PositionCode') ('')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('')
+
+%GreenBarOffStyle DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%ControlFieldStyleType DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Local List')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Local List')
+WHEN  ('EmpPos:BilingualCodeReq') ('Local List')
+WHEN  ('EmpPos:DataType') ('Local List')
+WHEN  ('EmpPos:Ed360Role') ('Local List')
+WHEN  ('EmpPos:FirstYearReq') ('Local List')
+WHEN  ('EmpPos:FundingSourceReq') ('Local List')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Local List')
+WHEN  ('EmpPos:MaxFTESalary') ('Local List')
+WHEN  ('EmpPos:MinFTESalary') ('Local List')
+WHEN  ('EmpPos:Position') ('Local List')
+WHEN  ('EmpPos:PositionCode') ('Local List')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Local List')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Local List')
+
+%ControlFieldStyleLocalList DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('')
+WHEN  ('EmpPos:BilingualCodeReq') ('')
+WHEN  ('EmpPos:DataType') ('')
+WHEN  ('EmpPos:Ed360Role') ('')
+WHEN  ('EmpPos:FirstYearReq') ('')
+WHEN  ('EmpPos:FundingSourceReq') ('')
+WHEN  ('EmpPos:GradeAssignmentReq') ('')
+WHEN  ('EmpPos:MaxFTESalary') ('')
+WHEN  ('EmpPos:MinFTESalary') ('')
+WHEN  ('EmpPos:Position') ('')
+WHEN  ('EmpPos:PositionCode') ('')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('')
+
+%ControlFieldStyle DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%ConditionalStyles DEPEND %Control DEPEND %ControlField MULTI LONG TIMES 0
+
+%StyleCondition DEPEND %ConditionalStyles DEFAULT TIMES 0
+
+%ConditionalControlFieldStyleType DEPEND %ConditionalStyles DEFAULT TIMES 1
+WHEN  ('')TIMES 1
+WHEN  ('')TIMES 0
+
+%ConditionalControlFieldStyleLocalList DEPEND %ConditionalStyles DEFAULT TIMES 1
+WHEN  ('')TIMES 1
+WHEN  ('')TIMES 0
+
+%ConditionalControlFieldStyle DEPEND %ConditionalStyles DEFAULT TIMES 0
+
+%AllControlGreenBarStyle LONG  (0)
+%AllControlGreenBarStyleAlternate LONG  (0)
+%AllControlFieldStyleType DEFAULT  ('Local List')
+%AllControlFieldStyleLocalList DEFAULT  ('')
+%AllControlFieldStyle DEFAULT  ('')
+%ConditionalStylesAll MULTI LONG  ()
+%StyleConditionAll DEPEND %ConditionalStylesAll DEFAULT TIMES 0
+
+%ConditionalAllControlFieldStyleType DEPEND %ConditionalStylesAll DEFAULT TIMES 0
+
+%ConditionalAllControlFieldStyleLocalList DEPEND %ConditionalStylesAll DEFAULT TIMES 0
+
+%ConditionalAllControlFieldStyle DEPEND %ConditionalStylesAll DEFAULT TIMES 0
+
+%AllGreenBarOnStyleType DEFAULT  ('Local List')
+%AllGreenBarOnStyleLocalList DEFAULT  ('')
+%AllGreenBarOnStyle DEFAULT  ('')
+%AllGreenBarOffStyleType DEFAULT  ('Local List')
+%AllGreenBarOffStyleLocalList DEFAULT  ('')
+%AllGreenBarOffStyle DEFAULT  ('')
+%ControlFieldTipField DEPEND %Control DEPEND %ControlField FIELD TIMES 0
+
+%BrowseAllTotalOnOff LONG  (1)
+%BrowseAllTotalOnOffCondition DEFAULT  ('')
+%BrowseTotals MULTI LONG  ()
+%BrowseTotalTarget DEPEND %BrowseTotals FIELD TIMES 0
+
+%BrowseTotalType DEPEND %BrowseTotals DEFAULT TIMES 0
+
+%BrowseTotalField DEPEND %BrowseTotals DEFAULT TIMES 0
+
+%BrowseTotalBasedOn DEPEND %BrowseTotals DEFAULT TIMES 0
+
+%BrowseTotalCondition DEPEND %BrowseTotals DEFAULT TIMES 0
+
+%DisableAutoSizeColumn LONG  (0)
+%DisableListFormatManager LONG  (0)
+%ListFormatManagerAllowPopupInEmptyList DEFAULT  ('Enable')
+%ListFormatManagerCheckType DEFAULT  ('Icon')
+%ListFormatManagerItemsSortBy DEFAULT  ('Alpha')
+%ListFormatManagerUseIdentificationTip DEFAULT  ('Enable')
+%ListFormatManagerSaveWindowPosition DEFAULT  ('Enable')
+%ListFormatManagerSortOrder LONG  (1)
+%ListFormatManagerMenuAppendSortOrder LONG  (1)
+%ListFormatManagerSave LONG  (1)
+%UseMRP LONG  (1)
+%AddPopUp MULTI LONG  ()
+%AddPopUpChoice DEPEND %AddPopUp DEFAULT TIMES 0
+
+%AddPopUpControl DEPEND %AddPopUp DEFAULT TIMES 0
+
+%AddPopUpAction DEPEND %AddPopUp DEFAULT TIMES 0
+
+%AddPopUpProcedure DEPEND %AddPopUp PROCEDURE TIMES 0
+
+%AddPopUpThreadProcedure DEPEND %AddPopUp LONG TIMES 0
+
+%AddPopUpThreadStack DEPEND %AddPopUp DEFAULT TIMES 0
+
+%AddPopUpText DEPEND %AddPopUp DEFAULT TIMES 0
+
+%AddPopUpIcon DEPEND %AddPopUp DEFAULT TIMES 0
+
+%TypeAddPopupIcon DEPEND %AddPopUp DEFAULT TIMES 0
+
+%OtherPopupIcon DEPEND %AddPopUp DEFAULT TIMES 0
+
+%AddPopUpDisable DEPEND %AddPopUp DEFAULT TIMES 0
+
+%AddPopUpSeparate DEPEND %AddPopUp LONG TIMES 0
+
+[ADDITION]
+NAME Clarion BrowseViewButton
+[INSTANCE]
+INSTANCE 2
+PARENT 1
+[ADDITION]
+NAME Clarion BrowseUpdateButtons
+[INSTANCE]
+INSTANCE 3
+PARENT 1
+PROCPROP
+[PROMPTS]
+%UpdateProcedure PROCEDURE  (UpdateEmpPosCSV)
+%EditViaPopup LONG  (1)
+%EditInPlace LONG  (0)
+%ClassItem UNIQUE DEFAULT  ('CWEIPManager', 'EIP_EmpPos:BenefitsReq', 'EIP_EmpPos:BilingualCodeReq', |
+  'EIP_EmpPos:DataType', 'EIP_EmpPos:Ed360Role', 'EIP_EmpPos:FirstYearReq', 'EIP_EmpPos:FundingSourceReq', |
+  'EIP_EmpPos:GradeAssignmentReq', 'EIP_EmpPos:MaxFTESalary', 'EIP_EmpPos:MinFTESalary', |
+  'EIP_EmpPos:Position', 'EIP_EmpPos:PositionCode', 'EIP_EmpPos:PrimaryWorkLocationReq', |
+  'EIP_EmpPos:SchoolWorkLocationReq')
+%DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 0
+
+%ActualDefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 0
+
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+
+%GlobalObject DEPEND %ClassItem DEFAULT TIMES 14
+WHEN  ('CWEIPManager') ('NO')
+WHEN  ('EIP_EmpPos:BenefitsReq') ('NO')
+WHEN  ('EIP_EmpPos:BilingualCodeReq') ('NO')
+WHEN  ('EIP_EmpPos:DataType') ('NO')
+WHEN  ('EIP_EmpPos:Ed360Role') ('NO')
+WHEN  ('EIP_EmpPos:FirstYearReq') ('NO')
+WHEN  ('EIP_EmpPos:FundingSourceReq') ('NO')
+WHEN  ('EIP_EmpPos:GradeAssignmentReq') ('NO')
+WHEN  ('EIP_EmpPos:MaxFTESalary') ('NO')
+WHEN  ('EIP_EmpPos:MinFTESalary') ('NO')
+WHEN  ('EIP_EmpPos:Position') ('NO')
+WHEN  ('EIP_EmpPos:PositionCode') ('NO')
+WHEN  ('EIP_EmpPos:PrimaryWorkLocationReq') ('NO')
+WHEN  ('EIP_EmpPos:SchoolWorkLocationReq') ('NO')
+
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 0
+
+%UseDefaultABCBaseClass DEPEND %ClassItem LONG TIMES 14
+WHEN  ('CWEIPManager') (1)
+WHEN  ('EIP_EmpPos:BenefitsReq') (1)
+WHEN  ('EIP_EmpPos:BilingualCodeReq') (1)
+WHEN  ('EIP_EmpPos:DataType') (1)
+WHEN  ('EIP_EmpPos:Ed360Role') (1)
+WHEN  ('EIP_EmpPos:FirstYearReq') (1)
+WHEN  ('EIP_EmpPos:FundingSourceReq') (1)
+WHEN  ('EIP_EmpPos:GradeAssignmentReq') (1)
+WHEN  ('EIP_EmpPos:MaxFTESalary') (1)
+WHEN  ('EIP_EmpPos:MinFTESalary') (1)
+WHEN  ('EIP_EmpPos:Position') (1)
+WHEN  ('EIP_EmpPos:PositionCode') (1)
+WHEN  ('EIP_EmpPos:PrimaryWorkLocationReq') (1)
+WHEN  ('EIP_EmpPos:SchoolWorkLocationReq') (1)
+
+%UseABCBaseClass DEPEND %ClassItem LONG TIMES 14
+WHEN  ('CWEIPManager') (1)
+WHEN  ('EIP_EmpPos:BenefitsReq') (1)
+WHEN  ('EIP_EmpPos:BilingualCodeReq') (1)
+WHEN  ('EIP_EmpPos:DataType') (1)
+WHEN  ('EIP_EmpPos:Ed360Role') (1)
+WHEN  ('EIP_EmpPos:FirstYearReq') (1)
+WHEN  ('EIP_EmpPos:FundingSourceReq') (1)
+WHEN  ('EIP_EmpPos:GradeAssignmentReq') (1)
+WHEN  ('EIP_EmpPos:MaxFTESalary') (1)
+WHEN  ('EIP_EmpPos:MinFTESalary') (1)
+WHEN  ('EIP_EmpPos:Position') (1)
+WHEN  ('EIP_EmpPos:PositionCode') (1)
+WHEN  ('EIP_EmpPos:PrimaryWorkLocationReq') (1)
+WHEN  ('EIP_EmpPos:SchoolWorkLocationReq') (1)
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 14
+WHEN  ('CWEIPManager') ('')
+WHEN  ('EIP_EmpPos:BenefitsReq') ('')
+WHEN  ('EIP_EmpPos:BilingualCodeReq') ('')
+WHEN  ('EIP_EmpPos:DataType') ('')
+WHEN  ('EIP_EmpPos:Ed360Role') ('')
+WHEN  ('EIP_EmpPos:FirstYearReq') ('')
+WHEN  ('EIP_EmpPos:FundingSourceReq') ('')
+WHEN  ('EIP_EmpPos:GradeAssignmentReq') ('')
+WHEN  ('EIP_EmpPos:MaxFTESalary') ('')
+WHEN  ('EIP_EmpPos:MinFTESalary') ('')
+WHEN  ('EIP_EmpPos:Position') ('')
+WHEN  ('EIP_EmpPos:PositionCode') ('')
+WHEN  ('EIP_EmpPos:PrimaryWorkLocationReq') ('')
+WHEN  ('EIP_EmpPos:SchoolWorkLocationReq') ('')
+
+%ExtBaseClass DEPEND %ClassItem DEFAULT TIMES 0
+
+%BaseClassIncludeFile DEPEND %ClassItem DEFAULT TIMES 0
+
+%DeriveFromBaseClass DEPEND %ClassItem LONG TIMES 14
+WHEN  ('CWEIPManager') (0)
+WHEN  ('EIP_EmpPos:BenefitsReq') (0)
+WHEN  ('EIP_EmpPos:BilingualCodeReq') (0)
+WHEN  ('EIP_EmpPos:DataType') (0)
+WHEN  ('EIP_EmpPos:Ed360Role') (0)
+WHEN  ('EIP_EmpPos:FirstYearReq') (0)
+WHEN  ('EIP_EmpPos:FundingSourceReq') (0)
+WHEN  ('EIP_EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EIP_EmpPos:MaxFTESalary') (0)
+WHEN  ('EIP_EmpPos:MinFTESalary') (0)
+WHEN  ('EIP_EmpPos:Position') (0)
+WHEN  ('EIP_EmpPos:PositionCode') (0)
+WHEN  ('EIP_EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EIP_EmpPos:SchoolWorkLocationReq') (0)
+
+%NewMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewMethodName DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewMethodPrototype DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewClassProperty DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataType DEPEND %NewClassPropertyItems DEFAULT TIMES 1
+WHEN  ('EIP_EmpPos:DataType')TIMES 0
+
+%NewClassOtherType DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataIsRef DEPEND %NewClassPropertyItems LONG TIMES 0
+
+%NewClassDataSize DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim1 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim2 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim3 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim4 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%ClassMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassMethodName DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassMethodPrototype DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassProperty DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataType DEPEND %ClassPropertyItems DEFAULT TIMES 1
+WHEN  ('EIP_EmpPos:DataType')TIMES 0
+
+%ClassOtherType DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataIsRef DEPEND %ClassPropertyItems LONG TIMES 0
+
+%ClassDataSize DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim1 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim2 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim3 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%EIPTabAction DEFAULT  ('Default')
+%EIPTabRemain LONG  (0)
+%EIPEnterAction DEFAULT  ('Default')
+%EIPEnterRemain LONG  (0)
+%EIPArrowAction DEFAULT  ('Default')
+%EIPArrowRemain LONG  (1)
+%EIPArrowRetain LONG  (1)
+%EIPFocusAction DEFAULT  ('Default')
+%EIPInsertionPoint DEFAULT  ('After')
+%EIPAskOnDelete DEFAULT  ('Always')
+%PrimingFields MULTI LONG  ()
+%PrimedField DEPEND %PrimingFields FIELD TIMES 0
+
+%PrimedValue DEPEND %PrimingFields DEFAULT TIMES 0
+
+%AllowEIP DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (1)
+WHEN  ('EmpPos:BilingualCodeReq') (1)
+WHEN  ('EmpPos:DataType') (1)
+WHEN  ('EmpPos:Ed360Role') (1)
+WHEN  ('EmpPos:FirstYearReq') (1)
+WHEN  ('EmpPos:FundingSourceReq') (1)
+WHEN  ('EmpPos:GradeAssignmentReq') (1)
+WHEN  ('EmpPos:MaxFTESalary') (1)
+WHEN  ('EmpPos:MinFTESalary') (1)
+WHEN  ('EmpPos:Position') (1)
+WHEN  ('EmpPos:PositionCode') (1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (1)
+
+%EditInPlaceType DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Entry')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Entry')
+WHEN  ('EmpPos:BilingualCodeReq') ('Entry')
+WHEN  ('EmpPos:DataType') ('Entry')
+WHEN  ('EmpPos:Ed360Role') ('Entry')
+WHEN  ('EmpPos:FirstYearReq') ('Entry')
+WHEN  ('EmpPos:FundingSourceReq') ('Entry')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Entry')
+WHEN  ('EmpPos:MaxFTESalary') ('Entry')
+WHEN  ('EmpPos:MinFTESalary') ('Entry')
+WHEN  ('EmpPos:Position') ('Entry')
+WHEN  ('EmpPos:PositionCode') ('Entry')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Entry')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Entry')
+
+%EditInPlaceFEQTitle DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQJust DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Default')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Default')
+WHEN  ('EmpPos:BilingualCodeReq') ('Default')
+WHEN  ('EmpPos:DataType') ('Default')
+WHEN  ('EmpPos:Ed360Role') ('Default')
+WHEN  ('EmpPos:FirstYearReq') ('Default')
+WHEN  ('EmpPos:FundingSourceReq') ('Default')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Default')
+WHEN  ('EmpPos:MaxFTESalary') ('Default')
+WHEN  ('EmpPos:MinFTESalary') ('Default')
+WHEN  ('EmpPos:Position') ('Default')
+WHEN  ('EmpPos:PositionCode') ('Default')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Default')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Default')
+
+%EditInPlaceFEQOffset DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('0')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('0')
+WHEN  ('EmpPos:BilingualCodeReq') ('0')
+WHEN  ('EmpPos:DataType') ('0')
+WHEN  ('EmpPos:Ed360Role') ('0')
+WHEN  ('EmpPos:FirstYearReq') ('0')
+WHEN  ('EmpPos:FundingSourceReq') ('0')
+WHEN  ('EmpPos:GradeAssignmentReq') ('0')
+WHEN  ('EmpPos:MaxFTESalary') ('0')
+WHEN  ('EmpPos:MinFTESalary') ('0')
+WHEN  ('EmpPos:Position') ('0')
+WHEN  ('EmpPos:PositionCode') ('0')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('0')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('0')
+
+%EditInPlaceFEQTransparent DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQReadOnly DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQRequired DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQDataSource DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Fixed')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Fixed')
+WHEN  ('EmpPos:BilingualCodeReq') ('Fixed')
+WHEN  ('EmpPos:DataType') ('Fixed')
+WHEN  ('EmpPos:Ed360Role') ('Fixed')
+WHEN  ('EmpPos:FirstYearReq') ('Fixed')
+WHEN  ('EmpPos:FundingSourceReq') ('Fixed')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Fixed')
+WHEN  ('EmpPos:MaxFTESalary') ('Fixed')
+WHEN  ('EmpPos:MinFTESalary') ('Fixed')
+WHEN  ('EmpPos:Position') ('Fixed')
+WHEN  ('EmpPos:PositionCode') ('Fixed')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Fixed')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Fixed')
+
+%EditInPlaceFEQFixedDataSource DEPEND %Control DEPEND %ControlField MULTI LONG TIMES 0
+
+%EditInPlaceFEQFixedDataSourceValue DEPEND %EditInPlaceFEQFixedDataSource DEFAULT TIMES 0
+
+%EditInPlaceFEQFixedDataSourceSelected DEPEND %EditInPlaceFEQFixedDataSource LONG TIMES 1
+WHEN  ('')TIMES 1
+WHEN  ('')TIMES 0
+
+%EditInPlaceFEQQueueDataSourceQN DEPEND %Control DEPEND %ControlField FIELD TIMES 0
+
+%EditInPlaceFEQQueueDataSourceV DEPEND %Control DEPEND %ControlField FIELD TIMES 0
+
+%EditInPlaceFEQQueueDataSourceS DEPEND %Control DEPEND %ControlField FIELD TIMES 0
+
+%EditInPlaceFEQAutoSerializeField DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQAutoSerializeFieldDelimiter DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%ReturnToOriginalDir DEPEND %Control DEPEND %ControlField LONG TIMES 0
+
+%AllowLongFilenames DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (1)
+WHEN  ('EmpPos:BilingualCodeReq') (1)
+WHEN  ('EmpPos:DataType') (1)
+WHEN  ('EmpPos:Ed360Role') (1)
+WHEN  ('EmpPos:FirstYearReq') (1)
+WHEN  ('EmpPos:FundingSourceReq') (1)
+WHEN  ('EmpPos:GradeAssignmentReq') (1)
+WHEN  ('EmpPos:MaxFTESalary') (1)
+WHEN  ('EmpPos:MinFTESalary') (1)
+WHEN  ('EmpPos:Position') (1)
+WHEN  ('EmpPos:PositionCode') (1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (1)
+
+%DOSFileDialogType DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Open')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Open')
+WHEN  ('EmpPos:BilingualCodeReq') ('Open')
+WHEN  ('EmpPos:DataType') ('Open')
+WHEN  ('EmpPos:Ed360Role') ('Open')
+WHEN  ('EmpPos:FirstYearReq') ('Open')
+WHEN  ('EmpPos:FundingSourceReq') ('Open')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Open')
+WHEN  ('EmpPos:MaxFTESalary') ('Open')
+WHEN  ('EmpPos:MinFTESalary') ('Open')
+WHEN  ('EmpPos:Position') ('Open')
+WHEN  ('EmpPos:PositionCode') ('Open')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Open')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Open')
+
+%AllowNoError DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%AllowMultiSelect DEPEND %Control DEPEND %ControlField LONG TIMES 0
+
+%DOSMaskDesc DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('All Files')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('All Files')
+WHEN  ('EmpPos:BilingualCodeReq') ('All Files')
+WHEN  ('EmpPos:DataType') ('All Files')
+WHEN  ('EmpPos:Ed360Role') ('All Files')
+WHEN  ('EmpPos:FirstYearReq') ('All Files')
+WHEN  ('EmpPos:FundingSourceReq') ('All Files')
+WHEN  ('EmpPos:GradeAssignmentReq') ('All Files')
+WHEN  ('EmpPos:MaxFTESalary') ('All Files')
+WHEN  ('EmpPos:MinFTESalary') ('All Files')
+WHEN  ('EmpPos:Position') ('All Files')
+WHEN  ('EmpPos:PositionCode') ('All Files')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('All Files')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('All Files')
+
+%DOSMask DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('*.*')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('*.*')
+WHEN  ('EmpPos:BilingualCodeReq') ('*.*')
+WHEN  ('EmpPos:DataType') ('*.*')
+WHEN  ('EmpPos:Ed360Role') ('*.*')
+WHEN  ('EmpPos:FirstYearReq') ('*.*')
+WHEN  ('EmpPos:FundingSourceReq') ('*.*')
+WHEN  ('EmpPos:GradeAssignmentReq') ('*.*')
+WHEN  ('EmpPos:MaxFTESalary') ('*.*')
+WHEN  ('EmpPos:MinFTESalary') ('*.*')
+WHEN  ('EmpPos:Position') ('*.*')
+WHEN  ('EmpPos:PositionCode') ('*.*')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('*.*')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('*.*')
+
+%DOSMoreMasks DEPEND %Control DEPEND %ControlField MULTI LONG TIMES 0
+
+%DOSMoreMaskDesc DEPEND %DOSMoreMasks DEFAULT TIMES 0
+
+%DOSMoreMask DEPEND %DOSMoreMasks DEFAULT TIMES 0
+
+%EditInPlaceFEQForegroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%EditInPlaceFEQBackgroundNormal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%EditInPlaceFEQForegroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%EditInPlaceFEQBackgroundSelected DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (-1)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (-1)
+WHEN  ('EmpPos:BilingualCodeReq') (-1)
+WHEN  ('EmpPos:DataType') (-1)
+WHEN  ('EmpPos:Ed360Role') (-1)
+WHEN  ('EmpPos:FirstYearReq') (-1)
+WHEN  ('EmpPos:FundingSourceReq') (-1)
+WHEN  ('EmpPos:GradeAssignmentReq') (-1)
+WHEN  ('EmpPos:MaxFTESalary') (-1)
+WHEN  ('EmpPos:MinFTESalary') (-1)
+WHEN  ('EmpPos:Position') (-1)
+WHEN  ('EmpPos:PositionCode') (-1)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (-1)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (-1)
+
+%EditInPlaceFEQFrom DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQColumnFrom DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQPicture DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQListFormat DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQDrop DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('0')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('0')
+WHEN  ('EmpPos:BilingualCodeReq') ('0')
+WHEN  ('EmpPos:DataType') ('0')
+WHEN  ('EmpPos:Ed360Role') ('0')
+WHEN  ('EmpPos:FirstYearReq') ('0')
+WHEN  ('EmpPos:FundingSourceReq') ('0')
+WHEN  ('EmpPos:GradeAssignmentReq') ('0')
+WHEN  ('EmpPos:MaxFTESalary') ('0')
+WHEN  ('EmpPos:MinFTESalary') ('0')
+WHEN  ('EmpPos:Position') ('0')
+WHEN  ('EmpPos:PositionCode') ('0')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('0')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('0')
+
+%EditInPlaceFEQWidth DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('0')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('0')
+WHEN  ('EmpPos:BilingualCodeReq') ('0')
+WHEN  ('EmpPos:DataType') ('0')
+WHEN  ('EmpPos:Ed360Role') ('0')
+WHEN  ('EmpPos:FirstYearReq') ('0')
+WHEN  ('EmpPos:FundingSourceReq') ('0')
+WHEN  ('EmpPos:GradeAssignmentReq') ('0')
+WHEN  ('EmpPos:MaxFTESalary') ('0')
+WHEN  ('EmpPos:MinFTESalary') ('0')
+WHEN  ('EmpPos:Position') ('0')
+WHEN  ('EmpPos:PositionCode') ('0')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('0')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('0')
+
+%EditInPlaceFEQCase DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Default')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Default')
+WHEN  ('EmpPos:BilingualCodeReq') ('Default')
+WHEN  ('EmpPos:DataType') ('Default')
+WHEN  ('EmpPos:Ed360Role') ('Default')
+WHEN  ('EmpPos:FirstYearReq') ('Default')
+WHEN  ('EmpPos:FundingSourceReq') ('Default')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Default')
+WHEN  ('EmpPos:MaxFTESalary') ('Default')
+WHEN  ('EmpPos:MinFTESalary') ('Default')
+WHEN  ('EmpPos:Position') ('Default')
+WHEN  ('EmpPos:PositionCode') ('Default')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Default')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Default')
+
+%EditInPlaceFEQFlat DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQHorizontal DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQVertical DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQImmediate DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%EditInPlaceFEQEntryCompletion DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%LookupAssign DEPEND %Control DEPEND %ControlField MULTI LONG TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%EditInPlaceFEQFixedDataSourceText DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQCheckJust DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Default')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Default')
+WHEN  ('EmpPos:BilingualCodeReq') ('Default')
+WHEN  ('EmpPos:DataType') ('Default')
+WHEN  ('EmpPos:Ed360Role') ('Default')
+WHEN  ('EmpPos:FirstYearReq') ('Default')
+WHEN  ('EmpPos:FundingSourceReq') ('Default')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Default')
+WHEN  ('EmpPos:MaxFTESalary') ('Default')
+WHEN  ('EmpPos:MinFTESalary') ('Default')
+WHEN  ('EmpPos:Position') ('Default')
+WHEN  ('EmpPos:PositionCode') ('Default')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Default')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Default')
+
+%EditInPlaceFEQTrue DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQFalse DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQTrueLabel DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQFalseLabel DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EditInPlaceFEQEntryMode DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Default')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Default')
+WHEN  ('EmpPos:BilingualCodeReq') ('Default')
+WHEN  ('EmpPos:DataType') ('Default')
+WHEN  ('EmpPos:Ed360Role') ('Default')
+WHEN  ('EmpPos:FirstYearReq') ('Default')
+WHEN  ('EmpPos:FundingSourceReq') ('Default')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Default')
+WHEN  ('EmpPos:MaxFTESalary') ('Default')
+WHEN  ('EmpPos:MinFTESalary') ('Default')
+WHEN  ('EmpPos:Position') ('Default')
+WHEN  ('EmpPos:PositionCode') ('Default')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Default')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Default')
+
+%EditInPlaceFEQLower DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('0')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('0')
+WHEN  ('EmpPos:BilingualCodeReq') ('0')
+WHEN  ('EmpPos:DataType') ('0')
+WHEN  ('EmpPos:Ed360Role') ('0')
+WHEN  ('EmpPos:FirstYearReq') ('0')
+WHEN  ('EmpPos:FundingSourceReq') ('0')
+WHEN  ('EmpPos:GradeAssignmentReq') ('0')
+WHEN  ('EmpPos:MaxFTESalary') ('0')
+WHEN  ('EmpPos:MinFTESalary') ('0')
+WHEN  ('EmpPos:Position') ('0')
+WHEN  ('EmpPos:PositionCode') ('0')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('0')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('0')
+
+%EditInPlaceFEQUpper DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('0')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('0')
+WHEN  ('EmpPos:BilingualCodeReq') ('0')
+WHEN  ('EmpPos:DataType') ('0')
+WHEN  ('EmpPos:Ed360Role') ('0')
+WHEN  ('EmpPos:FirstYearReq') ('0')
+WHEN  ('EmpPos:FundingSourceReq') ('0')
+WHEN  ('EmpPos:GradeAssignmentReq') ('0')
+WHEN  ('EmpPos:MaxFTESalary') ('0')
+WHEN  ('EmpPos:MinFTESalary') ('0')
+WHEN  ('EmpPos:Position') ('0')
+WHEN  ('EmpPos:PositionCode') ('0')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('0')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('0')
+
+%EditInPlaceFEQStep DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('0')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('0')
+WHEN  ('EmpPos:BilingualCodeReq') ('0')
+WHEN  ('EmpPos:DataType') ('0')
+WHEN  ('EmpPos:Ed360Role') ('0')
+WHEN  ('EmpPos:FirstYearReq') ('0')
+WHEN  ('EmpPos:FundingSourceReq') ('0')
+WHEN  ('EmpPos:GradeAssignmentReq') ('0')
+WHEN  ('EmpPos:MaxFTESalary') ('0')
+WHEN  ('EmpPos:MinFTESalary') ('0')
+WHEN  ('EmpPos:Position') ('0')
+WHEN  ('EmpPos:PositionCode') ('0')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('0')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('0')
+
+%EditInPlaceFEQPassword DEPEND %Control DEPEND %ControlField LONG TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') (0)
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') (0)
+WHEN  ('EmpPos:BilingualCodeReq') (0)
+WHEN  ('EmpPos:DataType') (0)
+WHEN  ('EmpPos:Ed360Role') (0)
+WHEN  ('EmpPos:FirstYearReq') (0)
+WHEN  ('EmpPos:FundingSourceReq') (0)
+WHEN  ('EmpPos:GradeAssignmentReq') (0)
+WHEN  ('EmpPos:MaxFTESalary') (0)
+WHEN  ('EmpPos:MinFTESalary') (0)
+WHEN  ('EmpPos:Position') (0)
+WHEN  ('EmpPos:PositionCode') (0)
+WHEN  ('EmpPos:PrimaryWorkLocationReq') (0)
+WHEN  ('EmpPos:SchoolWorkLocationReq') (0)
+
+%LookupType DEPEND %Control DEPEND %ControlField DEFAULT TIMES 2
+WHEN  ('')TIMES 1
+WHEN  ('') ('Related Field')
+WHEN  ('?Browse:1')TIMES 13
+WHEN  ('EmpPos:BenefitsReq') ('Related Field')
+WHEN  ('EmpPos:BilingualCodeReq') ('Related Field')
+WHEN  ('EmpPos:DataType') ('Related Field')
+WHEN  ('EmpPos:Ed360Role') ('Related Field')
+WHEN  ('EmpPos:FirstYearReq') ('Related Field')
+WHEN  ('EmpPos:FundingSourceReq') ('Related Field')
+WHEN  ('EmpPos:GradeAssignmentReq') ('Related Field')
+WHEN  ('EmpPos:MaxFTESalary') ('Related Field')
+WHEN  ('EmpPos:MinFTESalary') ('Related Field')
+WHEN  ('EmpPos:Position') ('Related Field')
+WHEN  ('EmpPos:PositionCode') ('Related Field')
+WHEN  ('EmpPos:PrimaryWorkLocationReq') ('Related Field')
+WHEN  ('EmpPos:SchoolWorkLocationReq') ('Related Field')
+
+%PostLookupKey DEPEND %Control DEPEND %ControlField KEY TIMES 0
+
+%PostLookupField DEPEND %Control DEPEND %ControlField COMPONENT TIMES 0
+
+%PostLookupFieldNoRelated DEPEND %Control DEPEND %ControlField FIELD TIMES 0
+
+%PostLookupProcedure DEPEND %Control DEPEND %ControlField PROCEDURE TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%PostLookupProcedureReturnValue DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%EIPThisObjectName DEPEND %Control DEPEND %ControlField DEFAULT TIMES 0
+
+%UpdateProcedureParameters DEFAULT  ('')
+[ADDITION]
+NAME Clarion CloseButton
+[INSTANCE]
+INSTANCE 4
+[ADDITION]
+NAME Clarion WindowResize
+[FIELDPROMPT]
+%ResizeAnchorTop DEPEND %Control LONG TIMES 0
+
+%ResizeAnchorLeft DEPEND %Control LONG TIMES 0
+
+%ResizeAnchorRight DEPEND %Control LONG TIMES 0
+
+%ResizeAnchorBottom DEPEND %Control LONG TIMES 0
+
+%ResizeAnchorGrowTop DEPEND %Control LONG TIMES 0
+
+%ResizeAnchorGrowLeft DEPEND %Control LONG TIMES 0
+
+%ResizeAnchorGrowRight DEPEND %Control LONG TIMES 0
+
+%ResizeAnchorGrowBottom DEPEND %Control LONG TIMES 0
+
+[INSTANCE]
+INSTANCE 6
+[PROMPTS]
+%UseAppStrategy DEFAULT  ('1')
+%AppStrategy DEFAULT  ('Spread')
+%RestrictMinSize LONG  (1)
+%WindowMinWidth DEFAULT  ('0')
+%WindowMaxWidth DEFAULT  ('0')
+%WindowMinHeight DEFAULT  ('')
+%RestrictMaxSize LONG  (0)
+%WindowMaxHeight DEFAULT  ('')
+[WINDOW]
+QuickWindow WINDOW('Browse the EmpPosCSV file - Browse of Basic File Example'),AT(,,661,201), |
+          FONT('Microsoft Sans Serif',8,,FONT:regular),RESIZE,GRAY,IMM,MDI,HLP('BrowseEmpPosCSV'), |
+          SYSTEM
+          LIST,AT(3,2,656,168),USE(?Browse:1),HVSCROLL,FORMAT('20L(2)|M~Code~@s3@150L(2' & |
+            ')|M~Position~@s128@44R(2)|M~Max Salary~C(0)@n10.2@44R(2)|M~Min Salary~C(0)' & |
+            '@n10.2@30L(2)|M~1st Year~@s3@32L(2)|M~Benefits~@s3@28L(2)|M~Source~@s3@31L' & |
+            '(2)|M~Bilingual~@s3@40L(2)|M~Grade Asn~@s3@40L(2)|M~School Loc~@s3@40L(2)|' & |
+            'M~Primary Loc~@s3@100L(2)|M~Ed 360 Role~@s40@40L(2)|M~Data Type~L(0)@s10@'),FROM(Queue:Browse:1), |
+            IMM,MSG('Browsing the EmpPosCSV file'),VCR,#FIELDS(EmpPos:PositionCode,EmpPos:Position, |
+            EmpPos:MaxFTESalary,EmpPos:MinFTESalary,EmpPos:FirstYearReq,EmpPos:BenefitsReq, |
+            EmpPos:FundingSourceReq,EmpPos:BilingualCodeReq,EmpPos:GradeAssignmentReq,EmpPos:SchoolWorkLocationReq, |
+            EmpPos:PrimaryWorkLocationReq,EmpPos:Ed360Role,EmpPos:DataType),#ORIG(?List),#SEQ(1), |
+            #ORDINAL(1)
+          BUTTON('&View'),AT(7,180,49,14),USE(?View:2),LEFT,ICON('WAVIEW.ICO'),FLAT,MSG('View Record'), |
+            TIP('View Record'),#ORIG(?View),#SEQ(2),#ORDINAL(2)
+          BUTTON('&Insert'),AT(61,180,49,14),USE(?Insert:3),LEFT,ICON('WAINSERT.ICO'),DISABLE, |
+            FLAT,MSG('Insert a Record'),TIP('Insert a Record'),#LINK(?Change:3),#ORIG(?Insert), |
+            #SEQ(3),#ORDINAL(3)
+          BUTTON('&Close'),AT(125,180,49,14),USE(?Close),LEFT,ICON('WACLOSE.ICO'),FLAT,MSG('Close Window'), |
+            TIP('Close Window'),#ORIG(?Close),#SEQ(4),#ORDINAL(4)
+          PROMPT('Bug: On the First page hit Page Up key and see the that Previous() go' & |
+            'es past the beginning of the file and repeats the First record repeatedly.' & |
+            ' Previous is suppose to work for Basic driver. Only occurs with DRIVER(,/F' & |
+            'IRSTROWHEADER=ON) which is now OFF.'),AT(319,174,327,25),USE(?PROMPT1),#ORDINAL(5)
+          CHECK('Row One Hide'),AT(210,182),USE(RowOneHide),SKIP,TIP('Simulate FIRSTROW' & |
+            'HEADER=ON and using ValidateRecord filter POINTER()=1'),#ORDINAL(6)
+        END
+
+[PROCEDURE]
+NAME ReportEmpPosCSV
+[COMMON]
+DESCRIPTION 'Adjust Records per cycle to 25 x (Estimated Record Size) for BASIC reading in BYTEs'
+FROM Clarion Report
+CATEGORY 'Report'
+MODIFIED '2020/09/25' '11:46:02'
+[DATA]
+RejectRecord             LONG
+!!> GUID('5d7e74d6-efc1-489b-bd22-c0d493953b9f')
+LocalRequest             LONG
+!!> GUID('c27d99f1-52ce-4421-a3a0-b480848b0cf8')
+OriginalRequest          LONG
+!!> GUID('0036011e-4519-4393-b590-908f8dc04e89')
+LocalResponse            LONG
+!!> GUID('688c6c99-bf07-442c-866d-3ca20736e25c')
+FilesOpened              LONG
+!!> GUID('7a6abc45-752c-431c-af26-5ca3a3afbee0')
+WindowOpened             LONG
+!!> GUID('ed34073e-4423-4503-bd4b-40f34d89f59a')
+RecordsToProcess         LONG,AUTO
+!!> GUID('6448be38-9237-49d7-b318-5a14c1d91f3b')
+RecordsProcessed         LONG,AUTO
+!!> GUID('aa1172fc-8a7f-4a16-ae54-5ae2c92ccb42')
+RecordsPerCycle          LONG,AUTO
+!!> GUID('4afc7706-3b7f-4aa8-a124-3ad59432e080')
+RecordsThisCycle         LONG,AUTO
+!!> GUID('fcc6cb99-3cfa-4729-91cd-b587d54e4f4d')
+PercentProgress          BYTE
+!!> GUID('e53416ea-fa5a-4a16-8cc7-ab2bc484f1ca')
+RecordStatus             BYTE,AUTO
+!!> GUID('2321a443-9e02-4f48-9903-7bcf5038f03c')
+WindowInitialized        LONG
+!!> GUID('e9765d7d-8b1e-4026-ac52-0894869867d5')
+ForceRefresh             LONG
+!!> GUID('143dff92-4fba-4238-9abe-27c8e5a3e66a')
+[FILES]
+[PRIMARY]
+EmpPosCSV
+[INSTANCE]
+0
+[PROMPTS]
+%EnablePrintPreview LONG  (1)
+%MaximizePreviewWindow LONG  (1)
+%InitialZoom DEFAULT  ('No Zoom')
+%ButtonAction DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('No Special Action')
+WHEN  ('?Progress:Cancel') ('No Special Action')
+
+%ButtonRunName DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ButtonThread DEPEND %Control LONG TIMES 0
+
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('25000')
+WHEN  ('?Progress:Cancel') ('25000')
+
+%ButtonParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRequest DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('None')
+WHEN  ('?Progress:Cancel') ('None')
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+
+%ReturnValue FIELD  ()
+%WindowOperationMode DEFAULT  ('Use WINDOW setting')
+%INISaveWindow LONG  (1)
+%ProcedureDisableEnhanceFocus LONG  (0)
+%ProcedureUseEnterInsteadTabOverride LONG  (0)
+%WindowUseEnterInsteadTab LONG  (1)
+%ProcedureUseEnterInsteadTabExcludeListCombo LONG  (0)
+%ProcedureUseEnterInsteadTabEnableNextTabStop LONG  (0)
+%ProcedureUseEnterInsteadTabExcludeG LONG  (1)
+%WindowUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%WindowStyles MULTI LONG  ()
+%WindowStyleFontName DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontSize DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontStyle DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontColor DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontCharSet DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStylePicture DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleOtherListboxes MULTI DEFAULT  ()
+%ProcedureAutoBindFields MULTI LONG  ()
+%ProcedureAutoBindField DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldTPL DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedures MULTI LONG  ()
+%ProcedureAutoBindProcedure DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedureTPL DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldsIgnored MULTI LONG  ()
+%ProcedureAutoBindFieldIgnored DEPEND %ProcedureAutoBindFieldsIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindProceduresIgnored MULTI LONG  ()
+%ProcedureAutoBindProcedureIgnored DEPEND %ProcedureAutoBindProceduresIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindValidToAddField LONG  (0)
+%ProcedureUserBindFields MULTI LONG  ()
+%ProcedureUserBindField DEPEND %ProcedureUserBindFields FIELD TIMES 0
+
+%ProcedureAutoBindFieldIgnore DEPEND %ProcedureAutoBindFields LONG TIMES 0
+
+%ProcedureUserBindProcedures MULTI LONG  ()
+%ProcedureUserBindProcedure DEPEND %ProcedureUserBindProcedures PROCEDURE TIMES 0
+
+%ProcedureAutoBindProcedureIgnore DEPEND %ProcedureAutoBindProcedures LONG TIMES 0
+
+%ProcedureUserBindExpressions MULTI LONG  ()
+%ProcedureUserBindExpressionName DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ProcedureUserBindExpression DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%WindowMessage DEFAULT  ('')
+%ClassItem UNIQUE DEFAULT  ('Previewer')
+%DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 0
+
+%ActualDefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 0
+
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+
+%ReportTargetList MULTI LONG  ()
+%ReportTargetListName DEPEND %ReportTargetList DEFAULT TIMES 0
+
+%ReportTargetListClass DEPEND %ReportTargetList DEFAULT TIMES 0
+
+%ReportTargetListObject DEPEND %ReportTargetList DEFAULT TIMES 0
+
+%ReportTargetListCondition DEPEND %ReportTargetList DEFAULT TIMES 0
+
+%ReportTargetHiddenControls MULTI LONG  ()
+%ReportTargetHiddenControl DEPEND %ReportTargetHiddenControls DEFAULT TIMES 0
+
+%ReportTargetHiddenControlTemplate DEPEND %ReportTargetHiddenControls DEFAULT TIMES 0
+
+%ReportDataSource DEFAULT  ('File')
+%EnableQuickScan LONG  (1)
+%RecordFilter DEFAULT  ('')
+%ApproxRecordCount DEFAULT  ('')
+%AdditionalSortType DEFAULT  ('Manual')
+%AddSortFields DEFAULT  ('')
+%AddSortFieldsAssisted MULTI LONG  ()
+%AddSortFieldAssisted DEPEND %AddSortFieldsAssisted FIELD TIMES 0
+
+%AddSortFieldAssistedOrder DEPEND %AddSortFieldsAssisted DEFAULT TIMES 0
+
+%AddSortFieldAssistedNoCase DEPEND %AddSortFieldsAssisted LONG TIMES 0
+
+%AddConditionalSort MULTI LONG  ()
+%AddConditionalSortCondition DEPEND %AddConditionalSort DEFAULT TIMES 0
+
+%AddConditionalSortFieldsAssisted DEPEND %AddConditionalSort MULTI LONG TIMES 0
+
+%AddConditionalSortFieldAssisted DEPEND %AddConditionalSortFieldsAssisted FIELD TIMES 0
+
+%AddConditionalSortFieldAssistedOrder DEPEND %AddConditionalSortFieldsAssisted DEFAULT TIMES 0
+
+%AddConditionalSortFieldAssistedNoCase DEPEND %AddConditionalSortFieldsAssisted LONG TIMES 0
+
+%AddSortDynamicNamed MULTI LONG  ()
+%AddSortFieldDinNameDescription DEPEND %AddSortDynamicNamed DEFAULT TIMES 0
+
+%AddSortFieldsDinName DEPEND %AddSortDynamicNamed MULTI LONG TIMES 0
+
+%AddSortFieldDinName DEPEND %AddSortFieldsDinName FIELD TIMES 0
+
+%AddSortFieldDinNameOrder DEPEND %AddSortFieldsDinName DEFAULT TIMES 0
+
+%AddSortFieldsDinSort MULTI LONG  ()
+%AddSortFieldDinSortDescription DEPEND %AddSortFieldsDinSort DEFAULT TIMES 0
+
+%AddSortFieldDinSort DEPEND %AddSortFieldsDinSort FIELD TIMES 0
+
+%AddSortFieldDinSortOrder DEPEND %AddSortFieldsDinSort DEFAULT TIMES 0
+
+%AdditionalSortWindowTitle DEFAULT  ('Select the Order')
+%AdditionalSortWindowMessage DEFAULT  ('Select the order to process the data.')
+%AdditionalSortWindowOkButtonText DEFAULT  ('&OK')
+%AdditionalSortWindowOkButtonIcon DEFAULT  ('SOK.ICO')
+%AdditionalSortWindowOkButtonCursor DEFAULT  ('')
+%AdditionalSortWindowOkButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowOkButtonMsg DEFAULT  ('Accept data and close the window')
+%AdditionalSortWindowOkButtonTip DEFAULT  ('Accept data and close the window')
+%AdditionalSortWindowOkButtonFlat LONG  (1)
+%AdditionalSortWindowOkButtonSkip LONG  (0)
+%AdditionalSortWindowOkButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowCancelButtonText DEFAULT  ('&Cancel')
+%AdditionalSortWindowCancelButtonIcon DEFAULT  ('SCANCEL.ICO')
+%AdditionalSortWindowCancelButtonCursor DEFAULT  ('')
+%AdditionalSortWindowCancelButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowCancelButtonMsg DEFAULT  ('Cancel operation')
+%AdditionalSortWindowCancelButtonTip DEFAULT  ('Cancel operation')
+%AdditionalSortWindowCancelButtonFlat LONG  (1)
+%AdditionalSortWindowCancelButtonSkip LONG  (0)
+%AdditionalSortWindowCancelButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowUpButtonText DEFAULT  ('')
+%AdditionalSortWindowUpButtonIcon DEFAULT  ('SUP.ICO')
+%AdditionalSortWindowUpButtonCursor DEFAULT  ('')
+%AdditionalSortWindowUpButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowUpButtonMsg DEFAULT  ('Move field up')
+%AdditionalSortWindowUpButtonTip DEFAULT  ('Move field up')
+%AdditionalSortWindowUpButtonFlat LONG  (1)
+%AdditionalSortWindowUpButtonSkip LONG  (0)
+%AdditionalSortWindowUpButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowDownButtonText DEFAULT  ('')
+%AdditionalSortWindowDownButtonIcon DEFAULT  ('SDOWN.ICO')
+%AdditionalSortWindowDownButtonCursor DEFAULT  ('')
+%AdditionalSortWindowDownButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowDownButtonMsg DEFAULT  ('Move field down')
+%AdditionalSortWindowDownButtonTip DEFAULT  ('Move field down')
+%AdditionalSortWindowDownButtonFlat LONG  (1)
+%AdditionalSortWindowDownButtonSkip LONG  (0)
+%AdditionalSortWindowDownButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowChOrdButtonText DEFAULT  ('')
+%AdditionalSortWindowChOrdButtonIcon DEFAULT  ('SCH-ORD.ICO')
+%AdditionalSortWindowChOrdButtonCursor DEFAULT  ('')
+%AdditionalSortWindowChOrdButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowChOrdButtonMsg DEFAULT  ('Change Order')
+%AdditionalSortWindowChOrdButtonTip DEFAULT  ('Change Order')
+%AdditionalSortWindowChOrdButtonFlat LONG  (1)
+%AdditionalSortWindowChOrdButtonSkip LONG  (0)
+%AdditionalSortWindowChOrdButtonJustification DEFAULT  ('Left')
+%ReportDataSourceQueueName DEFAULT  ('')
+%UseMRP LONG  (1)
+%ReportTargetOutput DEFAULT  ('Printer')
+%ReportTargetAskWithPrint LONG  (1)
+%ReportTargetOtherOutput DEFAULT  ('')
+%HideOutputProgress LONG  (0)
+%RuntimeSkipPreview DEFAULT  ('False')
+%AllowUserZooms LONG  (1)
+%InitWindowPosition LONG  (0)
+%WinXPos DEFAULT  ('')
+%WinYPos DEFAULT  ('')
+%WinWidth DEFAULT  ('315')
+%WinHeight DEFAULT  ('200')
+%OverrideGlobalReportPreviewProcedure LONG  (0)
+%ReportPreviewProcedure PROCEDURE  ()
+%RangeField COMPONENT  ()
+%HigherKeys MULTI LONG  ()
+%HigherKey DEPEND %HigherKeys COMPONENT TIMES 0
+
+%RangeLimitType DEFAULT  ('Current Value')
+%HigherKeyField DEPEND %HigherKeys FIELD TIMES 0
+
+%HigherKeyValueType DEPEND %HigherKeys DEFAULT TIMES 0
+
+%HigherKeyValueVariable DEPEND %HigherKeys FIELD TIMES 0
+
+%HigherKeyValueFixed DEPEND %HigherKeys DEFAULT TIMES 0
+
+%RangeLimit FIELD  ()
+%RangeLow FIELD  ()
+%RangeHigh FIELD  ()
+%RangeFile FILE  ()
+%HotFields MULTI LONG  ()
+%HotField DEPEND %HotFields FIELD TIMES 0
+
+%HotFieldBound DEPEND %HotFields LONG TIMES 0
+
+%DetailFilter DEPEND %ReportControl DEFAULT TIMES 0
+
+%DetailFilterExclusive DEPEND %ReportControl LONG TIMES 0
+
+%GlobalObject DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Previewer') ('NO')
+
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 0
+
+%UseDefaultABCBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Previewer') (1)
+
+%UseABCBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Previewer') (1)
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Previewer') ('')
+
+%ExtBaseClass DEPEND %ClassItem DEFAULT TIMES 0
+
+%BaseClassIncludeFile DEPEND %ClassItem DEFAULT TIMES 0
+
+%DeriveFromBaseClass DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Previewer') (0)
+
+%NewMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewMethodName DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewMethodPrototype DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewClassProperty DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataType DEPEND %NewClassPropertyItems DEFAULT TIMES 1
+WHEN  ('Previewer')TIMES 0
+
+%NewClassOtherType DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataIsRef DEPEND %NewClassPropertyItems LONG TIMES 0
+
+%NewClassDataSize DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim1 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim2 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim3 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim4 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%ClassMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassMethodName DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassMethodPrototype DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassProperty DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataType DEPEND %ClassPropertyItems DEFAULT TIMES 1
+WHEN  ('Previewer')TIMES 0
+
+%ClassOtherType DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataIsRef DEPEND %ClassPropertyItems LONG TIMES 0
+
+%ClassDataSize DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim1 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim2 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim3 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 0
+
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 2
+WHEN  ('') (1)
+WHEN  ('?Progress:Cancel') (1)
+
+%LookupAssign DEPEND %Control MULTI LONG TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%CheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedAssignVariable DEPEND %CheckedAssigns FIELD TIMES 0
+
+%CheckedAssignValue DEPEND %CheckedAssigns DEFAULT TIMES 0
+
+%CheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%CheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%UncheckedAssignVariable DEPEND %UncheckedAssigns FIELD TIMES 0
+
+%UncheckedAssignValue DEPEND %UncheckedAssigns DEFAULT TIMES 0
+
+%UnCheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 2
+WHEN  ('')TIMES 0
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%ExtUITabIcon DEPEND %Control DEFAULT TIMES 0
+
+%ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
+
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('Default')
+WHEN  ('?Progress:Cancel') ('Default')
+
+%ActiveImageEnable DEPEND %Control LONG TIMES 0
+
+%AIObjectName DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('AIBtn0')
+WHEN  ('?Progress:Cancel') ('AIBtn4')
+
+%AIEnableMimicControl DEPEND %Control LONG TIMES 2
+WHEN  ('') (1)
+WHEN  ('?Progress:Cancel') (1)
+
+%AIMimicControl DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('?Progress:Thermometer')
+WHEN  ('?Progress:Cancel') ('?Progress:Thermometer')
+
+%AIImgRound DEPEND %Control LONG TIMES 0
+
+%AIOverrideImg DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?Progress:Cancel') (0)
+
+%AIDisableImg DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?Progress:Cancel') (0)
+
+%AIHotImg DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?Progress:Cancel') (0)
+
+%AIPressedImg DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?Progress:Cancel') (0)
+
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('Off')
+WHEN  ('?Progress:Cancel') ('Off')
+
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 2
+WHEN  ('') ('')
+WHEN  ('?Progress:Cancel') ('')
+
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?Progress:Cancel') (0)
+
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 2
+WHEN  ('') (-1)
+WHEN  ('?Progress:Cancel') (-1)
+
+%FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?Progress:Cancel') (0)
+
+%FieldGradientColorTo DEPEND %Control LONG TIMES 2
+WHEN  ('') (-1)
+WHEN  ('?Progress:Cancel') (-1)
+
+%FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 2
+WHEN  ('') (0)
+WHEN  ('?Progress:Cancel') (0)
+
+[EMBED]
+EMBED %BeforeOpeningWindow
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+RecordsPerCycle = 25 * 100  !Process fix for BASIC
+!25 records per cycle is the normal for keyed file likes TPS
+!BASIC file is measured in BYTES
+!1000 is not bad but a better number is 25 * Estimated Record size
+[END]
+[END]
+[ADDITION]
+NAME Clarion ReportDateStamp
+[INSTANCE]
+INSTANCE 1
+[PROMPTS]
+%TimeStampFormat DEFAULT  ('@D17')
+%UseSystemTime DEFAULT  ('1')
+%DateStampFormat DEFAULT  ('@D17')
+%UseSystemDate LONG  (1)
+%DateValueToUse FIELD  ()
+[ADDITION]
+NAME Clarion ReportTimeStamp
+[INSTANCE]
+INSTANCE 2
+[PROMPTS]
+%DateStampFormat DEFAULT  ('@T7')
+%UseSystemDate DEFAULT  ('1')
+%TimeStampFormat DEFAULT  ('@T7')
+%UseSystemTime LONG  (1)
+%TimeValueToUse FIELD  ()
+[WINDOW]
+ProgressWindow WINDOW('Report EmpPosCSV'),AT(,,142,59),FONT('Microsoft Sans Serif',8,,FONT:regular), |
+          DOUBLE,CENTER,GRAY,TIMER(1)
+          PROGRESS,AT(15,15,111,12),USE(Progress:Thermometer),RANGE(0,100),#ORIG(Progress:Thermometer), |
+            #ORDINAL(1)
+          STRING(''),AT(0,3,141,10),USE(?Progress:UserString),CENTER,#ORIG(?Progress:UserString), |
+            #ORDINAL(2)
+          STRING(''),AT(0,30,141,10),USE(?Progress:PctText),CENTER,#ORIG(?Progress:PctText), |
+            #ORDINAL(3)
+          BUTTON('Cancel'),AT(46,42,49,15),USE(?Progress:Cancel),LEFT,ICON('WACANCEL.ICO'), |
+            FLAT,MSG('Cancel Report'),TIP('Cancel Report'),#ORIG(?Progress:Cancel),#ORDINAL(4)
+        END
+
+[REPORT]
+Report  REPORT('EmpPosCSV Report'),AT(250,917,8000,9583),PRE(RPT),PAPER(PAPER:LETTER),FONT('Microsoft ' & |
+          'Sans Serif',8,,FONT:regular),THOUS
+          HEADER,AT(250,250,8000,687),USE(?Header),FONT('Microsoft Sans Serif',8,,FONT:regular), |
+            #ORDINAL(1)
+            STRING('Report EmpPosCSV file'),AT(0,20,8000,220),USE(?ReportTitle),FONT('Microsoft ' & |
+              'Sans Serif',8,,FONT:regular),CENTER,#ORDINAL(2)
+            BOX,AT(0,350,8000,240),USE(?HeaderBox),COLOR(COLOR:Black),LINEWIDTH(1),#ORDINAL(3)
+            STRING('Code'),AT(50,390,,170),USE(?HeaderTitle:1),TRN,#ORDINAL(4)
+            STRING('Position'),AT(490,385,,170),USE(?HeaderTitle:2),TRN,#ORDINAL(5)
+            STRING('Max Salary'),AT(2375,385,,170),USE(?HeaderTitle:3),TRN,#ORDINAL(6)
+            STRING('Min Salary'),AT(3062,385,,170),USE(?HeaderTitle:4),TRN,#ORDINAL(7)
+            STRING('1st Yr'),AT(4604,385,,170),USE(?HeaderTitle:5),TRN,#ORDINAL(8)
+            STRING('Benefits'),AT(5354,385,,170),USE(?HeaderTitle:6),TRN,#ORDINAL(9)
+            STRING('Source'),AT(3729,385,,170),USE(?HeaderTitle:7),TRN,#ORDINAL(10)
+            STRING('Bilingual'),AT(5823,385,,170),USE(?HeaderTitle:8),TRN,#ORDINAL(11)
+            STRING('Grade'),AT(4979,385,,170),USE(?HeaderTitle:9),TRN,#ORDINAL(12)
+            STRING('Primary'),AT(4177,385,,170),USE(?HeaderTitle:11),TRN,#ORDINAL(13)
+            STRING('Ed 360 Role'),AT(6302,385,,170),USE(?HeaderTitle:12),TRN,#ORDINAL(14)
+          END
+Detail    DETAIL,AT(0,0,8000,281),USE(?Detail),#ORDINAL(15)
+            STRING(@s3),AT(50,50,,170),USE(EmpPos:PositionCode),#ORDINAL(16)
+            STRING(@s128),AT(365,52,1900,170),USE(EmpPos:Position),#ORDINAL(17)
+            STRING(@n10.2),AT(2354,52,573,170),USE(EmpPos:MaxFTESalary),RIGHT,#ORDINAL(18)
+            STRING(@n10.2),AT(3010,52,573,170),USE(EmpPos:MinFTESalary),RIGHT,#ORDINAL(19)
+            STRING(@s3),AT(4604,52,,170),USE(EmpPos:FirstYearReq),#ORDINAL(20)
+            STRING(@s3),AT(5427,52,,170),USE(EmpPos:BenefitsReq),#ORDINAL(21)
+            STRING(@s3),AT(3833,52,,170),USE(EmpPos:FundingSourceReq),#ORDINAL(22)
+            STRING(@s3),AT(5771,52,,170),USE(EmpPos:BilingualCodeReq),#ORDINAL(23)
+            STRING(@s3),AT(5083,52,,170),USE(EmpPos:GradeAssignmentReq),#ORDINAL(24)
+            STRING(@s3),AT(4177,52,,170),USE(EmpPos:PrimaryWorkLocationReq),#ORDINAL(25)
+            STRING(@s40),AT(6302,52,1900,170),USE(EmpPos:Ed360Role),#ORDINAL(26)
+          END
+          FOOTER,AT(250,10500,8000,250),USE(?Footer),#ORDINAL(27)
+            STRING('Date:'),AT(115,52,344,135),USE(?ReportDatePrompt:2),FONT('Arial',8,,FONT:regular), |
+              TRN,#ORIG(?ReportDatePrompt),#SEQ(1),#ORDINAL(28)
+            STRING('<<-- Date Stamp -->'),AT(490,52,927,135),USE(?ReportDateStamp:2),FONT('Arial', |
+              8,,FONT:regular),TRN,#ORIG(?ReportDateStamp),#SEQ(1),#ORDINAL(29)
+            STRING('Time:'),AT(1625,52,271,135),USE(?ReportTimePrompt:2),FONT('Arial',8,,FONT:regular), |
+              TRN,#ORIG(?ReportTimePrompt),#SEQ(2),#ORDINAL(30)
+            STRING('<<-- Time Stamp -->'),AT(1927,52,927,135),USE(?ReportTimeStamp:2),FONT('Arial', |
+              8,,FONT:regular),TRN,#ORIG(?ReportTimeStamp),#SEQ(2),#ORDINAL(31)
+            STRING(@pPage <<#p),AT(6950,52,700,135),USE(?PageCount:2),FONT('Arial',8,,FONT:regular), |
+              PAGENO,#ORDINAL(32)
+          END
+          FORM,AT(250,250,8000,10500),USE(?Form),FONT('Microsoft Sans Serif',8,,FONT:regular), |
+            #ORDINAL(33)
+            IMAGE,AT(0,0,8000,10500),USE(?FormImage),TILED,#ORDINAL(34)
+          END
+        END
+
+[PROCEDURE]
+NAME UpdateEmpPosCSV
+[COMMON]
+DESCRIPTION 'Form EmpPosCSV'
+FROM Clarion Form
+CATEGORY 'Form'
+MODIFIED '2020/09/25' '11:21:17'
+[DATA]
+CurrentTab               STRING(80)
+!!> GUID('54815e03-d936-4011-903d-ca834e91dffe')
+LocalRequest             LONG
+!!> GUID('79a6a349-1d9f-4741-a10f-203561ac30d3')
+OriginalRequest          LONG
+!!> GUID('894c4fb7-0b3b-4639-96f6-728cbbc103e8')
+LocalResponse            LONG
+!!> GUID('270cf759-0e69-4d6e-9929-9093c82f153c')
+FilesOpened              LONG
+!!> GUID('ec6ef606-ce8e-45c2-82ce-c148f4b7ab80')
+WindowOpened             LONG
+!!> GUID('e61b4741-82d1-4047-bf66-40473dea7d71')
+WindowInitialized        LONG
+!!> GUID('87745b66-b112-4137-a68d-fb73ab313953')
+ForceRefresh             LONG
+!!> GUID('f4b3083f-0dfa-487d-a2e7-047b1c46481e')
+ActionMessage            CSTRING(40)
+!!> GUID('f5a315b4-841d-4594-90a8-e492c9c8dac0')
+RecordChanged            BYTE,AUTO
+!!> GUID('91d99fd8-8984-44a2-bf3c-bfe057b04d08')
+[FILES]
+[PRIMARY]
+EmpPosCSV
+[INSTANCE]
+2
+[PROMPTS]
+%ButtonAction DEPEND %Control DEFAULT TIMES 3
+WHEN  ('') ('No Special Action')
+WHEN  ('?Cancel') ('No Special Action')
+WHEN  ('?OK') ('No Special Action')
+
+%ButtonRunName DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ButtonThread DEPEND %Control LONG TIMES 0
+
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 3
+WHEN  ('') ('25000')
+WHEN  ('?Cancel') ('25000')
+WHEN  ('?OK') ('25000')
+
+%ButtonParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRequest DEPEND %Control DEFAULT TIMES 3
+WHEN  ('') ('None')
+WHEN  ('?Cancel') ('None')
+WHEN  ('?OK') ('None')
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+
+%ReturnValue FIELD  ()
+%WindowOperationMode DEFAULT  ('Use WINDOW setting')
+%INISaveWindow LONG  (1)
+%ProcedureDisableEnhanceFocus LONG  (0)
+%ProcedureUseEnterInsteadTabOverride LONG  (0)
+%WindowUseEnterInsteadTab LONG  (1)
+%ProcedureUseEnterInsteadTabExcludeListCombo LONG  (0)
+%ProcedureUseEnterInsteadTabEnableNextTabStop LONG  (0)
+%ProcedureUseEnterInsteadTabExcludeG LONG  (1)
+%WindowUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%WindowStyles MULTI LONG  ()
+%WindowStyleFontName DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontSize DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontStyle DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontColor DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontCharSet DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStylePicture DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleOtherListboxes MULTI DEFAULT  ()
+%ProcedureAutoBindFields MULTI LONG  ()
+%ProcedureAutoBindField DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldTPL DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedures MULTI LONG  ()
+%ProcedureAutoBindProcedure DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedureTPL DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldsIgnored MULTI LONG  ()
+%ProcedureAutoBindFieldIgnored DEPEND %ProcedureAutoBindFieldsIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindProceduresIgnored MULTI LONG  ()
+%ProcedureAutoBindProcedureIgnored DEPEND %ProcedureAutoBindProceduresIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindValidToAddField LONG  (1)
+%ProcedureUserBindFields MULTI LONG  ()
+%ProcedureUserBindField DEPEND %ProcedureUserBindFields FIELD TIMES 0
+
+%ProcedureAutoBindFieldIgnore DEPEND %ProcedureAutoBindFields LONG TIMES 0
+
+%ProcedureUserBindProcedures MULTI LONG  ()
+%ProcedureUserBindProcedure DEPEND %ProcedureUserBindProcedures PROCEDURE TIMES 0
+
+%ProcedureAutoBindProcedureIgnore DEPEND %ProcedureAutoBindProcedures LONG TIMES 0
+
+%ProcedureUserBindExpressions MULTI LONG  ()
+%ProcedureUserBindExpressionName DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ProcedureUserBindExpression DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 0
+
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 14
+WHEN  ('') (1)
+WHEN  ('?EmpPos:BenefitsReq') (1)
+WHEN  ('?EmpPos:BilingualCodeReq') (1)
+WHEN  ('?EmpPos:DataType') (1)
+WHEN  ('?EmpPos:Ed360Role') (1)
+WHEN  ('?EmpPos:FirstYearReq') (1)
+WHEN  ('?EmpPos:FundingSourceReq') (1)
+WHEN  ('?EmpPos:GradeAssignmentReq') (1)
+WHEN  ('?EmpPos:MaxFTESalary') (1)
+WHEN  ('?EmpPos:MinFTESalary') (1)
+WHEN  ('?EmpPos:Position') (1)
+WHEN  ('?EmpPos:PositionCode') (1)
+WHEN  ('?EmpPos:PrimaryWorkLocationReq') (1)
+WHEN  ('?EmpPos:SchoolWorkLocationReq') (1)
+
+%LookupAssign DEPEND %Control MULTI LONG TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%CheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedAssignVariable DEPEND %CheckedAssigns FIELD TIMES 0
+
+%CheckedAssignValue DEPEND %CheckedAssigns DEFAULT TIMES 0
+
+%CheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 1
+WHEN  ('')TIMES 0
+
+%CheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 1
+WHEN  ('')TIMES 0
+
+%UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%UncheckedAssignVariable DEPEND %UncheckedAssigns FIELD TIMES 0
+
+%UncheckedAssignValue DEPEND %UncheckedAssigns DEFAULT TIMES 0
+
+%UnCheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 1
+WHEN  ('')TIMES 0
+
+%UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 1
+WHEN  ('')TIMES 0
+
+%ExtUITabIcon DEPEND %Control DEFAULT TIMES 0
+
+%ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
+
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 1
+WHEN  ('') ('Default')
+
+%ActiveImageEnable DEPEND %Control LONG TIMES 0
+
+%AIObjectName DEPEND %Control DEFAULT TIMES 1
+WHEN  ('') ('AIBtn0')
+
+%AIEnableMimicControl DEPEND %Control LONG TIMES 1
+WHEN  ('') (1)
+
+%AIMimicControl DEPEND %Control DEFAULT TIMES 1
+WHEN  ('') ('?EmpPos:PositionCode:Prompt')
+
+%AIImgRound DEPEND %Control LONG TIMES 0
+
+%AIOverrideImg DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('') (0)
+
+%AIDisableImg DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('') (0)
+
+%AIHotImg DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('') (0)
+
+%AIPressedImg DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('') (0)
+
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 1
+WHEN  ('') ('Off')
+
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 1
+WHEN  ('') ('')
+
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('') (0)
+
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 1
+WHEN  ('') (-1)
+
+%FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('') (0)
+
+%FieldGradientColorTo DEPEND %Control LONG TIMES 1
+WHEN  ('') (-1)
+
+%FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('') (0)
+
+[ADDITION]
+NAME Clarion RecordValidation
+[INSTANCE]
+INSTANCE 1
+PROCPROP
+[PROMPTS]
+%ValidateOnAccept LONG  (1)
+%ValidateOnNonStopSelect LONG  (1)
+%ControlsExcluded MULTI LONG  ()
+%ControlToExclude DEPEND %ControlsExcluded DEFAULT TIMES 0
+
+[ADDITION]
+NAME Clarion SaveButton
+[INSTANCE]
+INSTANCE 2
+PROCPROP
+[PROMPTS]
+%InsertAllowed LONG  (0)
+%InsertMessage DEFAULT  ('Record Will Be Added')
+%ChangeAllowed LONG  (0)
+%ChangeMessage DEFAULT  ('Record Will Be Changed')
+%DeleteAllowed LONG  (0)
+%DeleteMessage DEFAULT  ('Record Will Be Deleted')
+%ViewMessage DEFAULT  ('View Record')
+%MessageHeader LONG  (0)
+%ActionOnDelete DEFAULT  ('Standard Warning')
+%PrimingFields MULTI LONG  ()
+%PrimedField DEPEND %PrimingFields FIELD TIMES 0
+
+%PrimedValue DEPEND %PrimingFields DEFAULT TIMES 0
+
+%ActionOnCancel DEFAULT  ('Confirm cancel')
+%MessageLocation DEFAULT  ('Status Bar')
+%MessageStatusSection DEFAULT  ('0')
+%HistoryKey DEFAULT  ('')
+%AppendToTitle LONG  (0)
+%AppendToTitleID DEFAULT  ('')
+%AfterGoodInsert DEFAULT  ('Return to caller')
+%AskAfterAdd LONG  (0)
+[ADDITION]
+NAME Clarion CancelButton
+[INSTANCE]
+INSTANCE 3
+[ADDITION]
+NAME Clarion ViewFormActions
+[INSTANCE]
+INSTANCE 6
+[PROMPTS]
+%ForceViewOnly LONG  (0)
+%ViewAction DEPEND %Control DEFAULT TIMES 29
+WHEN  ('') ('None')
+WHEN  ('?Cancel') ('None')
+WHEN  ('?EmpPos:BenefitsReq') ('ReadOnly')
+WHEN  ('?EmpPos:BenefitsReq:Prompt') ('None')
+WHEN  ('?EmpPos:BilingualCodeReq') ('ReadOnly')
+WHEN  ('?EmpPos:BilingualCodeReq:Prompt') ('None')
+WHEN  ('?EmpPos:DataType') ('ReadOnly')
+WHEN  ('?EmpPos:DataType:Prompt') ('None')
+WHEN  ('?EmpPos:Ed360Role') ('ReadOnly')
+WHEN  ('?EmpPos:Ed360Role:Prompt') ('None')
+WHEN  ('?EmpPos:FirstYearReq') ('ReadOnly')
+WHEN  ('?EmpPos:FirstYearReq:Prompt') ('None')
+WHEN  ('?EmpPos:FundingSourceReq') ('ReadOnly')
+WHEN  ('?EmpPos:FundingSourceReq:Prompt') ('None')
+WHEN  ('?EmpPos:GradeAssignmentReq') ('ReadOnly')
+WHEN  ('?EmpPos:GradeAssignmentReq:Prompt') ('None')
+WHEN  ('?EmpPos:MaxFTESalary') ('ReadOnly')
+WHEN  ('?EmpPos:MaxFTESalary:Prompt') ('None')
+WHEN  ('?EmpPos:MinFTESalary') ('ReadOnly')
+WHEN  ('?EmpPos:MinFTESalary:Prompt') ('None')
+WHEN  ('?EmpPos:Position') ('ReadOnly')
+WHEN  ('?EmpPos:Position:Prompt') ('None')
+WHEN  ('?EmpPos:PositionCode') ('ReadOnly')
+WHEN  ('?EmpPos:PositionCode:Prompt') ('None')
+WHEN  ('?EmpPos:PrimaryWorkLocationReq') ('ReadOnly')
+WHEN  ('?EmpPos:PrimaryWorkLocationReq:Prompt') ('None')
+WHEN  ('?EmpPos:SchoolWorkLocationReq') ('ReadOnly')
+WHEN  ('?EmpPos:SchoolWorkLocationReq:Prompt') ('None')
+WHEN  ('?OK') ('Disable')
+
+%PropertyAssignments DEPEND %Control MULTI LONG TIMES 0
+
+%CtrlProperty DEPEND %PropertyAssignments DEFAULT TIMES 0
+
+%CtrlValue DEPEND %PropertyAssignments DEFAULT TIMES 0
+
+[WINDOW]
+QuickWindow WINDOW('Form EmpPosCSV'),AT(,,358,196),FONT('Microsoft Sans Serif',8,,FONT:regular), |
+          GRAY,IMM,MDI,HLP('UpdateEmpPosCSV'),SYSTEM
+          PROMPT('Position Code:'),AT(8,6),USE(?EmpPos:PositionCode:Prompt),TRN,#LINK(?EmpPos:PositionCode), |
+            #ORIG(?EmpPos:PositionCode:Prompt),#ORDINAL(1)
+          ENTRY(@s3),AT(116,6,40,10),USE(EmpPos:PositionCode),#LINK(?EmpPos:PositionCode:Prompt), |
+            #ORIG(EmpPos:PositionCode),#ORDINAL(2)
+          PROMPT('Position:'),AT(8,20),USE(?EmpPos:Position:Prompt),TRN,#LINK(?EmpPos:Position), |
+            #ORIG(?EmpPos:Position:Prompt),#ORDINAL(3)
+          ENTRY(@s128),AT(116,20,234,10),USE(EmpPos:Position),#LINK(?EmpPos:Position:Prompt), |
+            #ORIG(EmpPos:Position),#ORDINAL(4)
+          PROMPT('Max FTE Salary:'),AT(8,34),USE(?EmpPos:MaxFTESalary:Prompt),TRN,#LINK(?EmpPos:MaxFTESalary), |
+            #ORIG(?EmpPos:MaxFTESalary:Prompt),#ORDINAL(5)
+          ENTRY(@n10.2),AT(116,34,52,10),USE(EmpPos:MaxFTESalary),RIGHT(2),#LINK(?EmpPos:MaxFTESalary:Prompt), |
+            #ORIG(EmpPos:MaxFTESalary),#ORDINAL(6)
+          PROMPT('Min FTE Salary:'),AT(8,49),USE(?EmpPos:MinFTESalary:Prompt),TRN,#LINK(?EmpPos:MinFTESalary), |
+            #ORIG(?EmpPos:MinFTESalary:Prompt),#ORDINAL(7)
+          ENTRY(@n10.2),AT(116,49,52,10),USE(EmpPos:MinFTESalary),RIGHT(2),#LINK(?EmpPos:MinFTESalary:Prompt), |
+            #ORIG(EmpPos:MinFTESalary),#ORDINAL(8)
+          PROMPT('First Year Req:'),AT(8,63),USE(?EmpPos:FirstYearReq:Prompt),TRN,#LINK(?EmpPos:FirstYearReq), |
+            #ORIG(?EmpPos:FirstYearReq:Prompt),#ORDINAL(9)
+          ENTRY(@s3),AT(116,63,25,10),USE(EmpPos:FirstYearReq),#LINK(?EmpPos:FirstYearReq:Prompt), |
+            #ORIG(EmpPos:FirstYearReq),#ORDINAL(10)
+          PROMPT('Benefits Req:'),AT(8,76),USE(?EmpPos:BenefitsReq:Prompt),TRN,#LINK(?EmpPos:BenefitsReq), |
+            #ORIG(?EmpPos:BenefitsReq:Prompt),#ORDINAL(11)
+          ENTRY(@s3),AT(116,76,25,10),USE(EmpPos:BenefitsReq),#LINK(?EmpPos:BenefitsReq:Prompt), |
+            #ORIG(EmpPos:BenefitsReq),#ORDINAL(12)
+          PROMPT('Funding Source Req:'),AT(8,90),USE(?EmpPos:FundingSourceReq:Prompt),TRN, |
+            #LINK(?EmpPos:FundingSourceReq),#ORIG(?EmpPos:FundingSourceReq:Prompt),#ORDINAL(13)
+          ENTRY(@s3),AT(116,90,25,10),USE(EmpPos:FundingSourceReq),#LINK(?EmpPos:FundingSourceReq:Prompt), |
+            #ORIG(EmpPos:FundingSourceReq),#ORDINAL(14)
+          PROMPT('Bilingual Code Req:'),AT(8,105),USE(?EmpPos:BilingualCodeReq:Prompt),TRN, |
+            #LINK(?EmpPos:BilingualCodeReq),#ORIG(?EmpPos:BilingualCodeReq:Prompt),#ORDINAL(15)
+          ENTRY(@s3),AT(116,105,25,10),USE(EmpPos:BilingualCodeReq),#LINK(?EmpPos:BilingualCodeReq:Prompt), |
+            #ORIG(EmpPos:BilingualCodeReq),#ORDINAL(16)
+          PROMPT('Grade Assignment Req:'),AT(8,118),USE(?EmpPos:GradeAssignmentReq:Prompt), |
+            TRN,#LINK(?EmpPos:GradeAssignmentReq),#ORIG(?EmpPos:GradeAssignmentReq:Prompt), |
+            #ORDINAL(17)
+          ENTRY(@s3),AT(116,118,25,10),USE(EmpPos:GradeAssignmentReq),#LINK(?EmpPos:GradeAssignmentReq:Prompt), |
+            #ORIG(EmpPos:GradeAssignmentReq),#ORDINAL(18)
+          PROMPT('School Work Location Req:'),AT(8,132),USE(?EmpPos:SchoolWorkLocationReq:Prompt), |
+            TRN,#LINK(?EmpPos:SchoolWorkLocationReq),#ORIG(?EmpPos:SchoolWorkLocationReq:Prompt), |
+            #ORDINAL(19)
+          ENTRY(@s3),AT(116,132,25,10),USE(EmpPos:SchoolWorkLocationReq),#LINK(?EmpPos:SchoolWorkLocationReq:Prompt), |
+            #ORIG(EmpPos:SchoolWorkLocationReq),#ORDINAL(20)
+          PROMPT('Primary Work Location Req:'),AT(8,146),USE(?EmpPos:PrimaryWorkLocationReq:Prompt), |
+            TRN,#LINK(?EmpPos:PrimaryWorkLocationReq),#ORIG(?EmpPos:PrimaryWorkLocationReq:Prompt), |
+            #ORDINAL(21)
+          ENTRY(@s3),AT(116,146,25,10),USE(EmpPos:PrimaryWorkLocationReq),#LINK(?EmpPos:PrimaryWorkLocationReq:Prompt), |
+            #ORIG(EmpPos:PrimaryWorkLocationReq),#ORDINAL(22)
+          PROMPT('Ed 360 Role:'),AT(8,161),USE(?EmpPos:Ed360Role:Prompt),TRN,#LINK(?EmpPos:Ed360Role), |
+            #ORIG(?EmpPos:Ed360Role:Prompt),#ORDINAL(23)
+          ENTRY(@s40),AT(116,161,234,10),USE(EmpPos:Ed360Role),#LINK(?EmpPos:Ed360Role:Prompt), |
+            #ORIG(EmpPos:Ed360Role),#ORDINAL(24)
+          PROMPT('Data Type:'),AT(8,175),USE(?EmpPos:DataType:Prompt),TRN,#LINK(?EmpPos:DataType), |
+            #ORIG(?EmpPos:DataType:Prompt),#ORDINAL(25)
+          ENTRY(@s10),AT(116,175,44,10),USE(EmpPos:DataType),#LINK(?EmpPos:DataType:Prompt), |
+            #ORIG(EmpPos:DataType),#ORDINAL(26)
+          BUTTON('&OK'),AT(211,86,53,20),USE(?OK),LEFT,ICON('WAOK.ICO'),DEFAULT,FLAT,MSG('Accept dat' & |
+            'a and close the window'),TIP('Accept data and close the window'),#ORIG(?OK),#SEQ(2), |
+            #ORDINAL(27)
+          BUTTON('&Cancel'),AT(272,86,53,20),USE(?Cancel),LEFT,ICON('WACANCEL.ICO'),FLAT,MSG('Cancel operation'), |
+            TIP('Cancel operation'),#ORIG(?Cancel),#SEQ(3),#ORDINAL(28)
+        END
+
+[PROCEDURE]
+NAME ProcessEmpPosCSV
+[COMMON]
+DESCRIPTION 'Process the EmpPosCSV File'
+FROM Clarion Process
+CATEGORY 'Process'
+MODIFIED '2020/09/25' '12:04:20'
+[DATA]
+RejectRecord             LONG
+!!> GUID('6765d967-cf3f-4a68-9852-49f8eef86fd7'),SCOPE(1)
+LocalRequest             LONG
+!!> GUID('d4531e8e-e086-4f0a-b412-dcaceec5687d'),SCOPE(1)
+OriginalRequest          LONG
+!!> GUID('282b469f-ee8c-4b09-ba12-cf1cccb5a82f'),SCOPE(1)
+LocalResponse            LONG
+!!> GUID('2ecbc4c8-9872-4aef-abdf-1e519bcb0139'),SCOPE(1)
+FilesOpened              LONG
+!!> GUID('7e612f4b-a1f5-4a1a-88de-390b0fa6a74a'),SCOPE(1)
+WindowOpened             LONG
+!!> GUID('b0e9a28d-f3b6-49ea-beba-87093f8367d7'),SCOPE(1)
+RecordsToProcess         LONG,AUTO
+!!> GUID('432cd59a-fc23-4aea-9db5-2a6a14d92fc2'),SCOPE(1)
+RecordsProcessed         LONG,AUTO
+!!> GUID('cb01ce60-4f12-4d91-b74b-3b3f447392dd'),SCOPE(1)
+RecordsPerCycle          LONG,AUTO
+!!> GUID('e175a7f5-987d-4a6a-846f-89eb96562f29'),SCOPE(1)
+RecordsThisCycle         LONG,AUTO
+!!> GUID('29dd12b3-ef08-44a6-ba94-a085995bb18b'),SCOPE(1)
+PercentProgress          BYTE
+!!> GUID('0939bc0b-9b57-4b60-bc8d-72d8f7deed1e'),SCOPE(1)
+RecordStatus             BYTE,AUTO
+!!> GUID('7b413836-44b7-4dc8-9d2e-51bc683804eb'),SCOPE(1)
+WindowInitialized        LONG
+!!> GUID('6aa2521f-81e4-4279-96e5-5bb9d6e2ae0e'),SCOPE(1)
+ForceRefresh             LONG
+!!> GUID('6d01bb4a-6710-4c76-911b-b86621d69f12'),SCOPE(1)
+[FILES]
+[PRIMARY]
+EmpPosCSV
+[INSTANCE]
+0
+[PROMPTS]
+%ButtonAction DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('No Special Action')
+
+%ButtonRunName DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ButtonThread DEPEND %Control LONG TIMES 0
+
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('25000')
+
+%ButtonParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRequest DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('None')
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+
+%ReturnValue FIELD  ()
+%WindowOperationMode DEFAULT  ('Use WINDOW setting')
+%INISaveWindow LONG  (1)
+%ProcedureDisableEnhanceFocus LONG  (0)
+%ProcedureUseEnterInsteadTabOverride LONG  (0)
+%WindowUseEnterInsteadTab LONG  (1)
+%ProcedureUseEnterInsteadTabExcludeListCombo LONG  (0)
+%ProcedureUseEnterInsteadTabEnableNextTabStop LONG  (0)
+%ProcedureUseEnterInsteadTabExcludeG LONG  (1)
+%WindowUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%WindowStyles MULTI LONG  ()
+%WindowStyleFontName DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontSize DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontStyle DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontColor DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontCharSet DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStylePicture DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleOtherListboxes MULTI DEFAULT  ()
+%ProcedureAutoBindFields MULTI LONG  ()
+%ProcedureAutoBindField DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldTPL DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedures MULTI LONG  ()
+%ProcedureAutoBindProcedure DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedureTPL DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldsIgnored MULTI LONG  ()
+%ProcedureAutoBindFieldIgnored DEPEND %ProcedureAutoBindFieldsIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindProceduresIgnored MULTI LONG  ()
+%ProcedureAutoBindProcedureIgnored DEPEND %ProcedureAutoBindProceduresIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindValidToAddField LONG  (0)
+%ProcedureUserBindFields MULTI LONG  ()
+%ProcedureUserBindField DEPEND %ProcedureUserBindFields FIELD TIMES 0
+
+%ProcedureAutoBindFieldIgnore DEPEND %ProcedureAutoBindFields LONG TIMES 0
+
+%ProcedureUserBindProcedures MULTI LONG  ()
+%ProcedureUserBindProcedure DEPEND %ProcedureUserBindProcedures PROCEDURE TIMES 0
+
+%ProcedureAutoBindProcedureIgnore DEPEND %ProcedureAutoBindProcedures LONG TIMES 0
+
+%ProcedureUserBindExpressions MULTI LONG  ()
+%ProcedureUserBindExpressionName DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ProcedureUserBindExpression DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ReportDataSource DEFAULT  ('File')
+%WindowMessage DEFAULT  ('')
+%ProcessAction DEFAULT  ('No record action')
+%RIProcessAction LONG  (0)
+%UseMRP LONG  (1)
+%EnableQuickScan LONG  (1)
+%RecordFilter DEFAULT  ('')
+%ApproxRecordCount DEFAULT  ('')
+%AdditionalSortType DEFAULT  ('Manual')
+%AddSortFields DEFAULT  ('')
+%AddSortFieldsAssisted MULTI LONG  ()
+%AddSortFieldAssisted DEPEND %AddSortFieldsAssisted FIELD TIMES 0
+
+%AddSortFieldAssistedOrder DEPEND %AddSortFieldsAssisted DEFAULT TIMES 0
+
+%AddSortFieldAssistedNoCase DEPEND %AddSortFieldsAssisted LONG TIMES 0
+
+%AddConditionalSort MULTI LONG  ()
+%AddConditionalSortCondition DEPEND %AddConditionalSort DEFAULT TIMES 0
+
+%AddConditionalSortFieldsAssisted DEPEND %AddConditionalSort MULTI LONG TIMES 0
+
+%AddConditionalSortFieldAssisted DEPEND %AddConditionalSortFieldsAssisted FIELD TIMES 0
+
+%AddConditionalSortFieldAssistedOrder DEPEND %AddConditionalSortFieldsAssisted DEFAULT TIMES 0
+
+%AddConditionalSortFieldAssistedNoCase DEPEND %AddConditionalSortFieldsAssisted LONG TIMES 0
+
+%AddSortDynamicNamed MULTI LONG  ()
+%AddSortFieldDinNameDescription DEPEND %AddSortDynamicNamed DEFAULT TIMES 0
+
+%AddSortFieldsDinName DEPEND %AddSortDynamicNamed MULTI LONG TIMES 0
+
+%AddSortFieldDinName DEPEND %AddSortFieldsDinName FIELD TIMES 0
+
+%AddSortFieldDinNameOrder DEPEND %AddSortFieldsDinName DEFAULT TIMES 0
+
+%AddSortFieldsDinSort MULTI LONG  ()
+%AddSortFieldDinSortDescription DEPEND %AddSortFieldsDinSort DEFAULT TIMES 0
+
+%AddSortFieldDinSort DEPEND %AddSortFieldsDinSort FIELD TIMES 0
+
+%AddSortFieldDinSortOrder DEPEND %AddSortFieldsDinSort DEFAULT TIMES 0
+
+%AdditionalSortWindowTitle DEFAULT  ('Select the Order')
+%AdditionalSortWindowMessage DEFAULT  ('Select the order to process the data.')
+%AdditionalSortWindowOkButtonText DEFAULT  ('&OK')
+%AdditionalSortWindowOkButtonIcon DEFAULT  ('SOK.ICO')
+%AdditionalSortWindowOkButtonCursor DEFAULT  ('')
+%AdditionalSortWindowOkButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowOkButtonMsg DEFAULT  ('Accept data and close the window')
+%AdditionalSortWindowOkButtonTip DEFAULT  ('Accept data and close the window')
+%AdditionalSortWindowOkButtonFlat LONG  (1)
+%AdditionalSortWindowOkButtonSkip LONG  (0)
+%AdditionalSortWindowOkButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowCancelButtonText DEFAULT  ('&Cancel')
+%AdditionalSortWindowCancelButtonIcon DEFAULT  ('SCANCEL.ICO')
+%AdditionalSortWindowCancelButtonCursor DEFAULT  ('')
+%AdditionalSortWindowCancelButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowCancelButtonMsg DEFAULT  ('Cancel operation')
+%AdditionalSortWindowCancelButtonTip DEFAULT  ('Cancel operation')
+%AdditionalSortWindowCancelButtonFlat LONG  (1)
+%AdditionalSortWindowCancelButtonSkip LONG  (0)
+%AdditionalSortWindowCancelButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowUpButtonText DEFAULT  ('')
+%AdditionalSortWindowUpButtonIcon DEFAULT  ('SUP.ICO')
+%AdditionalSortWindowUpButtonCursor DEFAULT  ('')
+%AdditionalSortWindowUpButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowUpButtonMsg DEFAULT  ('Move field up')
+%AdditionalSortWindowUpButtonTip DEFAULT  ('Move field up')
+%AdditionalSortWindowUpButtonFlat LONG  (1)
+%AdditionalSortWindowUpButtonSkip LONG  (0)
+%AdditionalSortWindowUpButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowDownButtonText DEFAULT  ('')
+%AdditionalSortWindowDownButtonIcon DEFAULT  ('SDOWN.ICO')
+%AdditionalSortWindowDownButtonCursor DEFAULT  ('')
+%AdditionalSortWindowDownButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowDownButtonMsg DEFAULT  ('Move field down')
+%AdditionalSortWindowDownButtonTip DEFAULT  ('Move field down')
+%AdditionalSortWindowDownButtonFlat LONG  (1)
+%AdditionalSortWindowDownButtonSkip LONG  (0)
+%AdditionalSortWindowDownButtonJustification DEFAULT  ('Left')
+%AdditionalSortWindowChOrdButtonText DEFAULT  ('')
+%AdditionalSortWindowChOrdButtonIcon DEFAULT  ('SCH-ORD.ICO')
+%AdditionalSortWindowChOrdButtonCursor DEFAULT  ('')
+%AdditionalSortWindowChOrdButtonKeyCode DEFAULT  ('')
+%AdditionalSortWindowChOrdButtonMsg DEFAULT  ('Change Order')
+%AdditionalSortWindowChOrdButtonTip DEFAULT  ('Change Order')
+%AdditionalSortWindowChOrdButtonFlat LONG  (1)
+%AdditionalSortWindowChOrdButtonSkip LONG  (0)
+%AdditionalSortWindowChOrdButtonJustification DEFAULT  ('Left')
+%RangeField COMPONENT  ()
+%HigherKeys MULTI LONG  ()
+%HigherKey DEPEND %HigherKeys COMPONENT TIMES 0
+
+%RangeLimitType DEFAULT  ('Current Value')
+%HigherKeyField DEPEND %HigherKeys FIELD TIMES 0
+
+%HigherKeyValueType DEPEND %HigherKeys DEFAULT TIMES 0
+
+%HigherKeyValueVariable DEPEND %HigherKeys FIELD TIMES 0
+
+%HigherKeyValueFixed DEPEND %HigherKeys DEFAULT TIMES 0
+
+%RangeLimit FIELD  ()
+%RangeLow FIELD  ()
+%RangeHigh FIELD  ()
+%RangeFile FILE  ()
+%HotFields MULTI LONG  ()
+%HotField DEPEND %HotFields FIELD TIMES 0
+
+%HotFieldBound DEPEND %HotFields LONG TIMES 0
+
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 0
+
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (1)
+
+%LookupAssign DEPEND %Control MULTI LONG TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%CheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedAssignVariable DEPEND %CheckedAssigns FIELD TIMES 0
+
+%CheckedAssignValue DEPEND %CheckedAssigns DEFAULT TIMES 0
+
+%CheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%CheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%UncheckedAssignVariable DEPEND %UncheckedAssigns FIELD TIMES 0
+
+%UncheckedAssignValue DEPEND %UncheckedAssigns DEFAULT TIMES 0
+
+%UnCheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel')TIMES 0
+
+%ExtUITabIcon DEPEND %Control DEFAULT TIMES 0
+
+%ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
+
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('Default')
+
+%ActiveImageEnable DEPEND %Control LONG TIMES 0
+
+%AIObjectName DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('AIBtn4')
+
+%AIEnableMimicControl DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (1)
+
+%AIMimicControl DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('?Progress:Thermometer')
+
+%AIImgRound DEPEND %Control LONG TIMES 0
+
+%AIOverrideImg DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIOverrideImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (0)
+
+%AIDisableImg DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIDisableImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (0)
+
+%AIHotImg DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIHotImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (0)
+
+%AIPressedImg DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgVariable DEPEND %Control DEFAULT TIMES 0
+
+%AIPressedImgIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (0)
+
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('Off')
+
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 1
+WHEN  ('?Progress:Cancel') ('')
+
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (0)
+
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (-1)
+
+%FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (0)
+
+%FieldGradientColorTo DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (-1)
+
+%FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 1
+WHEN  ('?Progress:Cancel') (0)
+
+[EMBED]
+EMBED %DataSection
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+CntRecords LONG
+CntTimers  LONG
+[END]
+EMBED %WindowEventHandling
+[INSTANCES]
+WHEN 'Timer'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2500
+PROPERTY:END
+  CntTimers += 1
+[END]
+[END]
+EMBED %ProcessActivity
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+CntRecords += 1
+[END]
+EMBED %ProcessCompleted
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+Message('Read EmpPosCSV Process complete' & |
+        '|Record Count: ' & CntRecords & |
+        '|Timer Cycles: ' & CntTimers & | 
+       '||Template Variables' & |            
+        '|   RecordsToProcess: ' & RecordsToProcess & |            
+        '|   RecordsProcessed: ' & RecordsProcessed & |            
+        '|   RecordsPerCycle: ' & RecordsPerCycle & |            
+        '', 'ProcessEmpPosCSV')
+        
+[END]
+EMBED %BeforeOpeningWindow
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+CASE Message('Process template measures BASIC and ASCII using BYTES.' & |
+             '||RecordsPerCycle is best set to 25 * Average Record Length' & |
+             '|so more records are processed per timer event makes it faster.' & |
+             '||Template default is RecordsPerCycle=' & RecordsPerCycle & |
+             '||File is 7200 bytes and 71 records so about 100 bytes/record.' & |
+             '','ProcessEmpPosCSV',,'Default ' & RecordsPerCycle &'|2500=25*100')
+OF 2 ; RecordsPerCycle = 25 * 100    !Better to set to 25 * Average Record 
+END
+[END]
+[END]
+[WINDOW]
+ProgressWindow WINDOW('Process EmpPosCSV'),AT(,,142,59),FONT('Microsoft Sans Serif',8,,FONT:regular), |
+          DOUBLE,CENTER,GRAY,TIMER(1)
+          PROGRESS,AT(15,15,111,12),USE(Progress:Thermometer),RANGE(0,100),#ORIG(Progress:Thermometer), |
+            #ORDINAL(1)
+          STRING(''),AT(0,3,141,10),USE(?Progress:UserString),CENTER,#ORIG(?Progress:UserString), |
+            #ORDINAL(2)
+          STRING(''),AT(0,30,141,10),USE(?Progress:PctText),CENTER,#ORIG(?Progress:PctText), |
+            #ORDINAL(3)
+          BUTTON('Cancel'),AT(46,42,49,15),USE(?Progress:Cancel),LEFT,ICON('WACANCEL.ICO'), |
+            FLAT,MSG('Cancel Process'),TIP('Cancel Process'),#ORIG(?Progress:Cancel),#ORDINAL(4)
+        END
+
+[END]

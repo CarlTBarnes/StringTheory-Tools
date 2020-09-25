@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dictionary Name="BasicFiles" Version="1" StructureChecked="1" DctxFormat="4">
+	<DictionaryVersion Version="1" Description="Initial version"/>
+	<Table Guid="{77452bb5-48bb-46d0-b42d-df2b1644b8fc}" Name="EmpPosCSV" Description="!Previous bug  with /FIRSTROWHEADER=ON" Prefix="EmpPos" Driver="BASIC" Path="EmpPos2019.CSV" Create="true" Thread="true">
+		<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:25:10PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="25 SEP 2020" ModifiedTime="10:35:44AM" ModifiedVersionNumber="1"/>
+		<Field Guid="{e35a8c97-8501-4821-9ebc-83dc3f9446b7}" Name="PositionCode" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="Position Code:" ReportHeading="Code" ReportControl=" STRING(@s3),USE(EmpPos:PositionCode)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Position Code:&apos;),USE(?EmpPos:PositionCode:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:PositionCode)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:27:53PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:27:53PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{93ac65f9-3ee0-43a2-ae98-c5e38f60460d}" Name="Position" DataType="STRING" Size="128" ScreenPicture="@s128" ScreenPrompt="Position:" ReportHeading="Position" ReportControl=" STRING(@s128),USE(EmpPos:Position)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Position:&apos;),USE(?EmpPos:Position:Prompt)"/>
+				<Line Text=" ENTRY(@s128),USE(EmpPos:Position)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:28:08PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:28:08PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{0b962366-b858-4ac2-af43-a0956d2592c5}" Name="MaxFTESalary" DataType="DECIMAL" Size="9" Places="2" ScreenPicture="@n10.2" ScreenPrompt="Max FTE Salary:" ReportHeading="Max Salary" Justification="RIGHT" Offset="2" ReportControl=" STRING(@n10.2),USE(EmpPos:MaxFTESalary),RIGHT(2)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Max FTE Salary:&apos;),USE(?EmpPos:MaxFTESalary:Prompt)"/>
+				<Line Text=" ENTRY(@n10.2),USE(EmpPos:MaxFTESalary),RIGHT(2)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:29:04PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:47:41PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{3b580193-bf74-4051-b21d-edbfb7208db0}" Name="MinFTESalary" DataType="DECIMAL" Size="9" Places="2" ScreenPicture="@n10.2" ScreenPrompt="Min FTE Salary:" ReportHeading="Min Salary" Justification="RIGHT" Offset="12" ReportControl=" STRING(@n10.2),USE(EmpPos:MinFTESalary),RIGHT">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Min FTE Salary:&apos;),USE(?EmpPos:MinFTESalary:Prompt)"/>
+				<Line Text=" ENTRY(@n10.2),USE(EmpPos:MinFTESalary),RIGHT"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:28:08PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:47:56PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{26c93820-86ef-4602-85ef-9ad3734e14df}" Name="FirstYearReq" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="First Year Req:" ReportHeading="1st Year" ReportControl=" STRING(@s3),USE(EmpPos:FirstYearReq)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;First Year Req:&apos;),USE(?EmpPos:FirstYearReq:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:FirstYearReq)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:30:06PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:30:06PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{f03cc216-fc22-460a-949c-51f866c2888a}" Name="BenefitsReq" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="Benefits Req:" ReportHeading="Benefits" ReportControl=" STRING(@s3),USE(EmpPos:BenefitsReq)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Benefits Req:&apos;),USE(?EmpPos:BenefitsReq:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:BenefitsReq)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:30:56PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:30:56PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{cfc131cd-5609-4236-a2bf-2edcae9372b1}" Name="FundingSourceReq" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="Funding Source Req:" ReportHeading="Source" ReportControl=" STRING(@s3),USE(EmpPos:FundingSourceReq)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Funding Source Req:&apos;),USE(?EmpPos:FundingSourceReq:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:FundingSourceReq)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:31:23PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:31:23PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{41251370-2b40-4350-80c5-b1cbcb7fbbb1}" Name="BilingualCodeReq" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="Bilingual Code Req:" ReportHeading="Bilingual" ReportControl=" STRING(@s3),USE(EmpPos:BilingualCodeReq)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Bilingual Code Req:&apos;),USE(?EmpPos:BilingualCodeReq:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:BilingualCodeReq)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:31:46PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:31:46PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{1f1749d2-569a-452b-bca5-13b9bf959710}" Name="GradeAssignmentReq" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="Grade Assignment Req:" ReportHeading="Grade Asn" ReportControl=" STRING(@s3),USE(EmpPos:GradeAssignmentReq)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Grade Assignment Req:&apos;),USE(?EmpPos:GradeAssignmentReq:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:GradeAssignmentReq)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:32:06PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:32:06PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{e3e07dc9-a3fc-463a-9e8f-0876daff13c6}" Name="SchoolWorkLocationReq" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="School Work Location Req:" ReportHeading="School Loc" ReportControl=" STRING(@s3),USE(EmpPos:SchoolWorkLocationReq)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;School Work Location Req:&apos;),USE(?EmpPos:SchoolWorkLocationReq:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:SchoolWorkLocationReq)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:32:07PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:33:13PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{7c619795-abd3-4f11-b7e0-6ee5c0412e9e}" Name="PrimaryWorkLocationReq" DataType="STRING" Size="3" ScreenPicture="@s3" ScreenPrompt="Primary Work Location Req:" ReportHeading="Primary Loc" ReportControl=" STRING(@s3),USE(EmpPos:PrimaryWorkLocationReq)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Primary Work Location Req:&apos;),USE(?EmpPos:PrimaryWorkLocationReq:Prompt)"/>
+				<Line Text=" ENTRY(@s3),USE(EmpPos:PrimaryWorkLocationReq)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:32:40PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:33:40PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{2660e6a7-a40a-476f-a9ce-c8fc2bc20465}" Name="Ed360Role" DataType="STRING" Size="40" ScreenPicture="@s40" ScreenPrompt="Ed 360 Role:" ReportHeading="Ed 360 Role" ReportControl=" STRING(@s40),USE(EmpPos:Ed360Role)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Ed 360 Role:&apos;),USE(?EmpPos:Ed360Role:Prompt)"/>
+				<Line Text=" ENTRY(@s40),USE(EmpPos:Ed360Role)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:33:34PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:33:40PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+		<Field Guid="{a2a76bf0-0d7e-4821-8b28-4dcb27447685}" Name="DataType" DataType="STRING" Size="10" ScreenPicture="@s10" ScreenPrompt="Data Type:" ReportHeading="Data Type" ReportControl=" STRING(@s10),USE(EmpPos:DataType)">
+			<WindowControl>
+				<Line Text=" PROMPT(&apos;Data Type:&apos;),USE(?EmpPos:DataType:Prompt)"/>
+				<Line Text=" ENTRY(@s10),USE(EmpPos:DataType)"/>
+			</WindowControl>
+			<Audit CreateUser="Administrator" CreateDate="24 SEP 2020" CreateTime=" 8:33:40PM" CreateVersionNumber="1" ModifiedUser="Administrator" ModifiedDate="24 SEP 2020" ModifiedTime=" 8:34:01PM" ModifiedVersionNumber="1"/>
+			<Validity Check="NOCHECKS"/>
+		</Field>
+	</Table>
+</Dictionary>
+
