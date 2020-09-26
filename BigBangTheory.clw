@@ -19,7 +19,6 @@ Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
         LIST,AT(1,2),FULL,USE(?List:LinesQ),FLAT,HVSCROLL,VCR,FORMAT('24R(2)|M~Row~C(0)@n_6@999L(2)~Lines Q~')
     END
 X USHORT,AUTO
-P USHORT,AUTO
 LnzRecords LONG,AUTO
     CODE
   LnzRecords = LnzST.Records()
@@ -91,7 +90,6 @@ Contrt PROCEDURE(USHORT ColWd=24)
 Expand PROCEDURE()
       END
 X USHORT,AUTO
-P USHORT,AUTO
 Fmt ANY
 PColumn USHORT
 Picture STRING(32)
@@ -256,7 +254,6 @@ ByteNo          long,auto
 Mem_Hex         equate(8+4-4)
 Mem_Chr         equate(Mem_Hex+16*3+1)
 MemLine         string(Mem_Chr+16)         !AAAAAAAA XX x16  16CHRbytes
-cMemLine        cstring(size(MemLine)+3),auto
 Byte1           &byte
 HexD            STRING('0123456789ABCDEF')
 Dump            ANY
