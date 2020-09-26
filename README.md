@@ -92,3 +92,6 @@ I would expect you might use this class in your APP to allow a quick way to view
 
 There is also a SystemStringClass version. That class has no ability to deal with CSV type quoted values.
 
+
+Check out the BasicFileBrowse subfolder with an example of using a BASIC file defined in the DCT and discussion of some advantages. 
+https://github.com/CarlTBarnes/StringTheory-LoadFile-Split-Viewer/tree/master/BasicFileBrowse
