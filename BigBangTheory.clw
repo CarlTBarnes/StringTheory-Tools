@@ -28,7 +28,7 @@ LnzRecords LONG,AUTO
   ?List:LinesQ{7A58h}=1  !C11 PROP:PropVScroll
   0{PROP:Text}='StringTheory Lines View - '& LnzRecords & ' Records  -  Right-Click for Options' ! - ' & LoadFile
   X=LOG10(LnzRecords)+1 ; IF X<4 THEN X=4.
-  ?List:LinesQ{PROPLIST:Picture,1}='n' & X
+  ?List:LinesQ{PROPLIST:Picture,1}='n_' & X
   ?List:LinesQ{PROPLIST:Width,1}  =2 + 4*X
   VlbLines.Init(?List:LinesQ, LnzRecords, 2)
   ACCEPT
@@ -272,6 +272,6 @@ Dump            ANY
         MemLine[Mem_Hex + ByteNo*3 : Mem_Hex + ByteNo*3+1]=HexD[BSHIFT(Byte1,-4)+1] & HexD[BAND(Byte1,0FH) + 1]
         MemLine[Mem_Chr + ByteNo]=choose(Byte1<32,'.',chr(Byte1))
      end
-     Dump = Dump & clip(MemLine) & '<13,10>'
+     Dump = Dump & left(MemLine & '<13,10>')
   end
   RETURN Dump
