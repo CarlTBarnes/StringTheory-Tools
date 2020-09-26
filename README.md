@@ -20,7 +20,7 @@ x     Long
   End
 ```
 
-Insert BigBang to see the results.
+Insert BigBang calls to view the results of various Splits in a LIST.
 
 ```Clarion
 str   StringTheory
@@ -38,14 +38,47 @@ Bang BigBangTheory    !<-- Viewer
   loop x = 1 to str.Records()
     Lne.SetValue(Str.GetLine(x))
     Lne.Split(',','"','"',true)
+    IF X=5 AND DebugLoad THEN     !<-- Limit to developers and line 5
+       Bang.LinesViewInList(Lne)  !<-- See Lines from your: Lne.Split(',','"','"',true)
+    END
     field1 = Lne.GetLine(1)
     field2 = Lne.GetLine(2)
   End
 ```
 
-Screen capture shows the views available. 
+Call ```Bang.LinesViewInList(str)``` to view a LIST with the result of the ```ST.Split('<13,10>','"')``` to lines:
 
-![BigBangCapture](screenshotbang1.png)
+![readme1](images/readme1.png)
+
+Typical code loops the 13,10 split lines to split each line using CSV or Tabs. 
+You can see the entire file split this way in a LIST with a calling ```Bang.LinesViewSplit(Str,',','"','"')``` or for CSV call ```Bang.LinesViewSplitCSV(Str)```. 
+
+![readme2](images/readme2.png)
+
+In that list you can right click on a row and view the columns as rows in a LIST. You can also see then entire line or copy it to the clipboard.
+
+![readme3](images/readme3.png)
+
+
+```Clarion
+  loop x = 1 to str.Records()
+    Lne.SetValue(Str.GetLine(x))
+    Lne.Split(',','"','"',true)
+    IF X=5 AND DebugLoad THEN     !<-- Limit to developers and line 5
+       Bang.LinesViewInList(Lne)  !<-- See Lines from your: Lne.Split(',','"','"',true)
+    END
+    field1 = Lne.GetLine(1)
+    field2 = Lne.GetLine(2)
+  End
+```
+
+If there is a loop splittng lines (like above) you can call ```Bang.LinesViewInList(Lne)``` to view one line to be certain your Split() call is working as you expect.
+
+![readme4](images/readme4.png)
+
+Screen capture shows several views available based on included Bang Test example CwProj and files.
+
+![BigBangCapture](images/screenshotbang1.png)
 
 I would expect you might use this class in your APP to allow a quick way to view files before import. You probably will want to remove some of the features that would confuse end users, like the Picture thing and Menu.
 

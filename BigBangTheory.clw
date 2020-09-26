@@ -97,16 +97,18 @@ PColumn USHORT
 Picture STRING(32)
 Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
         BUTTON('&Menu'),AT(2,2,25,12),USE(?MenuBtn),SKIP
-        BUTTON('View Lines'),AT(40,2,,12),USE(?LinesBtn),SKIP,TIP('Display raw lines')
+        BUTTON('View Lines'),AT(31,2,,12),USE(?LinesBtn),SKIP,TIP('Display raw lines')
+        CHECK('Hide Quotes'),AT(87,3),USE(?NoQuotes),SKIP,HIDE
         STRING('Picture Column:'),AT(173,3,55),USE(?Pict:Pmt),RIGHT
-        COMBO(@s32),AT(233,3,59,10),USE(Picture),DISABLE,VSCROLL,TIP('Change Picture for Column'), |
-                DROP(16),FROM('@D1|@D2|@D3|@D17|@N11.2|@S255|@T1|@T3|@T4|@T8')
-        LIST,AT(1,17),FULL,USE(?List:VLB),HVSCROLL,COLUMN,VCR,FORMAT('40L(2)|M~Col1~Q''NAME'''),FLAT
+        COMBO(@s32),AT(233,3,59,10),USE(Picture),DISABLE,VSCROLL,TIP('Change Picture for Column'),DROP(16),FROM('@D1|@D2' & |
+                '|@D3|@D17|@N11.2|@S255|@T1|@T3|@T4|@T8')
+        LIST,AT(1,17),FULL,USE(?List:VLB),FLAT,HVSCROLL,COLUMN,VCR,FORMAT('40L(2)|M~Col1~Q''NAME''')
     END
 LinST StringTheory
 CsvRecords LONG,AUTO
 ColCount LONG,AUTO
 CsvST_GotRow LONG
+QChanged BOOL
     CODE
   CsvRecords = CsvST.Records()
   IF ~CsvRecords THEN Message('No Lines in Loaded file','LinesViewSplit') ; RETURN .
@@ -120,6 +122,9 @@ CsvST_GotRow LONG
   ?List:VLB{PROP:LineHeight}=1+?List:VLB{PROP:LineHeight}
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
   ?Pict:Pmt{PROP:Tip}='Right click on cell to change the Picture'
+  IF CsvQuoteStart THEN 
+     ?NoQuotes{PROP:Use}=pRemoveQuotes ; UNHIDE(?NoQuotes)
+  END
   0{PROP:Text}='StringTheory CSV View - '& CsvRecords & ' Records - '& ColCount &' Columns  -  Right-Click for Options' ! - ' & LoadFile
   VlbCls.Init(?List:VLB, CsvRecords, ColCount)
   ACCEPT
@@ -131,7 +136,7 @@ CsvST_GotRow LONG
          SETCLIPBOARD(LinST.GetLine(X))    !Correct?
          MESSAGE(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
          SetClipboard(CsvST.GetLine(CsvST_GotRow))
-         MESSAGE(CsvST.GetLine(CsvST_GotRow),'Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
+         MESSAGE(CsvST.GetLine(CsvST_GotRow),'View Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
          ViewColumns()
          BEGIN ; ?List:VLB{PROPLIST:width,X}=0 ; IF X=PColumn THEN DISABLE(?Picture). ; END
          BEGIN ; Picture=?List:VLB{PROPLIST:Picture,X} ; ?Pict:Pmt{PROP:Text}='&Picture Col ' & X & ':'
@@ -151,6 +156,7 @@ CsvST_GotRow LONG
          SETCLIPBOARD(?List:VLB{PROP:Format})
         END
     OF ?LinesBtn ; SELF.LinesViewInList(CsvST)
+    OF ?NoQuotes ; QChanged=1 ; SELECT(?List:VLB,1)
     OF ?Picture ; ?List:VLB{CHOOSE(~INSTRING(lower(picture[1:2]),'@d@t@n@e'),PROPLIST:Left,PROPLIST:Right) ,PColumn}=1
                   ?List:VLB{PROPLIST:Picture,PColumn}=Picture ; DISPLAY
     END
@@ -187,7 +193,7 @@ Chg LONG,AUTO
   CASE xRow
   OF -1 ; RETURN SELF.RowCnt !Rows
   OF -2 ; RETURN SELF.ClmCnt !Columns
-  OF -3 ; RETURN False
+  OF -3 ; Chg=QChanged ; QChanged=0 ; RETURN Chg
   END
   IF xRow <> CsvST_GotRow THEN
     LinSTfromCsvST(xRow)

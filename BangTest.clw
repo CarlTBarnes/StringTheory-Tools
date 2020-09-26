@@ -13,20 +13,26 @@ Test_SystemString PROCEDURE()
 !-------------------
 Test_StringTheory PROCEDURE()  
 Bang BigBangTheory  !Carl Viewer
-ST   StringTheory 
+ST   StringTheory
+lne  StringTheory
+X    LONG 
     CODE
   !GOTO TabTestLabel:
-  IF ~ST.LoadFile('EmpPos2019.csv') THEN  |
-        Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
-  ST.Split('<13,10>') !,'"','"') !<- GPF in 2014 ST
-  Bang.LinesViewInList(ST)    !See Raw Lines
-  Bang.LinesViewSplitCSV(ST)  !does-->  Bang.LinesViewSplit(ST ,',' ,'"','"')
+  IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
+  ST.Split('<13,10>')
+  Bang.LinesViewInList(ST)    !See Raw Lines split by 13,10 in LIST
+  Bang.LinesViewSplitCSV(ST)                  !<-- this line does below CSV split
+! Bang.LinesViewSplit(ST ,',' ,'"','"',True)  !<-- same as above CSV function
+  LOOP X=5 TO 5
+    lne.SetValue(ST.GetLine(X))
+    lne.Split(',','"','"', True)  ! Your Exact Split Code e.g. CSV
+    Bang.LinesViewInList(lne)     ! See the results of your exact split code
+  END
 ! return
-  IF ~ST.LoadFile('LangCds.Pipe') THEN |
-        Message('LoadFile LangCds.Pipe Failed').
-  ST.Split('<13,10>') !,'"','"') !<- GPF in 2014 ST  
-  Bang.LinesViewInList(ST) !See the Raw Lines
-  Bang.LinesViewSplit(ST ,'|' ,'"','"')
+  IF ~ST.LoadFile('LangCds.Pipe') THEN Message('LoadFile LangCds.Pipe Failed').
+  ST.Split('<13,10>') 
+  Bang.LinesViewInList(ST) !See the Raw Lines split 13,10
+  Bang.LinesViewSplit(ST ,'|' ,'"','"')  !Split those lines using Pipes
 
 ! return
 TabTestLabel:
