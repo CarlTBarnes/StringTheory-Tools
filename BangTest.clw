@@ -19,7 +19,8 @@ ST   StringTheory
 lne  StringTheory
 X    LONG 
     CODE
- GOTO TabTestLabel:
+! GOTO LongLinesLabel:
+! GOTO TabTestLabel:
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
   Bang.ValueView(ST,'ValueView ST GetValue of EmpPos2019.CSV')
   ST.Split('<13,10>')
@@ -49,6 +50,13 @@ TabTestLabel:
    
   ST.Base64Encode() 
   Bang.ValueView(ST,'ValueView Base64 Encode LangCds.TAB') 
+
+LongLinesLabel:
+  IF ~ST.LoadFile('LongLines.Pipe') THEN Message('LoadFile LongLines.Pipe Failed').
+  ST.Split('<13,10>', True)
+  Bang.LinesViewInList(ST) 
+  Bang.LinesViewSplit(ST ,'|','','')  
+    
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split
 Test_SystemString PROCEDURE()  
