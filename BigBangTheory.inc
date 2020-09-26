@@ -8,5 +8,8 @@ LinesViewInList     PROCEDURE(StringTheory STwithLinesSplitDone)
 LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE pRemoveQuotes=TRUE)  
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
 LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, string CsvSplitDelim,string CsvQuoteStart,string CsvQuoteEnd, BYTE pRemoveQuotes=TRUE)  
+ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
+StringView          PROCEDURE(STRING StrValue, <STRING WindowCaption>) 
+HexDump             PROCEDURE(long StringAddr, Long StringSize),STRING
      END
     _EndOfInclude_

@@ -5,9 +5,11 @@
   INCLUDE('SystemString.INC'),ONCE
   MAP
 Test_StringTheory PROCEDURE()  
-Test_SystemString PROCEDURE()  
+Test_SystemString PROCEDURE()
+HaltBangTest      PROCEDURE()  
   END
   CODE
+  START(HaltBangTest)
   Test_StringTheory()  
  ! Test_SystemString()   cannot do Quotes but does work
 !-------------------
@@ -17,8 +19,9 @@ ST   StringTheory
 lne  StringTheory
 X    LONG 
     CODE
-  !GOTO TabTestLabel:
+ GOTO TabTestLabel:
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
+  Bang.ValueView(ST,'ValueView ST GetValue of EmpPos2019.CSV')
   ST.Split('<13,10>')
   Bang.LinesViewInList(ST)    !See Raw Lines split by 13,10 in LIST
   Bang.LinesViewSplitCSV(ST)                  !<-- this line does below CSV split
@@ -35,15 +38,21 @@ X    LONG
   Bang.LinesViewSplit(ST ,'|' ,'"','"')  !Split those lines using Pipes
 
 ! return
-TabTestLabel:
-  IF ~ST.LoadFile('LangCds.TAB') THEN |
-        Message('LoadFile LangCds.TAB Failed').
-  ST.Split('<13,10>')
+TabTestLabel: 
+  !   Bang.ValueView(ST,'Empty ST test')
+  IF ~ST.LoadFile('LangCds.TAB') THEN Message('LoadFile LangCds.TAB Failed').
+  Bang.ValueView(ST,'ValueView LangCds.TAB')  
+!  return
+  ST.Split('<13,10>') 
+  Bang.LinesViewInList(ST)
   Bang.LinesViewSplitTAB(ST) 
-  
-!-------------------
+   
+  ST.Base64Encode() 
+  Bang.ValueView(ST,'ValueView Base64 Encode LangCds.TAB') 
+!========================================================================== 
+! systemStringClass cannot do Quotes in Split
 Test_SystemString PROCEDURE()  
-Bang BigBangSystemString  !Carl Viewer
+Bang BigBangSystemString  
 !ST   StringTheory 
 SSC  SystemStringClass 
     CODE     
@@ -66,4 +75,15 @@ TabTestLabel:
   IF SSC.FromFile('LangCds.TAB') THEN Message('FromFile LangCds.TAB Failed').
   SSC.Split('<13,10>')
   Bang.LinesViewSplitTAB(SSC) 
-  
+
+!===========================================================================
+HaltBangTest      PROCEDURE()
+W   WINDOW('Bang Test'),AT(1,1,80,40),GRAY,SYSTEM,FONT('Segoe UI',9)
+        BUTTON('Halt Bang Test'),AT(9,4,60,33),USE(?HaltBtn),ICON(ICON:Cross)
+    END
+    CODE
+    OPEN(W)
+    ACCEPT
+        IF ACCEPTED() THEN BREAK.
+    END
+    HALT()

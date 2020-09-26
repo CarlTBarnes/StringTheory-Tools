@@ -5,8 +5,7 @@
 !----------------------------------------------------------------------------
     INCLUDE('KEYCODES.CLW')
     INCLUDE('BigBangTheory.INC'),ONCE
-  MAP
-  END
+  MAP.
 !----------------------------------------------------------------------
 BigBangTheory.LinesViewInList PROCEDURE(StringTheory LnzST)
 VlbLines CLASS
@@ -37,10 +36,11 @@ LnzRecords LONG,AUTO
     IF EVENT()=EVENT:NewSelection AND FIELD()=?List:LinesQ AND KEYCODE()=MouseRight THEN
        SETKEYCODE(0)
        X=CHOICE(?List:LinesQ)
-       CASE POPUP('Copy Row to Clipboard|View Row Text|-|Copy All Rows Text')
-       OF 1 ; SetClipboard(LnzST.GetLine(X))
-       OF 2 ; MESSAGE(LnzST.GetLine(X),'Row ' & X,,,,MSGMODE:CANCOPY)
-       OF 3 ; SetClipboard(LnzST.GetValue())
+       EXECUTE POPUP('Copy Row to Clipboard|View Row Text|-|Copy All Rows Text|View All Rows Text')
+         SetClipboard(LnzST.GetLine(X))
+         SELF.StringView(LnzST.GetLine(X),'Row ' & X) ! MESSAGE(LnzST.GetLine(X),'Row ' & X,,,,MSGMODE:CANCOPY)
+         SetClipboard(LnzST.GetValue()) 
+         SELF.ValueView(LnzST)
        END
     END
     CASE ACCEPTED()
@@ -131,13 +131,16 @@ QChanged BOOL
     IF EVENT()=EVENT:NewSelection AND FIELD()=?List:VLB AND KEYCODE()=MouseRight THEN
        SETKEYCODE(0)
        X=?List:VLB{PROPLIST:MouseDownField}
-       EXECUTE POPUP('Copy Cell to Clipboard|View Cell Text|-|Copy Row to Clipboard|View Row Line Text|View Row Split...|-|Hide Column ' & X &'|Change @ Picture' & |
-                  '|Column Alignment{{Left|Center|Right}')
+       EXECUTE POPUP('Copy Cell to Clipboard|View Cell Text|-|Copy Row to Clipboard|View Row Text|View Row Split...' & |
+                  '|-|Copy All Rows to Clipboard|View All Rows Text' & |
+                  '|-|Hide Column ' & X &'|Change @ Picture|Column Alignment{{Left|Center|Right}')
          SETCLIPBOARD(LinST.GetLine(X))    !Correct?
-         MESSAGE(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
+         SELF.StringView(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow) !MESSAGE(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
          SetClipboard(CsvST.GetLine(CsvST_GotRow))
-         MESSAGE(CsvST.GetLine(CsvST_GotRow),'View Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
+         SELF.StringView(CsvST.GetLine(CsvST_GotRow),'View Row ' & CsvST_GotRow) ! MESSAGE(CsvST.GetLine(CsvST_GotRow),'View Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
          ViewColumns()
+         SETCLIPBOARD(CsvST.GetValue())
+         SELF.ValueView(CsvST)
          BEGIN ; ?List:VLB{PROPLIST:width,X}=0 ; IF X=PColumn THEN DISABLE(?Picture). ; END
          BEGIN ; Picture=?List:VLB{PROPLIST:Picture,X} ; ?Pict:Pmt{PROP:Text}='&Picture Col ' & X & ':'
                  ENABLE(?Picture) ; SELECT(?Picture) ; PColumn=X ; END
@@ -207,3 +210,71 @@ VlbCls.Contrt PROCEDURE(USHORT ColWd)
 VlbCls.Expand PROCEDURE()
   CODE
   SELF.Contrt(SELF.FEQ{PROP:Width}/SELF.ClmCnt)
+!-------------------------------
+BigBangTheory.ValueView PROCEDURE(StringTheory SeeST, <STRING CapTxt>) 
+    CODE
+    SELF.StringView(SeeST.GetValue(),CapTxt)
+BigBangTheory.StringView PROCEDURE(STRING StrValue, <STRING CapTxt>)
+LenTxt  LONG,AUTO
+HexTxt      ANY
+ShowHex     BYTE
+HScrollTxt  BYTE(1)
+VScrollTxt  BYTE(1)
+Window WINDOW('ST'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
+        TOOLBAR,AT(0,0,325),USE(?TB1)
+            CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
+            CHECK('HScroll'),AT(74,0),USE(HScrollTxt)
+            CHECK('VScroll'),AT(126,0),USE(VScrollTxt)
+        END
+        TEXT,AT(0,2),FULL,USE(?Txt),HVSCROLL,READONLY,FLAT
+        TEXT,AT(0,2),FULL,USE(?HexTxt),HIDE,HVSCROLL,READONLY,FLAT
+    END
+  CODE
+  LenTxt=SIZE(StrValue)
+  OPEN(Window)
+  ?Txt{PROP:Use}=StrValue
+  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory Value') & ' - Length ' & LenTxt 
+  ACCEPT
+    CASE ACCEPTED()
+    OF ?HScrollTxt ; ?Txt{PROP:HScroll}=HScrollTxt
+    OF ?VScrollTxt ; ?Txt{PROP:VScroll}=VScrollTxt
+    OF ?ShowHex 
+        IF ~LenTxt THEN CYCLE.
+        IF HexTxt &= NULL THEN
+           HexTxt = SELF.HexDump(ADDRESS(StrValue),LenTxt-1) 
+           ?HexTxt{PROP:Use}=HexTxt
+        END
+        ?Txt{PROP:Hide}=ShowHex ; ?HexTxt{PROP:Hide}=1-ShowHex
+    END
+  END
+  CLOSE(Window) 
+  RETURN
+!-------------------------------
+BigBangTheory.HexDump PROCEDURE(long SrcAddr, Long SrcSize)
+Segment16       long,auto
+ByteNo          long,auto
+Mem_Hex         equate(8+4-4)
+Mem_Chr         equate(Mem_Hex+16*3+1)
+MemLine         string(Mem_Chr+16)         !AAAAAAAA XX x16  16CHRbytes
+cMemLine        cstring(size(MemLine)+3),auto
+Byte1           &byte
+HexD            STRING('0123456789ABCDEF')
+Dump            ANY
+  CODE
+  MemLine[Mem_Hex : Mem_Hex+16*3]=' 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16'
+  MemLine[Mem_Chr : Mem_Chr+15]='0123456789abcdef'
+  Dump=MemLine & '<13,10>'
+  if SrcAddr >= 0 and SrcAddr < 10000h then return (Dump & 'Error Low Address '&SrcAddr).  !memory < 64KB will cause access violation. Could be <0 if /3GB LargeMemory
+  if SrcSize <= 0 then return(Dump & 'Error Invalid Size '&SrcSize).                       !Passed LEN(CLIP()) and it was zero
+  loop Segment16=SrcAddr to SrcAddr+SrcSize-1 by 16
+     MemLine=Segment16-SrcAddr
+     Loop ByteNo = 0 to 15
+        if Segment16 + ByteNo > SrcAddr+SrcSize-1 then break.
+        IF ByteNo=8 THEN MemLine[Mem_Hex+3*8-1]='-'.
+        Byte1 &= (Segment16 + ByteNo)
+        MemLine[Mem_Hex + ByteNo*3 : Mem_Hex + ByteNo*3+1]=HexD[BSHIFT(Byte1,-4)+1] & HexD[BAND(Byte1,0FH) + 1]
+        MemLine[Mem_Chr + ByteNo]=choose(Byte1<32,'.',chr(Byte1))
+     end
+     Dump = Dump & clip(MemLine) & '<13,10>'
+  end
+  RETURN Dump

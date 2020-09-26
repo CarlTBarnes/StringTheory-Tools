@@ -76,6 +76,14 @@ If there is a loop splittng lines (like above) you can call ```Bang.LinesViewInL
 
 ![readme4](images/readme4.png)
 
+To view the current value in the StringTheory object call ```Bang.ValueView(ST) ``` or you can view any string with ```Bang.StringView(Cus:Record)```. The viewer can be changed to show Hex so you can see the low ASCII values like Tab Chr(9).
+
+![readme5](images/readme5.png)
+
+All right click popups have been changed to use this string viewer instead of a message.
+
+![readme6](images/readme6.png)
+
 Screen capture shows several views available based on included Bang Test example CwProj and files.
 
 ![BigBangCapture](images/screenshotbang1.png)
