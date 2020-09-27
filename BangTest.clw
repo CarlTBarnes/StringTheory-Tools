@@ -18,7 +18,8 @@ Bang BigBangTheory  !Carl Viewer
 ST   StringTheory
 lne  StringTheory
 X    LONG 
-    CODE
+    CODE 
+        !  Bang.DoNotShow=1      !When True None of the Bang windows show
 ! GOTO LongLinesLabel:
 ! GOTO TabTestLabel:
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).

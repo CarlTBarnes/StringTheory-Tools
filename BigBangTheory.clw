@@ -19,11 +19,14 @@ Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
         LIST,AT(1,2),FULL,USE(?List:LinesQ),FLAT,HVSCROLL,VCR,FORMAT('24R(2)|M~Row~C(0)@n_6@999L(2)~Lines Q~')
     END
 X LONG,AUTO
+P LONG,DIM(4),STATIC
 LnzRecords LONG,AUTO
     CODE
+  IF SELF.DoNotShow THEN RETURN.
   LnzRecords = LnzST.Records()
   IF ~LnzRecords THEN Message('No Lines in Loaded file','LinesViewInList') ; RETURN .
   OPEN(Window)
+  IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
   ?List:LinesQ{PROP:LineHeight}=1+?List:LinesQ{PROP:LineHeight}
   ?List:LinesQ{7A58h}=1  !C11 PROP:PropVScroll
   0{PROP:Text}='StringTheory Lines View - '& LnzRecords & ' Records  -  Right-Click for Options' ! - ' & LoadFile
@@ -45,7 +48,7 @@ LnzRecords LONG,AUTO
     CASE ACCEPTED()
     END
   END
-  CLOSE(Window)
+  GETPOSITION(0,P[1],P[2],P[3],P[4])
   RETURN
 !----------------------
 VlbLines.Init PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)
@@ -89,6 +92,7 @@ Contrt PROCEDURE(USHORT ColWd=24)
 Expand PROCEDURE()
       END
 X LONG,AUTO
+P LONG,DIM(4),STATIC
 Fmt ANY
 PColumn USHORT
 Picture STRING(32)
@@ -107,6 +111,7 @@ ColCount LONG,AUTO
 CsvST_GotRow LONG
 QChanged BOOL
     CODE
+  IF SELF.DoNotShow THEN RETURN.
   CsvRecords = CsvST.Records()
   IF ~CsvRecords THEN Message('No Lines in Loaded file','LinesViewSplit') ; RETURN .
   LinSTfromCsvST(1)
@@ -115,6 +120,7 @@ QChanged BOOL
     Fmt=Fmt&'40L(2)|M~' & X & '. <13,10>'& CLIP(SUB(LinST.GetLine(X),1,30)) &'~'
   END
   OPEN(Window)
+  IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
   ?List:VLB{PROP:Format}=Fmt ; CLEAR(Fmt)
   ?List:VLB{PROP:LineHeight}=1+?List:VLB{PROP:LineHeight}
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
@@ -161,7 +167,7 @@ QChanged BOOL
                   ?List:VLB{PROPLIST:Picture,PColumn}=Picture ; DISPLAY
     END
   END
-  CLOSE(Window)
+  GETPOSITION(0,P[1],P[2],P[3],P[4])
   RETURN
 !------------------------------------------
 LinSTfromCsvST PROCEDURE(LONG xRow)    !So all Row Split in one place
@@ -203,21 +209,22 @@ VlbCls.Contrt PROCEDURE(USHORT ColWd)
   CODE
   LOOP X=1 TO SELF.ClmCnt
        IF SELF.FEQ{PROPLIST:Width,X}>0 THEN SELF.FEQ{PROPLIST:Width,X}=ColWd.
-  END ; DISPLAY
+  END
 VlbCls.Expand PROCEDURE()
   CODE
   SELF.Contrt(SELF.FEQ{PROP:Width}/SELF.ClmCnt)
 !-------------------------------
 BigBangTheory.ValueView PROCEDURE(StringTheory SeeST, <STRING CapTxt>) 
     CODE
-    SELF.StringView(SeeST.GetValue(),CapTxt)
+    IF ~SELF.DoNotShow THEN |
+       SELF.StringView(SeeST.GetValue(),CHOOSE(~OMITTED(CapTxt),CapTxt,'StringTheory Value')) .
 
 BigBangTheory.StringView PROCEDURE(STRING StrValue, <STRING CapTxt>)
 LenTxt  LONG,AUTO
-HexTxt      ANY
-ShowHex     BYTE
-HScrollTxt  BYTE(1)
-VScrollTxt  BYTE(1)
+HexTxt  ANY
+ShowHex    BYTE
+HScrollTxt BYTE(1)
+VScrollTxt BYTE(1)
 Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
         TOOLBAR,AT(0,0,325),USE(?TB1)
             CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
@@ -227,11 +234,14 @@ Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
         TEXT,AT(0,2),FULL,USE(?Txt),HVSCROLL,READONLY,FLAT
         TEXT,AT(0,2),FULL,USE(?HexTxt),HIDE,HVSCROLL,READONLY,FLAT
     END
+P LONG,DIM(4),STATIC
   CODE
+  IF SELF.DoNotShow THEN RETURN.
   LenTxt=SIZE(StrValue)
   OPEN(Window)
+  IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
   ?Txt{PROP:Use}=StrValue
-  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory Value') & ' - Length ' & LenTxt 
+  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'String Value') & ' - Length ' & LenTxt 
   ACCEPT
     CASE ACCEPTED()
     OF ?HScrollTxt ; ?Txt{PROP:HScroll}=HScrollTxt
@@ -245,7 +255,7 @@ Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
         ?Txt{PROP:Hide}=ShowHex ; ?HexTxt{PROP:Hide}=1-ShowHex
     END
   END
-  CLOSE(Window) 
+  GETPOSITION(0,P[1],P[2],P[3],P[4]) 
   RETURN
 !-------------------------------
 BigBangTheory.HexDump PROCEDURE(long SrcAddr, Long SrcSize)
