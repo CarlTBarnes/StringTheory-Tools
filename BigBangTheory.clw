@@ -12,13 +12,13 @@ VlbLines CLASS
 FEQ    LONG
 RowCnt LONG
 ClmCnt USHORT
-Init   PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)!  ,VIRTUAL !<-- cannot because Address(Self) in Init is always VlbCls. Maybe if this was TYPE
+Init   PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)
 VLBprc PROCEDURE(LONG xRow, USHORT xCol),STRING
       END
 Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
         LIST,AT(1,2),FULL,USE(?List:LinesQ),FLAT,HVSCROLL,VCR,FORMAT('24R(2)|M~Row~C(0)@n_6@999L(2)~Lines Q~')
     END
-X USHORT,AUTO
+X LONG,AUTO
 LnzRecords LONG,AUTO
     CODE
   LnzRecords = LnzST.Records()
@@ -57,7 +57,6 @@ VlbLines.Init PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)
   xFEQ{PROP:VLBproc}=ADDRESS(SELF.VLBprc)
   RETURN
 VlbLines.VLBprc PROCEDURE(LONG xRow, USHORT xCol)
-Chg LONG,AUTO
   CODE
   CASE xRow
   OF -1 ; RETURN SELF.RowCnt !Rows
@@ -89,7 +88,7 @@ VLBprc PROCEDURE(LONG xRow, USHORT xCol),STRING
 Contrt PROCEDURE(USHORT ColWd=24)
 Expand PROCEDURE()
       END
-X USHORT,AUTO
+X LONG,AUTO
 Fmt ANY
 PColumn USHORT
 Picture STRING(32)
@@ -212,13 +211,14 @@ VlbCls.Expand PROCEDURE()
 BigBangTheory.ValueView PROCEDURE(StringTheory SeeST, <STRING CapTxt>) 
     CODE
     SELF.StringView(SeeST.GetValue(),CapTxt)
+
 BigBangTheory.StringView PROCEDURE(STRING StrValue, <STRING CapTxt>)
 LenTxt  LONG,AUTO
 HexTxt      ANY
 ShowHex     BYTE
 HScrollTxt  BYTE(1)
 VScrollTxt  BYTE(1)
-Window WINDOW('ST'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
+Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
         TOOLBAR,AT(0,0,325),USE(?TB1)
             CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
             CHECK('HScroll'),AT(74,0),USE(HScrollTxt)
@@ -253,7 +253,7 @@ Segment16       long,auto
 ByteNo          long,auto
 Mem_Hex         equate(8+4-4)
 Mem_Chr         equate(Mem_Hex+16*3+1)
-MemLine         string(Mem_Chr+16)         !AAAAAAAA XX x16  16CHRbytes
+MemLine         string(Mem_Chr+16)    !AAAAAAAA XX x16  16CHRbytes
 Byte1           &byte
 HexD            STRING('0123456789ABCDEF')
 Dump            ANY
