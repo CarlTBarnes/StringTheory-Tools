@@ -239,7 +239,8 @@ P LONG,DIM(4),STATIC
   IF SELF.DoNotShow THEN RETURN.
   LenTxt=SIZE(StrValue)
   OPEN(Window)
-  IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
+  IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]). 
+  IF LenTxt > 0FFF0h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k in 11.13505 - Message('Risk GPF?',LenTxt,,'No|Risk')
   ?Txt{PROP:Use}=StrValue
   0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'String Value') & ' - Length ' & LenTxt 
   ACCEPT

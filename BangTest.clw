@@ -3,6 +3,7 @@
   INCLUDE('BigBangTheory.INC'),ONCE
   INCLUDE('BigBangSystemString.INC'),ONCE
   INCLUDE('SystemString.INC'),ONCE
+ 
   MAP
 Test_StringTheory PROCEDURE()  
 Test_SystemString PROCEDURE()
@@ -20,6 +21,7 @@ lne  StringTheory
 X    LONG 
     CODE 
         !  Bang.DoNotShow=1      !When True None of the Bang windows show
+! GOTO WrapTestLabel:
 ! GOTO LongLinesLabel:
 ! GOTO TabTestLabel:
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
@@ -57,7 +59,14 @@ LongLinesLabel:
   ST.Split('<13,10>', True)
   Bang.LinesViewInList(ST) 
   Bang.LinesViewSplit(ST ,'|','','')  
-    
+
+WrapTestLabel:
+  IF ~ST.LoadFile('AliceANSI.txt') THEN Message('LoadFile AliceANSI.txt Failed').  
+  Bang.ValueView(ST,'ST Value Alice.txt') 
+  Bang.StringView(SUB(ST.getValue(),1,0FF00h),'Alice.txt') 
+ ! Bang.WrapView(ST,'Wrap Alice.txt', true) 
+            
+  HALT()
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split
 Test_SystemString PROCEDURE()  
