@@ -62,11 +62,13 @@ LongLinesLabel:
 
 WrapTestLabel:
   IF ~ST.LoadFile('AliceANSI.txt') THEN Message('LoadFile AliceANSI.txt Failed').  
-  Bang.ValueView(ST,'ST Value Alice.txt') 
-  Bang.StringView(SUB(ST.getValue(),1,0FF00h),'Alice.txt') 
- ! Bang.WrapView(ST,'Wrap Alice.txt', true) 
+  Bang.ValueView(ST,'ST Value Full Alice.txt') 
+  Bang.StringView(SUB(ST.getValue(),1,0FF00h),'64kb of Alice.txt') 
+  Bang.WrapView(ST,'Wrap Alice.txt', true) 
             
-  HALT()
+  HALT()  
+  
+  
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split
 Test_SystemString PROCEDURE()  

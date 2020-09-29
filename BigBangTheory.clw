@@ -285,4 +285,63 @@ Dump            ANY
      end
      Dump = Dump & left(MemLine & '<13,10>')
   end
-  RETURN Dump
+  RETURN Dump  
+!------------------------------- 
+BigBangTheory.WrapView PROCEDURE(StringTheory STorig, <STRING CapTxt>, Bool pWrap=false)
+LenTxt      LONG,AUTO
+WrapTheTxt  BYTE
+WrapWidth   LONG(80)
+WrapKeep    BYTE(1) 
+WrapLeft    BYTE
+HScrollTxt  BYTE(1)
+VScrollTxt  BYTE(1)
+stWrap      StringTheory
+Window WINDOW('S'),AT(,,400,250),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
+        TOOLBAR,AT(0,0,350,12),USE(?TB1),FONT('Segoe UI',9)
+            CHECK('Wrap Text'),AT(2,1),USE(WrapTheTxt)
+            PROMPT('Wrap Column:'),AT(52,2),USE(?WrapPrompt)
+            SPIN(@n5),AT(99,2,34,9),USE(WrapWidth),SKIP,DISABLE,HSCROLL,RIGHT,TIP('Width to word wrap each line<13,10>Pr' & |
+                    'ess Enter to wrap at width'),RANGE(5,9999),STEP(5),ALRT(EnterKey), ALRT(TabKey)
+            CHECK('Keep Breaks'),AT(145,1),USE(WrapKeep),DISABLE,TIP('Keep existing CR/LF in the output')
+            CHECK('Left'),AT(202,1),USE(WrapLeft),DISABLE,TIP('Leading white space is removed')
+            CHECK('HScroll'),AT(251,1),USE(HScrollTxt)
+            CHECK('VScroll'),AT(292,1),USE(VScrollTxt)
+        END
+        TEXT,AT(0,2),FULL,USE(?Txt),FLAT,HVSCROLL,READONLY
+        TEXT,AT(0,2),FULL,USE(?WrapTxt),FLAT,HIDE,HVSCROLL,READONLY
+    END
+P LONG,DIM(4),STATIC
+  CODE 
+  IF SELF.DoNotShow THEN RETURN. 
+  LenTxt=stOrig.Length() 
+  IF ~LenTxt THEN Message('No Text','WrapView') ; RETURN. 
+  OPEN(Window)
+  IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
+  ?Txt{PROP:Use}=StOrig.valuePtr
+  IF LenTxt>0FF00h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k
+  DO CapRtn
+  WrapTheTxt=pWrap ; IF pWrap THEN POST(EVENT:Accepted,?WrapTheTxt).
+  ACCEPT
+    CASE ACCEPTED()
+    OF ?HScrollTxt ; ?Txt{PROP:HScroll}=HScrollTxt
+    OF ?VScrollTxt ; ?Txt{PROP:VScroll}=VScrollTxt
+    OF ?WrapTheTxt ; IF WrapTheTxt THEN ENABLE(?WrapWidth,?WrapLeft) ELSE DISABLE(?WrapWidth,?WrapLeft).
+                     ?Txt{PROP:Hide}=WrapTheTxt
+                     IF WrapTheTxt THEN DO WrapRtn ELSE DO CapRtn.
+                     ?WrapTxt{PROP:Hide}=1-WrapTheTxt                     
+    OF ?WrapWidth OROF ?WrapKeep OROF ?WrapLeft ; DO WrapRtn
+    END
+    IF EVENT()=EVENT:AlertKey AND FIELD()=?WrapWidth THEN UPDATE ; DO WrapRtn.
+!make press Tab: IF EVENT()=EVENT:NewSelection AND FIELD()=?WrapWidth THEN DO WrapRtn.
+  END
+  GETPOSITION(0,P[1],P[2],P[3],P[4])
+  CLOSE(Window) 
+  RETURN
+CapRtn ROUTINE
+  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory Wrap') & ' - Length ' & LenTxt & choose(~WrapTheTxt,'',' - Wrapped ' & stWrap.Length())
+WrapRtn ROUTINE
+  StWrap.SetValue(StOrig)
+  StWrap.WrapText(WrapWidth,WrapKeep,WrapLeft)  
+  ?WrapTxt{PROP:Use}=StWrap.valuePtr
+  DO CapRtn
+  DISPLAY  

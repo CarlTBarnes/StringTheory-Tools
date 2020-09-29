@@ -10,12 +10,16 @@ _IFDef_BigBangTheory_  EQUATE(1)
 !----------------- BigBangTheory -----------------
 BigBangTheory    CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW') !,StringTheoryLinkMode),DLL(StringTheoryDllMode)
 DoNotShow           BOOL     !Class is for Developers so =True doesn't show any Windows
+
+ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
+StringView          PROCEDURE(STRING StrValue, <STRING WindowCaption>) 
+WrapView            PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bool pOpenWrapped=false)
+
 LinesViewInList     PROCEDURE(StringTheory STwithLinesSplitDone)
 LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE pRemoveQuotes=TRUE)  
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
 LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, string CsvSplitDelim,string CsvQuoteStart,string CsvQuoteEnd, BYTE pRemoveQuotes=TRUE)  
-ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
-StringView          PROCEDURE(STRING StrValue, <STRING WindowCaption>) 
+
 HexDump             PROCEDURE(long StringAddr, Long StringSize),STRING
      END
 !-------------------------- How to Use: ------------------------------------
