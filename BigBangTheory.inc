@@ -15,7 +15,7 @@ ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCapti
 StringView          PROCEDURE(STRING StrValue, <STRING WindowCaption>) 
 WrapView            PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bool pOpenWrapped=false)
 
-LinesViewInList     PROCEDURE(StringTheory STwithLinesSplitDone)
+LinesViewInList     PROCEDURE(StringTheory STwithLinesSplitDone, <STRING WindowCaption>)
 LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuotes=TRUE)  
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
 LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, string SplitDelim, <string QuoteStart>,<string QuoteEnd>, BYTE RemoveQuotes=TRUE)  

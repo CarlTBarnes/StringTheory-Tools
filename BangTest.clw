@@ -33,7 +33,7 @@ CsvTestRtn ROUTINE
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
   Bang.ValueView(ST,'ValueView ST GetValue of EmpPos2019.CSV')
   ST.Split('<13,10>')
-  Bang.LinesViewInList(ST)    !See Raw Lines split by 13,10 in LIST
+  Bang.LinesViewInList(ST,'Split 13,10 EmpPos2019.CSV')    !See Raw Lines split by 13,10 in LIST
   Bang.LinesViewSplitCSV(ST)                  !<-- this line does below CSV split
 ! Bang.LinesViewSplit(ST ,',' ,'"','"',True)  !<-- same as above CSV function
   LOOP X=5 TO 5

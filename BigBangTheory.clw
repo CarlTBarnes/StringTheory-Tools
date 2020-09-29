@@ -7,7 +7,7 @@
     INCLUDE('BigBangTheory.INC'),ONCE
   MAP.
 !----------------------------------------------------------------------
-BigBangTheory.LinesViewInList PROCEDURE(StringTheory LnzST)
+BigBangTheory.LinesViewInList PROCEDURE(StringTheory LnzST,<STRING CapTxt>)
 VlbLines CLASS
 FEQ    LONG
 RowCnt LONG
@@ -28,8 +28,8 @@ LnzRecords LONG,AUTO
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
   ?List:LinesQ{PROP:LineHeight}=1+?List:LinesQ{PROP:LineHeight}
-  ?List:LinesQ{7A58h}=1  !C11 PROP:PropVScroll
-  0{PROP:Text}='StringTheory Lines View - '& LnzRecords & ' Records  -  Right-Click for Options' ! - ' & LoadFile
+  ?List:LinesQ{7A58h}=1  !C11 PROP:PropVScroll 
+  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CLIP(CapTxt),'StringTheory Lines') &' - '& LnzRecords & ' Records  -  Right-Click for Options'
   X=LOG10(LnzRecords)+1 ; IF X<4 THEN X=4.
   ?List:LinesQ{PROPLIST:Picture,1}='n_' & X
   ?List:LinesQ{PROPLIST:Width,1}  =2 + 4*X
@@ -50,7 +50,6 @@ LnzRecords LONG,AUTO
   END
   GETPOSITION(0,P[1],P[2],P[3],P[4])
   RETURN
-!----------------------
 VlbLines.Init PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)
   CODE
   SELF.FEQ=xFEQ
@@ -189,7 +188,7 @@ ColST StringTheory
   CODE
   ColST.SetValue(CsvST.GetLine(CsvST_GotRow))
   ColST.Split(pDelim,Quote1,Quote2,pRemoveQuotes)
-  SELF.LinesViewInList(ColST)
+  SELF.LinesViewInList(ColST,'View Row ' & CsvST_GotRow)
   RETURN
 VlbCls.Init PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)
   CODE
@@ -223,7 +222,7 @@ VlbCls.Expand PROCEDURE()
 BigBangTheory.ValueView PROCEDURE(StringTheory SeeST, <STRING CapTxt>) 
     CODE
     IF ~SELF.DoNotShow THEN |
-       SELF.StringView(SeeST.GetValue(),CHOOSE(~OMITTED(CapTxt),CapTxt,'StringTheory Value')) .
+       SELF.StringView(SeeST.GetValue(),CHOOSE(~OMITTED(CapTxt),CLIP(CapTxt),'StringTheory Value')) .
 
 BigBangTheory.StringView PROCEDURE(STRING StrValue, <STRING CapTxt>)
 LenTxt  LONG,AUTO
@@ -248,7 +247,7 @@ P LONG,DIM(4),STATIC
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]). 
   IF LenTxt > 0FFF0h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k in 11.13505 - Message('Risk GPF?',LenTxt,,'No|Risk')
   ?Txt{PROP:Use}=StrValue
-  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'String Value') & ' - Length ' & LenTxt 
+  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CLIP(CapTxt),'String Value') & ' - Length ' & LenTxt 
   ACCEPT
     CASE ACCEPTED()
     OF ?HScrollTxt ; ?Txt{PROP:HScroll}=HScrollTxt
@@ -344,7 +343,7 @@ P LONG,DIM(4),STATIC
   CLOSE(Window) 
   RETURN
 CapRtn ROUTINE
-  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory Wrap') & ' - Length ' & LenTxt & choose(~WrapTheTxt,'',' - Wrapped ' & stWrap.Length())
+  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CLIP(CapTxt),'StringTheory Wrap') & ' - Length ' & LenTxt & choose(~WrapTheTxt,'',' - Wrapped ' & stWrap.Length())
 WrapRtn ROUTINE
   StWrap.SetValue(StOrig)
   StWrap.WrapText(WrapWidth,WrapKeep,WrapLeft)  
