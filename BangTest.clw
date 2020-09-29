@@ -20,10 +20,15 @@ ST   StringTheory
 lne  StringTheory
 X    LONG 
     CODE 
-        !  Bang.DoNotShow=1      !When True None of the Bang windows show
-! GOTO WrapTestLabel:
-! GOTO LongLinesLabel:
-! GOTO TabTestLabel:
+        !  Bang.DoNotShow=1      !When True None of the Bang windows show 
+    DO CsvTestRtn
+    DO TabTestRtn
+    DO PipeSplitRtn
+    DO WrapTestRtn
+    HALT()
+    RETURN
+!-------------------------------------
+CsvTestRtn ROUTINE    
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
   Bang.ValueView(ST,'ValueView ST GetValue of EmpPos2019.CSV')
   ST.Split('<13,10>')
@@ -35,37 +40,47 @@ X    LONG
     lne.Split(',','"','"', True)  ! Your Exact Split Code e.g. CSV
     Bang.LinesViewInList(lne)     ! See the results of your exact split code
   END
-! return
+! EXIT
   IF ~ST.LoadFile('LangCds.Pipe') THEN Message('LoadFile LangCds.Pipe Failed').
   ST.Split('<13,10>') 
   Bang.LinesViewInList(ST) !See the Raw Lines split 13,10
   Bang.LinesViewSplit(ST ,'|' ,'"','"')  !Split those lines using Pipes
 
-! return
-TabTestLabel: 
+!-------------------------------------
+TabTestRtn ROUTINE
   !   Bang.ValueView(ST,'Empty ST test')
   IF ~ST.LoadFile('LangCds.TAB') THEN Message('LoadFile LangCds.TAB Failed').
   Bang.ValueView(ST,'ValueView LangCds.TAB')  
-!  return
+!  EXIT
   ST.Split('<13,10>') 
   Bang.LinesViewInList(ST)
   Bang.LinesViewSplitTAB(ST) 
    
   ST.Base64Encode() 
   Bang.ValueView(ST,'ValueView Base64 Encode LangCds.TAB') 
+  
+!-------------------------------------
+PipeSplitRtn ROUTINE
 
-LongLinesLabel:
-  IF ~ST.LoadFile('LongLines.Pipe') THEN Message('LoadFile LongLines.Pipe Failed').
+  IF ~ST.LoadFile('LangCds.Pipe') THEN Message('LoadFile LangCds.Pipe Failed').
   ST.Split('<13,10>', True)
   Bang.LinesViewInList(ST) 
   Bang.LinesViewSplit(ST ,'|','','')  
 
-WrapTestLabel:
-  IF ~ST.LoadFile('AliceANSI.txt') THEN Message('LoadFile AliceANSI.txt Failed').  
+!-------------------------------------
+WrapTestRtn ROUTINE
+  IF ~ST.LoadFile('AliceANSI.txt') THEN Message('LoadFile AliceANSI.txt Failed').   
   Bang.ValueView(ST,'ST Value Full Alice.txt') 
-  Bang.StringView(SUB(ST.getValue(),1,0FF00h),'64kb of Alice.txt') 
-  Bang.WrapView(ST,'Wrap Alice.txt', true) 
-            
+!  Bang.StringView(SUB(ST.getValue(),1,0FF00h),'64kb of Alice.txt') 
+  Bang.WrapView(ST,'Wrap Alice.txt') !, true) 
+
+ ST.SetValue('Test-SplitIntoWords - So she was considering in her own mind (as well as she could, for the hot day ' & |
+          'made her feel very sleepy and stupid), whether the pleasure of making a ' & |
+          'daisy-chain would be worth the trouble of getting up and picking the daisies, ' & |
+          'when suddenly a White Rabbit with pink eyes ran close by')
+ ST.SplitIntoWords()
+ Bang.LinesViewInList(ST)
+ 
   HALT()  
   
   

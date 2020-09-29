@@ -314,10 +314,10 @@ P LONG,DIM(4),STATIC
   CODE 
   IF SELF.DoNotShow THEN RETURN. 
   LenTxt=stOrig.Length() 
-  IF ~LenTxt THEN Message('No Text','WrapView') ; RETURN. 
+  IF ~stOrig.clipLength() THEN Message('No Text','WrapView') ; RETURN. 
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
-  ?Txt{PROP:Use}=StOrig.valuePtr
+  ?Txt{PROP:Use}=StOrig.valuePtr[1 : LenTxt]
   IF LenTxt>0FF00h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k
   DO CapRtn
   WrapTheTxt=pWrap ; IF pWrap THEN POST(EVENT:Accepted,?WrapTheTxt).
@@ -326,9 +326,9 @@ P LONG,DIM(4),STATIC
     OF ?HScrollTxt ; ?Txt{PROP:HScroll}=HScrollTxt
     OF ?VScrollTxt ; ?Txt{PROP:VScroll}=VScrollTxt
     OF ?WrapTheTxt ; IF WrapTheTxt THEN ENABLE(?WrapWidth,?WrapLeft) ELSE DISABLE(?WrapWidth,?WrapLeft).
-                     ?Txt{PROP:Hide}=WrapTheTxt
-                     IF WrapTheTxt THEN DO WrapRtn ELSE DO CapRtn.
-                     ?WrapTxt{PROP:Hide}=1-WrapTheTxt                     
+                     ?Txt{PROP:Hide}=WrapTheTxt 
+                     ?WrapTxt{PROP:Hide}=1-WrapTheTxt 
+                     IF WrapTheTxt THEN DO WrapRtn ELSE DO CapRtn.                                         
     OF ?WrapWidth OROF ?WrapKeep OROF ?WrapLeft ; DO WrapRtn
     END
     IF EVENT()=EVENT:AlertKey AND FIELD()=?WrapWidth THEN UPDATE ; DO WrapRtn.
@@ -342,6 +342,6 @@ CapRtn ROUTINE
 WrapRtn ROUTINE
   StWrap.SetValue(StOrig)
   StWrap.WrapText(WrapWidth,WrapKeep,WrapLeft)  
-  ?WrapTxt{PROP:Use}=StWrap.valuePtr
+  ?WrapTxt{PROP:Use}=StWrap.valuePtr[1 : StWrap._DataEnd]
   DO CapRtn
   DISPLAY  
