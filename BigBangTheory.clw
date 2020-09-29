@@ -76,7 +76,7 @@ BigBangTheory.LinesViewSplitTAB   PROCEDURE(StringTheory STLined)
     CODE
     SELF.LinesViewSplit(STLined,CHR(9),'','',False)
 
-BigBangTheory.LinesViewSplit PROCEDURE(StringTheory CsvST,string CsvDelim,string CsvQuoteStart,string CsvQuoteEnd, BYTE pRemoveQuotes)
+BigBangTheory.LinesViewSplit PROCEDURE(StringTheory CsvST,string pDelim,<string pQuoteBegin>,<string pQuoteEnd>, BYTE pRemoveQuotes)
     MAP
 LinSTfromCsvST PROCEDURE(LONG xRow2Load)   !Has lines specs eg. delimeter may not be Comma
 ViewColumns    PROCEDURE()
@@ -110,10 +110,14 @@ CsvRecords LONG,AUTO
 ColCount LONG,AUTO
 CsvST_GotRow LONG
 QChanged BOOL
+Quote1 PSTRING(9)
+Quote2 PSTRING(9)
     CODE
   IF SELF.DoNotShow THEN RETURN.
   CsvRecords = CsvST.Records()
   IF ~CsvRecords THEN Message('No Lines in Loaded file','LinesViewSplit') ; RETURN .
+  IF ~OMITTED(pQuoteBegin) THEN Quote1=pQuoteBegin.
+  IF ~OMITTED(pQuoteEnd) THEN Quote2=pQuoteEnd.
   LinSTfromCsvST(1)
   ColCount = LinST.Records()  !Assume 1st line has all columns. Pass columns?
   LOOP X=1 TO ColCount        !Assume first row has labels
@@ -125,10 +129,12 @@ QChanged BOOL
   ?List:VLB{PROP:LineHeight}=1+?List:VLB{PROP:LineHeight}
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
   ?Pict:Pmt{PROP:Tip}='Right click on cell to change the Picture'
-  IF CsvQuoteStart THEN 
+  IF Quote1 THEN 
      ?NoQuotes{PROP:Use}=pRemoveQuotes ; UNHIDE(?NoQuotes)
   END
-  0{PROP:Text}='StringTheory CSV View - '& CsvRecords & ' Records - '& ColCount &' Columns  -  Right-Click for Options' ! - ' & LoadFile
+  0{PROP:Text}='StringTheory Split - '& CsvRecords & ' Records - '& ColCount &' Columns' & |
+                ' - SplitStr: ' & QUOTE(pDelim) & '  Quote: ' & QUOTE(Quote1) &'  End: ' & QUOTE(Quote2) &' Remove: ' & pRemoveQuotes & |
+               ' -  Right-Click for Options' 
   VlbCls.Init(?List:VLB, CsvRecords, ColCount)
   ACCEPT
     IF EVENT()=EVENT:NewSelection AND FIELD()=?List:VLB AND KEYCODE()=MouseRight THEN
@@ -175,14 +181,14 @@ LinSTfromCsvST PROCEDURE(LONG xRow)    !So all Row Split in one place
   IF xRow <> CsvST_GotRow THEN
     CsvST_GotRow = xRow
     LinST.SetValue(CsvST.GetLine(xRow))
-    LinST.Split(CsvDelim,CsvQuoteStart,CsvQuoteEnd,pRemoveQuotes)
+    LinST.Split(pDelim,Quote1,Quote2,pRemoveQuotes)
   END
   RETURN
 ViewColumns PROCEDURE()
 ColST StringTheory
   CODE
   ColST.SetValue(CsvST.GetLine(CsvST_GotRow))
-  ColST.Split(CsvDelim,CsvQuoteStart,CsvQuoteEnd,pRemoveQuotes)
+  ColST.Split(pDelim,Quote1,Quote2,pRemoveQuotes)
   SELF.LinesViewInList(ColST)
   RETURN
 VlbCls.Init PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)

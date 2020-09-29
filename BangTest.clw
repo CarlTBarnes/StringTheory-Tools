@@ -20,7 +20,8 @@ ST   StringTheory
 lne  StringTheory
 X    LONG 
     CODE 
-        !  Bang.DoNotShow=1      !When True None of the Bang windows show 
+        !  Bang.DoNotShow=1      !When True None of the Bang windows show  
+!   DO TabTestRtn
     DO CsvTestRtn
     DO TabTestRtn
     DO PipeSplitRtn
@@ -44,7 +45,7 @@ CsvTestRtn ROUTINE
   IF ~ST.LoadFile('LangCds.Pipe') THEN Message('LoadFile LangCds.Pipe Failed').
   ST.Split('<13,10>') 
   Bang.LinesViewInList(ST) !See the Raw Lines split 13,10
-  Bang.LinesViewSplit(ST ,'|' ,'"','"')  !Split those lines using Pipes
+  Bang.LinesViewSplit(ST ,'|')  !Split those lines using Pipes
 
 !-------------------------------------
 TabTestRtn ROUTINE
@@ -54,7 +55,8 @@ TabTestRtn ROUTINE
 !  EXIT
   ST.Split('<13,10>') 
   Bang.LinesViewInList(ST)
-  Bang.LinesViewSplitTAB(ST) 
+!  Bang.LinesViewSplitTAB(ST) 
+  Bang.LinesViewSplit(ST,CHR(9)) 
    
   ST.Base64Encode() 
   Bang.ValueView(ST,'ValueView Base64 Encode LangCds.TAB') 
@@ -65,7 +67,7 @@ PipeSplitRtn ROUTINE
   IF ~ST.LoadFile('LangCds.Pipe') THEN Message('LoadFile LangCds.Pipe Failed').
   ST.Split('<13,10>', True)
   Bang.LinesViewInList(ST) 
-  Bang.LinesViewSplit(ST ,'|','','')  
+  Bang.LinesViewSplit(ST ,'|','"')  
 
 !-------------------------------------
 WrapTestRtn ROUTINE

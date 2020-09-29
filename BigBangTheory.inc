@@ -16,9 +16,9 @@ StringView          PROCEDURE(STRING StrValue, <STRING WindowCaption>)
 WrapView            PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bool pOpenWrapped=false)
 
 LinesViewInList     PROCEDURE(StringTheory STwithLinesSplitDone)
-LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE pRemoveQuotes=TRUE)  
+LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuotes=TRUE)  
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
-LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, string CsvSplitDelim,string CsvQuoteStart,string CsvQuoteEnd, BYTE pRemoveQuotes=TRUE)  
+LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, string SplitDelim, <string QuoteStart>,<string QuoteEnd>, BYTE RemoveQuotes=TRUE)  
 
 HexDump             PROCEDURE(long StringAddr, Long StringSize),STRING
      END
