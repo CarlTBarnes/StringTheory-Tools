@@ -255,7 +255,7 @@ P LONG,DIM(4),STATIC
     OF ?ShowHex 
         IF ~LenTxt THEN CYCLE.
         IF HexTxt &= NULL THEN
-           HexTxt = SELF.HexDump(ADDRESS(StrValue),LenTxt-1) 
+           HexTxt = SELF.HexDump(StrValue) 
            ?HexTxt{PROP:Use}=HexTxt
         END
         ?Txt{PROP:Hide}=ShowHex ; ?HexTxt{PROP:Hide}=1-ShowHex
@@ -264,33 +264,40 @@ P LONG,DIM(4),STATIC
   GETPOSITION(0,P[1],P[2],P[3],P[4]) 
   RETURN
 !-------------------------------
-BigBangTheory.HexDump PROCEDURE(long SrcAddr, Long SrcSize)
-Segment16       long,auto
-ByteNo          long,auto
-Mem_Hex         equate(8+4-4)
-Mem_Chr         equate(Mem_Hex+16*3+1)
-MemLine         string(Mem_Chr+16)    !AAAAAAAA XX x16  16CHRbytes
-Byte1           &byte
-HexD            STRING('0123456789ABCDEF')
-Dump            ANY
+BigBangTheory.HexDump PROCEDURE(*STRING Str2Hex)
+Str StringTheory
+Dmp StringTheory
+    CODE
+    Str.SetValue(Str2Hex)
+    SELF.HexDump(Str,Dmp)
+    RETURN Dmp.GetValue()
+ 
+BigBangTheory.HexDump PROCEDURE(StringTheory pStr, StringTheory Dump)
+offset  Long,auto
+x       Long,auto
+Mem_Hex Equate(8+4-4)
+Mem_Chr Equate(Mem_Hex+16*3+1)
+MemLine String(Mem_Chr+16)    !AAAAAAAA XX x16  16CHRbytes
+stHex   StringTheory
+Lin_Pos String(9),auto
+Lin_Hex String(49),auto
+Lin_Chr String(16),auto
   CODE
+  stHex.setValue(pStr)
+  stHex.ToHex(st:Upper,true)
   MemLine[Mem_Hex : Mem_Hex+16*3]=' 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16'
   MemLine[Mem_Chr : Mem_Chr+15]='0123456789abcdef'
-  Dump=MemLine & '<13,10>'
-  if SrcAddr >= 0 and SrcAddr < 10000h then return (Dump & 'Error Low Address '&SrcAddr).  !memory < 64KB will cause access violation. Could be <0 if /3GB LargeMemory
-  if SrcSize <= 0 then return(Dump & 'Error Invalid Size '&SrcSize).                       !Passed LEN(CLIP()) and it was zero
-  loop Segment16=SrcAddr to SrcAddr+SrcSize-1 by 16
-     MemLine=Segment16-SrcAddr
-     Loop ByteNo = 0 to 15
-        if Segment16 + ByteNo > SrcAddr+SrcSize-1 then break.
-        IF ByteNo=8 THEN MemLine[Mem_Hex+3*8-1]='-'.
-        Byte1 &= (Segment16 + ByteNo)
-        MemLine[Mem_Hex + ByteNo*3 : Mem_Hex + ByteNo*3+1]=HexD[BSHIFT(Byte1,-4)+1] & HexD[BAND(Byte1,0FH) + 1]
-        MemLine[Mem_Chr + ByteNo]=choose(Byte1<32,'.',chr(Byte1))
+  Dump.setValue(MemLine)
+  loop offset=0 to pStr._DataEnd-1 by 16
+     Lin_Pos='<13,10>' & offset
+     Lin_Hex=stHex.sub(offset*3 + 1, 48) ; Lin_Hex[24]='-'
+     Lin_Chr=pStr.sub(offset+1, 16)
+     loop x = 1 to 16
+       if val(Lin_Chr[x]) < 32 then Lin_Chr[x] = '.'.
      end
-     Dump = Dump & left(MemLine & '<13,10>')
-  end
-  RETURN Dump  
+     Dump.Append(Lin_Pos & Lin_Hex & Lin_Chr)
+  end  
+  RETURN
 !------------------------------- 
 BigBangTheory.WrapView PROCEDURE(StringTheory STorig, <STRING CapTxt>, Bool pWrap=false)
 LenTxt      LONG,AUTO

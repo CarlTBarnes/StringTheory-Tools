@@ -20,7 +20,8 @@ LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuot
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
 LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, string SplitDelim, <string QuoteStart>,<string QuoteEnd>, BYTE RemoveQuotes=TRUE)  
 
-HexDump             PROCEDURE(long StringAddr, Long StringSize),STRING
+HexDump             PROCEDURE(*STRING StringToReturnHex),STRING
+HexDump             PROCEDURE(StringTheory InputString, StringTheory OutHexDump)
      END
 !-------------------------- How to Use: ------------------------------------
 !

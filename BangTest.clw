@@ -27,6 +27,7 @@ X    LONG
     DO PipeSplitRtn
     DO WrapTestRtn
     DO SerializeQRtn
+    DO HexTestRtn
     HALT()
     RETURN
 !-------------------------------------
@@ -97,7 +98,17 @@ FilesQ    FILE:Queue
        bang.LinesViewInList(ST,'Directory() SerializeQueue Lines')
        bang.LinesViewSplitCSV(ST)
        EXIT  
-  
+!-------------------------------------
+HexTestRtn ROUTINE   !
+    DATA 
+s256    STRING(256)    
+    CODE
+    LOOP X=1 to 255 ; s256[x]=CHR(x) ; END
+    Bang.StringView(s256 & s256 & s256 & s256 & '1024 Byte Tester','Check "HEX" Test 1024 bytes')
+    IF ST.LoadFile('LangCds.TAB') THEN 
+       Bang.ValueView(ST,'Check "HEX" LangCds.TAB')  
+    END
+
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split
 Test_SystemString PROCEDURE()  
