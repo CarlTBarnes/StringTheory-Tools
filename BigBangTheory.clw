@@ -305,8 +305,8 @@ Window WINDOW('S'),AT(,,400,250),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
         TOOLBAR,AT(0,0,350,12),USE(?TB1),FONT('Segoe UI',9)
             CHECK('Wrap Text'),AT(2,1),USE(WrapTheTxt)
             PROMPT('Wrap Column:'),AT(52,2),USE(?WrapPrompt)
-            SPIN(@n5),AT(99,2,34,9),USE(WrapWidth),SKIP,DISABLE,HSCROLL,RIGHT,TIP('Width to word wrap each line<13,10>Pr' & |
-                    'ess Enter to wrap at width'),RANGE(5,9999),STEP(5),ALRT(EnterKey), ALRT(TabKey)
+            SPIN(@n5),AT(99,2,34,9),USE(WrapWidth),DELAY(50),SKIP,DISABLE,HSCROLL,RIGHT,TIP('Width to word wrap each line<13,10>Pr' & |
+                    'ess Enter to wrap at width'),RANGE(5,9999),STEP(5),ALRT(EnterKey)
             CHECK('Keep Breaks'),AT(145,1),USE(WrapKeep),DISABLE,TIP('Keep existing CR/LF in the output')
             CHECK('Left'),AT(202,1),USE(WrapLeft),DISABLE,TIP('Leading white space is removed')
             CHECK('HScroll'),AT(251,1),USE(HScrollTxt)
@@ -336,8 +336,9 @@ P LONG,DIM(4),STATIC
                      IF WrapTheTxt THEN DO WrapRtn ELSE DO CapRtn.                                         
     OF ?WrapWidth OROF ?WrapKeep OROF ?WrapLeft ; DO WrapRtn
     END
-    IF EVENT()=EVENT:AlertKey AND FIELD()=?WrapWidth THEN UPDATE ; DO WrapRtn.
-!make press Tab: IF EVENT()=EVENT:NewSelection AND FIELD()=?WrapWidth THEN DO WrapRtn.
+    IF FIELD()=?WrapWidth AND INLIST(EVENT(),EVENT:NewSelection,EVENT:AlertKey) THEN
+       UPDATE ; DO WrapRtn 
+    END
   END
   GETPOSITION(0,P[1],P[2],P[3],P[4])
   CLOSE(Window) 
