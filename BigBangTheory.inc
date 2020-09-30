@@ -12,13 +12,15 @@ BigBangTheory    CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW'
 DoNotShow           BOOL     !Class is for Developers so =True doesn't show any Windows
 
 ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
-StringView          PROCEDURE(STRING StrValue, <STRING WindowCaption>) 
+StringView          PROCEDURE(*STRING StrValue, <STRING WindowCaption>) 
+StringView          PROCEDURE(STRING  StrValue, <STRING WindowCaption>) 
+
 WrapView            PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bool pOpenWrapped=false)
 
 LinesViewInList     PROCEDURE(StringTheory STwithLinesSplitDone, <STRING WindowCaption>)
 LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuotes=False)  
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
-LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, string SplitDelim, <string QuoteStart>,<string QuoteEnd>, BYTE RemoveQuotes=TRUE)  
+LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE)  
 
 HexDump             PROCEDURE(*STRING StringToReturnHex),STRING
 HexDump             PROCEDURE(StringTheory InputString, StringTheory OutHexDump)

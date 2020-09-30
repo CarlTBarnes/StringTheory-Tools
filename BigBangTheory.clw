@@ -219,14 +219,20 @@ VlbCls.Expand PROCEDURE()
   CODE
   SELF.Contrt(SELF.FEQ{PROP:Width}/SELF.ClmCnt)
 !-------------------------------
-BigBangTheory.ValueView PROCEDURE(StringTheory SeeST, <STRING CapTxt>) 
-    CODE
-    IF ~SELF.DoNotShow THEN |
-       SELF.StringView(SeeST.GetValue(),CHOOSE(~OMITTED(CapTxt),CLIP(CapTxt),'StringTheory Value')) .
-
 BigBangTheory.StringView PROCEDURE(STRING StrValue, <STRING CapTxt>)
-LenTxt  LONG,AUTO
-HexTxt  ANY
+  CODE
+  SELF.StringView(StrValue,CapTxt)
+
+BigBangTheory.StringView PROCEDURE(*STRING StrValue, <STRING CapTxt>)
+St StringTheory
+  CODE
+  IF SELF.DoNotShow THEN RETURN.
+  St.setValue(StrValue) 
+  SELF.ValueView(St, CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'String Value'))
+
+BigBangTheory.ValueView PROCEDURE(StringTheory pST, <STRING CapTxt>) 
+LenTxt     LONG,AUTO
+HexTxt     StringTheory
 ShowHex    BYTE
 HScrollTxt BYTE(1)
 VScrollTxt BYTE(1)
@@ -242,21 +248,21 @@ Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
 P LONG,DIM(4),STATIC
   CODE
   IF SELF.DoNotShow THEN RETURN.
-  LenTxt=SIZE(StrValue)
+  LenTxt=pSt.length()
+  IF ~LenTxt THEN Message('No Text','ValueView') ; RETURN. 
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]). 
   IF LenTxt > 0FFF0h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k in 11.13505 - Message('Risk GPF?',LenTxt,,'No|Risk')
-  ?Txt{PROP:Use}=StrValue
-  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CLIP(CapTxt),'String Value') & ' - Length ' & LenTxt 
+  ?Txt{PROP:Use}=pSt.valuePtr[1 : LenTxt]
+  0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CLIP(CapTxt),'StringTheory Value') & ' - Length ' & LenTxt 
   ACCEPT
     CASE ACCEPTED()
     OF ?HScrollTxt ; ?Txt{PROP:HScroll}=HScrollTxt
     OF ?VScrollTxt ; ?Txt{PROP:VScroll}=VScrollTxt
     OF ?ShowHex 
-        IF ~LenTxt THEN CYCLE.
-        IF HexTxt &= NULL THEN
-           HexTxt = SELF.HexDump(StrValue) 
-           ?HexTxt{PROP:Use}=HexTxt
+        IF ~HexTxt.length() THEN
+           SELF.HexDump(pSt, HexTxt) 
+           ?HexTxt{PROP:Use}=HexTxt.valuePtr[1 : HexTxt._DataEnd]
         END
         ?Txt{PROP:Hide}=ShowHex ; ?HexTxt{PROP:Hide}=1-ShowHex
     END

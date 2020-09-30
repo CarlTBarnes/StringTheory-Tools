@@ -21,7 +21,7 @@ lne  StringTheory
 X    LONG 
     CODE 
         !  Bang.DoNotShow=1      !When True None of the Bang windows show  
-!    DO SerializeQRtn
+!    DO HexTestRtn
     DO CsvTestRtn
     DO TabTestRtn
     DO PipeSplitRtn
@@ -105,6 +105,7 @@ s256    STRING(256)
     CODE
     LOOP X=1 to 255 ; s256[x]=CHR(x) ; END
     Bang.StringView(s256 & s256 & s256 & s256 & '1024 Byte Tester','Check "HEX" Test 1024 bytes')
+    Bang.StringView(s256,'Call *STRING (256) sig')
     IF ST.LoadFile('LangCds.TAB') THEN 
        Bang.ValueView(ST,'Check "HEX" LangCds.TAB')  
     END
