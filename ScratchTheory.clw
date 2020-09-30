@@ -30,7 +30,7 @@ Window WINDOW('Scratch StringTheory '),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,FONT
         BUTTON('Test 1'),AT(9,10),USE(?Test1)
         BUTTON('Test 2'),AT(9,30),USE(?Test2)
         BUTTON('Test 3'),AT(9,50),USE(?Test3)
-        BUTTON('Test 4 - Split test Separator && Between'),AT(9,70),USE(?Test4)
+        BUTTON('Test 4 - Split test Separator && Between && SerializeQueue'),AT(9,70),USE(?Test4)
         BUTTON('Test 5 - Load File, View Split'),AT(9,90),USE(?Test5)
         TEXT,AT(1,150),FULL,USE(txt),HVSCROLL
     END
@@ -79,8 +79,9 @@ Test4Rtn ROUTINE  !------------------------------------------------------
     DATA
 Bang BigBangTheory
 ST   StringTheory
-Lne  StringTheory    
-    CODE
+Lne  StringTheory 
+FilesQ    FILE:Queue   
+    CODE       
     st.SetValue('[12,24,36],bruce,(po box 511, plumstead)') 
         bang.ValueView(ST, 'Value Split  "[-(","]-)",false,,,- ' ) 
     st.split(',','[-(',']-)',false,,,'-') ! result is ! [12,24,36] ! bruce ! (po box 511, plumstead)
@@ -90,6 +91,16 @@ Lne  StringTheory
         bang.ValueView(ST,'Value test SplitBetween "(" ")"') 
     st.splitBetween('(',')') 
         bang.LinesViewInList(ST,'SplitBetween "( )" ')
+
+   ! DIRECTORY(FilesQ,'c:\windows\system32\*.*',ff_:NORMAL)
+    DIRECTORY(FilesQ,'*.*',ff_:NORMAL)
+    st.SerializeQueue(FilesQ,'<13,10>',',','"') 
+    st.Prepend('Name,Short,Date,Time,Size,Attrib<13,10>')
+       bang.ValueView(ST,'Directory SerializeQueue Value')
+    st.Split('<13,10>')       
+       bang.LinesViewInList(ST,'Directory SerializeQueue Lines')
+       bang.LinesViewSplitCSV(ST)
+       EXIT    
 
 Test5Rtn ROUTINE  !---- Split code you can modify -------------------------------------------------- 
     DATA

@@ -21,11 +21,12 @@ lne  StringTheory
 X    LONG 
     CODE 
         !  Bang.DoNotShow=1      !When True None of the Bang windows show  
-!   DO TabTestRtn
+!    DO SerializeQRtn
     DO CsvTestRtn
     DO TabTestRtn
     DO PipeSplitRtn
     DO WrapTestRtn
+    DO SerializeQRtn
     HALT()
     RETURN
 !-------------------------------------
@@ -82,9 +83,20 @@ WrapTestRtn ROUTINE
           'when suddenly a White Rabbit with pink eyes ran close by')
  ST.SplitIntoWords()
  Bang.LinesViewInList(ST)
- 
-  HALT()  
-  
+!----------------------------
+SerializeQRtn ROUTINE
+    DATA
+FilesQ    FILE:Queue   
+    CODE
+    DIRECTORY(FilesQ,'c:\windows\system32\*.*',ff_:NORMAL) ; SORT(FilesQ,-FilesQ.Size)
+    !DIRECTORY(FilesQ,'*.*',ff_:NORMAL)
+    st.SerializeQueue(FilesQ,'<13,10>',',','"') 
+    st.Prepend('Name,Short,Date,Time,Size,Attrib<13,10>')
+       bang.ValueView(ST,'Directory() SerializeQueue Value')
+    st.Split('<13,10>')       
+       bang.LinesViewInList(ST,'Directory() SerializeQueue Lines')
+       bang.LinesViewSplitCSV(ST)
+       EXIT  
   
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split
