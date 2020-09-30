@@ -281,27 +281,24 @@ Dmp StringTheory
 BigBangTheory.HexDump PROCEDURE(StringTheory pStr, StringTheory Dump)
 offset  Long,auto
 x       Long,auto
-Mem_Hex Equate(8+4-4)
-Mem_Chr Equate(Mem_Hex+16*3+1)
-MemLine String(Mem_Chr+16)    !AAAAAAAA XX x16  16CHRbytes
 stHex   StringTheory
-Lin_Pos String(9),auto
+Lin_Pos String(7),auto
 Lin_Hex String(49),auto
 Lin_Chr String(16),auto
   CODE
   stHex.setValue(pStr)
   stHex.ToHex(st:Upper,true)
-  MemLine[Mem_Hex : Mem_Hex+16*3]=' 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16'
-  MemLine[Mem_Chr : Mem_Chr+15]='0123456789abcdef'
-  Dump.setValue(MemLine)
+  Lin_Hex=' 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16'
+  Lin_Chr='0123456789abcdef'
+  Dump.setValue('Offset ' & Lin_Hex & Lin_Chr)
   loop offset=0 to pStr._DataEnd-1 by 16
-     Lin_Pos='<13,10>' & offset
+     Lin_Pos=offset
      Lin_Hex=stHex.sub(offset*3 + 1, 48) ; Lin_Hex[24]='-'
      Lin_Chr=pStr.sub(offset+1, 16)
      loop x = 1 to 16
        if val(Lin_Chr[x]) < 32 then Lin_Chr[x] = '.'.
      end
-     Dump.Append(Lin_Pos & Lin_Hex & Lin_Chr)
+     Dump.Append('<13,10>' & Lin_Pos & Lin_Hex & Lin_Chr)
   end  
   RETURN
 !------------------------------- 
