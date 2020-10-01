@@ -38,11 +38,13 @@ LnzRecords LONG,AUTO
     IF EVENT()=EVENT:NewSelection AND FIELD()=?List:LinesQ AND KEYCODE()=MouseRight THEN
        SETKEYCODE(0)
        X=CHOICE(?List:LinesQ)
-       EXECUTE POPUP('Copy Row to Clipboard|View Row Text|-|Copy All Rows Text|View All Rows Text')
+       EXECUTE POPUP('Copy Row to Clipboard|View Row Text|-|Copy All Rows Text|View All Rows Text' & |
+                    CHOOSE(~SELF.DoNotShow,'|-|-','|-|+') & 'Do Not Show BigBang Views')
          SetClipboard(LnzST.GetLine(X))
          SELF.StringView(LnzST.GetLine(X),'Row ' & X) ! MESSAGE(LnzST.GetLine(X),'Row ' & X,,,,MSGMODE:CANCOPY)
          SetClipboard(LnzST.GetValue()) 
          SELF.ValueView(LnzST)
+         SELF.DoNotShow=1-SELF.DoNotShow
        END
     END
     CASE ACCEPTED()
@@ -99,9 +101,10 @@ Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
         BUTTON('&Menu'),AT(2,2,25,12),USE(?MenuBtn),SKIP
         BUTTON('View Lines'),AT(31,2,,12),USE(?LinesBtn),SKIP,TIP('Display raw lines')
         CHECK('Hide Quotes'),AT(87,3),USE(?NoQuotes),SKIP,HIDE
-        STRING('Picture Column:'),AT(173,3,55),USE(?Pict:Pmt),RIGHT
-        COMBO(@s32),AT(233,3,59,10),USE(Picture),DISABLE,VSCROLL,TIP('Change Picture for Column'),DROP(16),FROM('@D1|@D2' & |
-                '|@D3|@D17|@N11.2|@S255|@T1|@T3|@T4|@T8')
+        STRING('Picture Column:'),AT(153,3,55),USE(?Pict:Pmt),RIGHT
+        COMBO(@s32),AT(213,3,59,10),USE(Picture),DISABLE,VSCROLL,TIP('Change Picture for Column'),DROP(16),FROM('@D1|@D2' & |
+                '|@D3|@D17|@N11.2|@S255|@T1|@T3|@T4|@T8') 
+        CHECK('No Bang'),AT(296,3),USE(?NoBang),SKIP,TIP('Do Not show BigBang Views')
         LIST,AT(1,17),FULL,USE(?List:VLB),FLAT,HVSCROLL,COLUMN,VCR,FORMAT('40L(2)|M~Col1~Q''NAME''')
     END
 LinST StringTheory
@@ -128,6 +131,7 @@ Quote2 PSTRING(9)
   ?List:VLB{PROP:LineHeight}=1+?List:VLB{PROP:LineHeight}
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
   ?Pict:Pmt{PROP:Tip}='Right click on cell to change the Picture'
+  ?NoBang{PROP:Use}=SELF.DoNotShow
   IF Quote1 THEN 
      ?NoQuotes{PROP:Use}=pRemoveQuotes ; UNHIDE(?NoQuotes)
   END
@@ -241,6 +245,7 @@ Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
             CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
             CHECK('HScroll'),AT(74,0),USE(HScrollTxt)
             CHECK('VScroll'),AT(126,0),USE(VScrollTxt)
+            CHECK('No Bang'),AT(196,0),USE(?NoBang),TIP('Do Not show BigBang Views')
         END
         TEXT,AT(0,2),FULL,USE(?Txt),HVSCROLL,READONLY,FLAT
         TEXT,AT(0,2),FULL,USE(?HexTxt),HIDE,HVSCROLL,READONLY,FLAT
@@ -254,6 +259,7 @@ P LONG,DIM(4),STATIC
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]). 
   IF LenTxt > 0FFF0h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k in 11.13505 - Message('Risk GPF?',LenTxt,,'No|Risk')
   ?Txt{PROP:Use}=pSt.valuePtr[1 : LenTxt]
+  ?NoBang{PROP:Use}=SELF.DoNotShow
   0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CLIP(CapTxt),'StringTheory Value') & ' - Length ' & LenTxt 
   ACCEPT
     CASE ACCEPTED()
@@ -320,7 +326,8 @@ Window WINDOW('S'),AT(,,400,250),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
             CHECK('Keep Breaks'),AT(145,1),USE(WrapKeep),DISABLE,TIP('Keep existing CR/LF in the output')
             CHECK('Left'),AT(202,1),USE(WrapLeft),DISABLE,TIP('Leading white space is removed')
             CHECK('HScroll'),AT(251,1),USE(HScrollTxt)
-            CHECK('VScroll'),AT(292,1),USE(VScrollTxt)
+            CHECK('VScroll'),AT(292,1),USE(VScrollTxt) 
+            CHECK('No Bang'),AT(350,0),USE(?NoBang),TIP('Do Not show BigBang Views')
         END
         TEXT,AT(0,2),FULL,USE(?Txt),FLAT,HVSCROLL,READONLY
         TEXT,AT(0,2),FULL,USE(?WrapTxt),FLAT,HIDE,HVSCROLL,READONLY
@@ -332,7 +339,8 @@ P LONG,DIM(4),STATIC
   IF ~stOrig.clipLength() THEN Message('No Text','WrapView') ; RETURN. 
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
-  ?Txt{PROP:Use}=StOrig.valuePtr[1 : LenTxt]
+  ?Txt{PROP:Use}=StOrig.valuePtr[1 : LenTxt] 
+  ?NoBang{PROP:Use}=SELF.DoNotShow
   IF LenTxt>0FF00h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k
   DO CapRtn
   WrapTheTxt=pWrap ; IF pWrap THEN POST(EVENT:Accepted,?WrapTheTxt).
