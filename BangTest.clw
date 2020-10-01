@@ -101,9 +101,9 @@ FilesQ    FILE:Queue
 !-------------------------------------
 HexTestRtn ROUTINE   !
     DATA 
-s256    STRING(256)    
+s256    STRING(256)   
     CODE
-    LOOP X=1 to 255 ; s256[x]=CHR(x) ; END
+    LOOP X=1 to 255 ; s256[x]=CHR(x) ; END 
     Bang.StringView(s256 & s256 & s256 & s256 & '1024 Byte Tester','Check "HEX" Test 1024 bytes')
     Bang.StringView(s256,'Call *STRING (256) sig')
     IF ST.LoadFile('LangCds.TAB') THEN 

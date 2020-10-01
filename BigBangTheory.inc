@@ -22,8 +22,9 @@ LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuot
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
 LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE)  
 
-HexDump             PROCEDURE(*STRING StringToReturnHex),STRING
 HexDump             PROCEDURE(StringTheory InputString, StringTheory OutHexDump)
+HexDump             PROCEDURE(STRING StringToReturnHex),STRING
+HexDump             PROCEDURE(*STRING StringToReturnHex),STRING
      END
 !-------------------------- How to Use: ------------------------------------
 !
