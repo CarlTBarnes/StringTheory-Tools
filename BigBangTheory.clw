@@ -307,7 +307,7 @@ stHex StringTheory
   stDump.CatAddr(address(Lin)+2,size(Lin)-2)  !Headings w/o 13,10
   loop P = 0 to pStr._DataEnd-1 by 16
      Off=P
-     Hex=stHex.Sub(P*3+1, 48) ; Lin.Hex[24]='-'
+     Hex=stHex.Sub(P*3+1, 48) ; Hex[24]='-'
      Chr=pStr.Sub(P+1, 16)
      loop c = 1 to 16
        if val(Chr[c]) < 32 then Chr[c] = '.'.
