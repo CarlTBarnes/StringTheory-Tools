@@ -88,7 +88,8 @@ Screen capture shows several views available based on included Bang Test example
 
 ![BigBangCapture](images/screenshotbang1.png)
 
-I would expect you might use this class in your APP to allow a quick way to view files before import. You probably will want to remove some of the features that would confuse end users, like the Picture thing and Menu.
+I would expect you might use this class in your APP to allow a quick way for the user to view file contents before import.
+ You probably will want to remove some of the developer features that would confuse end users, like the Picture thing and Menu.
 
 There is also a SystemStringClass version. That class has no ability to deal with CSV type quoted values.
 
@@ -99,8 +100,8 @@ https://github.com/CarlTBarnes/StringTheory-LoadFile-Split-Viewer/tree/master/Ba
 
 ## BigBangTheory.INC
 
-The BigBangTheory Class has just a few methods to let you see either the StringTheory Value or the Lines.
- StringView allows viewing any String. WrapView allow viewing the word wrapping
+The BigBangTheory Class has just a few methods to let you see either the StringTheory Value or the Split Lines.
+ StringView allows viewing any String. WrapView allows viewing the word wrapping
 
 ```Clarion
 BigBangTheory  CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW')
@@ -135,11 +136,11 @@ If you need to use the debugger it's much faster with a tiny scratch program to 
  be able to see the values of the variables.
 
 ScratchTheory has StringTheory included, defined and ready to use. It also has BingBangTheory to see StringTheory Values or Lines.
- It has a DB() procedure to OutputDebugString. It has a Window with a Text Control. You can have your code written and tested in a few minutes.
+ It has a DB('Debug Text') procedure to OutputDebugString. It has a Window with a Text Control. You can have your code written and tested in a few minutes.
 
-An example included in the Scratch program is the below routine run by button 4 that
+An example included in the Scratch program is the below routine that
  Serializes a Queue loaded by Directory() then splits that by 13,10 into lines.
- The BigBangTheory class is used to view the resulting string or lines inside the StringTheory object:
+ The BigBangTheory class is used to view the resulting String or Lines inside the StringTheory object:
 
 ```Clarion
 Test4Rtn ROUTINE
