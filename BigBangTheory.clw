@@ -145,7 +145,7 @@ Quote2 PSTRING(9)
        X=?List:VLB{PROPLIST:MouseDownField}
        EXECUTE POPUP('Copy Cell to Clipboard|View Cell Text|-|Copy Row to Clipboard|View Row Text|View Row Split...' & |
                   '|-|Copy All Rows to Clipboard|View All Rows Text' & |
-                  '|-|Hide Column ' & X &'|Change @ Picture|Column Alignment{{Left|Center|Right}')
+                  '|-|Change @ Picture|Column Alignment{{Left|Center|Right}|-|Hide Column ' & X)
          SETCLIPBOARD(LinST.GetLine(X))    !Correct?
          SELF.StringView(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow) !MESSAGE(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
          SetClipboard(CsvST.GetLine(CsvST_GotRow))
@@ -153,12 +153,12 @@ Quote2 PSTRING(9)
          ViewColumns()
          SETCLIPBOARD(CsvST.GetValue())
          SELF.ValueView(CsvST)
-         BEGIN ; ?List:VLB{PROPLIST:width,X}=0 ; IF X=PColumn THEN DISABLE(?Picture). ; END
-         BEGIN ; Picture=?List:VLB{PROPLIST:Picture,X} ; ?Pict:Pmt{PROP:Text}='&Picture Col ' & X & ':'
+         BEGIN ; Picture=?List:VLB{PROPLIST:Picture,X} ; ?Pict:Pmt{PROP:Text}='Picture Col ' & X & ':'
                  ENABLE(?Picture) ; SELECT(?Picture) ; PColumn=X ; END
          ?List:VLB{PROPLIST:Left,X}=1
          ?List:VLB{PROPLIST:Center,X}=1
          ?List:VLB{PROPLIST:Right,X}=1
+         BEGIN ; ?List:VLB{PROPLIST:width,X}=0 ; IF X=PColumn THEN DISABLE(?Picture). ; END         
        END
     END
     CASE ACCEPTED()
@@ -168,7 +168,7 @@ Quote2 PSTRING(9)
          SETCLIPBOARD(CsvST.GetValue())
          VlbCls.Contrt()
          VlbCls.Expand()
-         SETCLIPBOARD(?List:VLB{PROP:Format})
+         SETCLIPBOARD(QUOTE(?List:VLB{PROP:Format}))
         END
     OF ?LinesBtn ; SELF.LinesViewInList(CsvST)
     OF ?NoQuotes ; QChanged=1 ; SELECT(?List:VLB,1)
@@ -335,7 +335,7 @@ Window WINDOW('S'),AT(,,400,250),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
             CHECK('Left'),AT(202,1),USE(WrapLeft),DISABLE,TIP('Leading white space is removed')
             CHECK('HScroll'),AT(251,1),USE(HScrollTxt)
             CHECK('VScroll'),AT(292,1),USE(VScrollTxt)
-            CHECK('No Bang'),AT(350,0),USE(?NoBang),TIP('Do Not show BigBang Views')
+            CHECK('No Bang'),AT(350,1),USE(?NoBang),TIP('Do Not show BigBang Views')
         END
         TEXT,AT(0,2),FULL,USE(?Txt),FLAT,HVSCROLL,READONLY
         TEXT,AT(0,2),FULL,USE(?WrapTxt),FLAT,HIDE,HVSCROLL,READONLY
