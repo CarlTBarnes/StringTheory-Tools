@@ -77,7 +77,8 @@ BigBangTheory.LinesViewSplitTAB   PROCEDURE(StringTheory STLined)
     CODE
     SELF.LinesViewSplit(STLined,CHR(9),'','',False)
 
-BigBangTheory.LinesViewSplit PROCEDURE(StringTheory CsvST,string pDelim,<string pQuoteBegin>,<string pQuoteEnd>, BYTE pRemoveQuotes)
+BigBangTheory.LinesViewSplit PROCEDURE(StringTheory CsvST,string pDelim,<string pQuoteBegin>,<string pQuoteEnd>, BYTE pRemoveQuotes, |
+                                          bool pClip, bool pLeft=false, <string pSeparatr>,Long pNested=false)
     MAP
 LinSTfromCsvST PROCEDURE(LONG xRow2Load)   !Has lines specs eg. delimeter may not be Comma
 ViewColumns    PROCEDURE()
@@ -100,11 +101,12 @@ Picture STRING(32)
 Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
         BUTTON('&Menu'),AT(2,2,25,12),USE(?MenuBtn),SKIP
         BUTTON('View Lines'),AT(31,2,,12),USE(?LinesBtn),SKIP,TIP('Display raw lines')
-        CHECK('Hide Quotes'),AT(87,3),USE(?NoQuotes),SKIP,HIDE
-        STRING('Picture Column:'),AT(153,3,55),USE(?Pict:Pmt),RIGHT
-        COMBO(@s32),AT(213,3,59,10),USE(Picture),DISABLE,VSCROLL,TIP('Change Picture for Column'),DROP(16),FROM('@D1|@D2' & |
+        CHECK('Hide Quotes'),AT(87,3),USE(?NoQuotes),SKIP,DISABLE
+        CHECK('Left'),AT(142,3),USE(?pLeft),SKIP
+        STRING('Picture Column:'),AT(178,3,55),USE(?Pict:Pmt),RIGHT
+        COMBO(@s32),AT(238,3,59,10),USE(Picture),DISABLE,VSCROLL,TIP('Change Picture for Column'),DROP(16),FROM('@D1|@D2' & |
                 '|@D3|@D17|@N11.2|@S255|@T1|@T3|@T4|@T8')
-        CHECK('No Bang'),AT(296,3),USE(?NoBang),SKIP,TIP('Do Not show BigBang Views')
+        CHECK('No Bang'),AT(319,3),USE(?NoBang),SKIP,TIP('Do Not show BigBang Views')
         LIST,AT(1,17),FULL,USE(?List:VLB),FLAT,HVSCROLL,COLUMN,VCR,FORMAT('40L(2)|M~Col1~Q''NAME''')
     END
 LinST StringTheory
@@ -112,14 +114,16 @@ CsvRecords LONG,AUTO
 ColCount LONG,AUTO
 CsvST_GotRow LONG
 QChanged BOOL
-Quote1 PSTRING(9)
-Quote2 PSTRING(9)
+Quote1 PSTRING(16)
+Quote2 PSTRING(16)
+Separator1 PSTRING(9)
     CODE
   IF SELF.DoNotShow THEN RETURN.
   CsvRecords = CsvST.Records()
   IF ~CsvRecords THEN Message('No Lines in Loaded file','LinesViewSplit') ; RETURN .
   IF ~OMITTED(pQuoteBegin) THEN Quote1=pQuoteBegin.
   IF ~OMITTED(pQuoteEnd) THEN Quote2=pQuoteEnd.
+  IF ~OMITTED(pSeparatr) AND SIZE(pSeparatr) AND pSeparatr THEN Separator1=pSeparatr.
   LinSTfromCsvST(1)
   ColCount = LinST.Records()  !Assume 1st line has all columns. Pass columns?
   LOOP X=1 TO ColCount        !Assume first row has labels
@@ -131,13 +135,15 @@ Quote2 PSTRING(9)
   ?List:VLB{PROP:LineHeight}=1+?List:VLB{PROP:LineHeight}
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
   ?Pict:Pmt{PROP:Tip}='Right click on cell to change the Picture'
+  ?pLeft{PROP:Use}=pLeft
   ?NoBang{PROP:Use}=SELF.DoNotShow
   IF Quote1 THEN
-     ?NoQuotes{PROP:Use}=pRemoveQuotes ; UNHIDE(?NoQuotes)
+     ?NoQuotes{PROP:Use}=pRemoveQuotes ; ENABLE(?NoQuotes)
   END
-  0{PROP:Text}='StringTheory Split - '& CsvRecords & ' Records - '& ColCount &' Columns' & |
-                ' - SplitStr: ' & QUOTE(pDelim) & '  Quote: ' & QUOTE(Quote1) &'  End: ' & QUOTE(Quote2) &' Remove: ' & pRemoveQuotes & |
-               ' -  Right-Click for Options'
+  0{PROP:Text}='StringTheory Split: '& CsvRecords & ' Records, '& ColCount &' Columns' & |
+                ' - SplitStr: ' & QUOTE(pDelim) & '  Quote: ' & QUOTE(Quote1) &'  End: ' & QUOTE(Quote2) &|
+                CHOOSE(~Separator1,'','  Separator: ' & QUOTE(Separator1) & CHOOSE(~pNested,'',' (nested)')) & |
+               '   Right-Click for Options'
   VlbCls.Init(?List:VLB, CsvRecords, ColCount)
   ACCEPT
     IF EVENT()=EVENT:NewSelection AND FIELD()=?List:VLB AND KEYCODE()=MouseRight THEN
@@ -171,7 +177,7 @@ Quote2 PSTRING(9)
          SETCLIPBOARD(QUOTE(?List:VLB{PROP:Format}))
         END
     OF ?LinesBtn ; SELF.LinesViewInList(CsvST)
-    OF ?NoQuotes ; QChanged=1 ; SELECT(?List:VLB,1)
+    OF ?NoQuotes OROF ?pLeft ; QChanged=1 ; SELECT(?List:VLB,1)
     OF ?Picture ; ?List:VLB{CHOOSE(~INSTRING(lower(picture[1:2]),'@d@t@n@e'),PROPLIST:Left,PROPLIST:Right) ,PColumn}=1
                   ?List:VLB{PROPLIST:Picture,PColumn}=Picture ; DISPLAY
     END
@@ -184,7 +190,7 @@ LinSTfromCsvST PROCEDURE(LONG xRow)    !So all Row Split in one place
   IF xRow <> CsvST_GotRow THEN
     CsvST_GotRow = xRow
     LinST.SetValue(CsvST.GetLine(xRow))
-    LinST.Split(pDelim,Quote1,Quote2,pRemoveQuotes)
+    LinST.Split(pDelim,Quote1,Quote2,pRemoveQuotes,pClip,pLeft,Separator1,pNested)
   END
   RETURN
 ViewColumns PROCEDURE()

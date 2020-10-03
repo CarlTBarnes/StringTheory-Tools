@@ -20,7 +20,8 @@ WrapView            PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bo
 LinesViewInList     PROCEDURE(StringTheory STwithLinesSplitDone, <STRING WindowCaption>)
 LinesViewSplitCSV   PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuotes=False)  
 LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)  
-LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE)  
+LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE ,|
+                                                bool pClip=false, bool pLeft=false, <STRING pSeparator>, long pNested=false)
 
 HexDump             PROCEDURE(StringTheory InputString, StringTheory OutHexDump)
 HexDump             PROCEDURE(STRING StringToReturnHex),STRING

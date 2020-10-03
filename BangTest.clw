@@ -20,16 +20,18 @@ ST   StringTheory
 lne  StringTheory
 X    LONG 
     CODE 
-        !  Bang.DoNotShow=1      !When True None of the Bang windows show  
-!    DO HexTestRtn
+!    Bang.DoNotShow=1      !When True None of the Bang windows show  
+!    DO SplitMultiQuotesTestRtn ; halt()  
     DO CsvTestRtn
     DO TabTestRtn
     DO PipeSplitRtn
     DO WrapTestRtn
     DO SerializeQRtn
     DO HexTestRtn
+    DO SplitMultiQuotesTestRtn
     HALT()
     RETURN
+
 !-------------------------------------
 CsvTestRtn ROUTINE    
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
@@ -109,6 +111,27 @@ s256    STRING(256)
     IF ST.LoadFile('LangCds.TAB') THEN 
        Bang.ValueView(ST,'Check "HEX" LangCds.TAB')  
     END
+
+!------------------------------------- 
+SplitMultiQuotesTestRtn ROUTINE
+    st.Start()
+    st.AddLine(1,'[12,24,36],Person,(po box 111, plumstead)') 
+    st.AddLine(2,'[22,34,46],   Man,(po box 222, apricot') 
+    st.AddLine(3,'[32,44,56], Woman,(po box 333, berry')
+    st.AddLine(4,'[42,55,66],Camera,(po box 444, berry')
+    st.Join('<13,10>')
+        bang.LinesViewInList(st,'AddLines with Quotes [()]')
+        bang.LinesViewSplit(st,',','[-(',']-)',false,,,'-')
+        exit
+! StringTheory.Split Procedure(
+!   string pSplitStr,         <13,10> or <9> if 1 line of Tab Delim
+!   <string pQuotestart>,     "
+!   <string pQuoteEnd>, 
+!   bool removeQuotes=false,  
+!   bool pClip = false,       Trim trailing spaces
+!   bool pLeft=false,         Trim leading spaces
+!   <string pSeparator>,      Sep if QuoteStart has multiple e.g. - for  [-(  )-]
+!   Long pNested=false)       True=Ignore () around "5,6" in (1,2),(3,4),((5,6),7)
 
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split

@@ -4,6 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Clarion 2.1.0.2447
 Project("{12B76EC0-1D7B-4FA7-A7D0-C524288B48A1}") = "BangTest", "BangTest.cwproj", "{6C393FFC-E9F2-474F-8FB7-493BD1E0AA10}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Included Files", "Included Files", "{709793DB-6C1C-41E3-AACB-9B0F5885BA47}"
+	ProjectSection(SolutionItems) = postProject
+		BigBangTheory.clw = BigBangTheory.clw
+		BigBangTheory.inc = BigBangTheory.inc
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

@@ -1,9 +1,9 @@
 # StringTheory-LoadFile-Split-Viewer
  StringTheory Value and Split Viewer aka BigBangTheory
 
-To help you see what your StringTheory code is actually doing Big Bang class allows
- you to simply view the GetValue string or Split Lines queue in a Window. This allows
- scrolling the data and digging deeper which can be easier than looking at debug view.
+To help you see what your StringTheory code is actually doing the Big Bang class allows
+ you to view the GetValue string or Split Lines queue in a Window. This allows
+ scrolling the data and digging deeper which can be easier than looking at Debug View or Message boxes.
  A Lines Split viewer allows you to specify your Split( parameters ) and see the resulting columns in a List.
 
 StringTheory makes it easy to load a CSV file and split it into columns
