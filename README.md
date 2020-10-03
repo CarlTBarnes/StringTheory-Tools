@@ -1,10 +1,13 @@
 # StringTheory-LoadFile-Split-Viewer
- StringTheory LoadFile and Split Viewer aka BigBangTheory
+ StringTheory Value and Split Viewer aka BigBangTheory
 
-StringTheory makes it easy to load a CSV file and split it into columns.
-This class helps by allowing you to view the file right from the StringTheory object to confirm the data is what you exect, and to see how the splits are working.
+To help you see what your StringTheory code is actually doing Big Bang class allows
+ you to simply view the GetValue string or Split Lines queue in a Window. This allows
+ scrolling the data and digging deeper which can be easier than looking at debug view.
+ A Lines Split viewer allows you to specify your Split( parameters ) and see the resulting columns in a List.
 
-You write code like below (from https://www.capesoft.com/docs/StringTheory3/StringTheory.htm#ParsingCSVFile).
+StringTheory makes it easy to load a CSV file and split it into columns
+ with code like below (from https://www.capesoft.com/docs/StringTheory3/StringTheory.htm#ParsingCSVFile).
 ```Clarion
 str   StringTheory
 lne   StringTheory
@@ -20,7 +23,7 @@ x     Long
   End
 ```
 
-Insert BigBang calls to view the results of various Splits in a LIST.
+Insert BigBang calls to view the LoadFile String Value or the results of Splits in a LIST.
 
 ```Clarion
 str   StringTheory
@@ -30,20 +33,18 @@ Bang BigBangTheory    !<-- Viewer
   code
   str.LoadFile('Somefile.CSV')
   str.Split('<13,10>','"')
-  IF DebugLoad THEN               !<-- Limit to just developers
-     Bang.LinesViewInList(str)    !<-- Add to see Lines split by 13,10
-     Bang.LinesViewSplitCSV(Str)  !<-- Add to see CSV columns
-     Bang.LinesViewSplit(Str,',','"','"')  !Alternate specify Split() parms
-  END
-  loop x = 1 to str.Records()
+     Bang.DoNotShow=CHOOSE(~DebugLoad) !<-- Limit to just developers
+     Bang.ValueView(str)          !<-- See GetValue() String in TEXT
+     Bang.LinesViewInList(str)    !<-- See Lines Queue from Split(13,10)
+     Bang.LinesViewSplitCSV(Str)  !<-- See Lines Split as CSV columns
+     Bang.LinesViewSplit(Str,',','"')  !Alternate specify Split( parms )
+
+  Loop x = 1 to str.Records()
     Lne.SetValue(Str.GetLine(x))
     Lne.Split(',','"','"',true)
     IF X=5 AND DebugLoad THEN     !<-- Limit to developers and line 5
-       Bang.LinesViewInList(Lne)  !<-- See Lines from your: Lne.Split(',','"','"',true)
+       Bang.LinesViewInList(Lne)  !<-- See Lines: Lne.Split(',','"','"',true)
     END
-    field1 = Lne.GetLine(1)
-    field2 = Lne.GetLine(2)
-  End
 ```
 
 Call ```Bang.LinesViewInList(str)``` to view a LIST with the result of the ```ST.Split('<13,10>','"')``` to lines:
@@ -51,7 +52,7 @@ Call ```Bang.LinesViewInList(str)``` to view a LIST with the result of the ```ST
 ![readme1](images/readme1.png)
 
 Typical code loops the 13,10 split lines to split each line using CSV or Tabs.
-You can see the entire file split this way in a LIST with a calling ```Bang.LinesViewSplit(Str,',','"','"')``` or for CSV call ```Bang.LinesViewSplitCSV(Str)```.
+You can see the entire file split this way in a LIST with a calling ```Bang.LinesViewSplit(Str,',','"')``` or for CSV call ```Bang.LinesViewSplitCSV(Str)```.
 
 ![readme2](images/readme2.png)
 
@@ -63,7 +64,7 @@ In that list you can right click on a row and view the columns as rows in a LIST
 ```Clarion
   loop x = 1 to str.Records()
     Lne.SetValue(Str.GetLine(x))
-    Lne.Split(',','"','"',true)
+    Lne.Split(',','"',,true)
     IF X=5 AND DebugLoad THEN     !<-- Limit to developers and line 5
        Bang.LinesViewInList(Lne)  !<-- See Lines from your: Lne.Split(',','"','"',true)
     END
@@ -84,12 +85,16 @@ All right click popups have been changed to use this string viewer instead of a 
 
 ![readme6](images/readme6.png)
 
-Screen capture shows several views available based on included Bang Test example CwProj and files.
+Screen capture shows several views available and how right-click allows showing different view of same data. This is based on included Bang Test example CwProj and files.
 
 ![BigBangCapture](images/screenshotbang1.png)
 
-I would expect you might use this class in your APP to allow a quick way for the user to view file contents before import.
- You probably will want to remove some of the developer features that would confuse end users, like the Picture thing and Menu.
+I would expect you might use this class in your APP to allow a quick way to show the user a view file contents before import.
+ You probably will want to copy the class and remove some of the developer features that would confuse end users. 
+ You can configure the LIST columns and pictures as desired then
+  grab the Format string using the Menu button  Copy Format string item.
+ The code is lightweight using a VLB (Virtual List Box) fed directly by the ST object.
+ The Lines view is 60 code lines and just 45 without the developer popup menu. 
 
 There is also a SystemStringClass version. That class has no ability to deal with CSV type quoted values.
 
