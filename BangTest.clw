@@ -80,10 +80,12 @@ WrapTestRtn ROUTINE
 !  Bang.StringView(SUB(ST.getValue(),1,0FF00h),'64kb of Alice.txt') 
   Bang.WrapView(ST,'Wrap Alice.txt') !, true) 
 
- ST.SetValue('Test-SplitIntoWords - So she was considering in her own mind (as well as she could, for the hot day ' & |
-          'made her feel very sleepy and stupid), whether the pleasure of making a ' & |
-          'daisy-chain would be worth the trouble of getting up and picking the daisies, ' & |
-          'when suddenly a White Rabbit with pink eyes ran close by')
+ ST.SetValue('Test-SplitIntoWords - ' & |
+    'While impervious to everything, they had no resistance to the microbes ' & | 
+    'in our atmosphere to which we have long since become immune. After all that men ' & | 
+    'could do had failed, the Trumpians were destroyed and humanity was saved by the ' & | 
+    'littlest things, which God, in His wisdom, had put upon this Earth.'
+          
  ST.SplitIntoWords()
  Bang.LinesViewInList(ST)
 !----------------------------
@@ -115,10 +117,12 @@ s256    STRING(256)
 !------------------------------------- 
 SplitMultiQuotesTestRtn ROUTINE
     st.Start()
-    st.AddLine(1,'[12,24,36],Person,(po box 111, plumstead)') 
-    st.AddLine(2,'[22,34,46],   Man,(po box 222, apricot') 
-    st.AddLine(3,'[32,44,56], Woman,(po box 333, berry')
-    st.AddLine(4,'[42,55,66],Camera,(po box 444, berry')
+    st.AddLine(1,'[12,24,36],Person,(PO Box 111, Plum)') 
+    st.AddLine(2,'[22,34,46],   Man,(PO Box 222, Scarlet') 
+    st.AddLine(3,'[32,44,56], Woman,(PO Box 333, Mustard')
+    st.AddLine(4,'[42,55,66],Camera,(PO Box 444, Peacock')
+    st.AddLine(5,'[52,65,76],    TV,(PO Box 555, Green')  
+    
     st.Join('<13,10>')
         bang.LinesViewInList(st,'AddLines with Quotes [()]')
         bang.LinesViewSplit(st,',','[-(',']-)',false,,,'-')

@@ -165,3 +165,11 @@ FilesQ  FILE:Queue
 ```
 
 ![scratchcap](images/scratch1.png)
+
+## Split Theory
+
+Try out many StringTheory Split calls and view the results without writing code.
+ The test data can be loaded from a file, the clipboard, or typed int the Text control at the bottom of the windows.
+ View buttons use BigBangTheory to show the String Value, Lines split, or those lines split again into Columns.
+
+![splitcap](images/split1.png)

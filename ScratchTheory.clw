@@ -1,5 +1,8 @@
 ! ScratchTheory - Scratch program to write and test StringTheory code
 !                 The fastest way to work out code can be a small test program so you can compile and test quickly
+!
+!Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
+
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
     INCLUDE 'KeyCodes.CLW'
