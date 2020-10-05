@@ -382,4 +382,28 @@ WrapRtn ROUTINE
   StWrap.WrapText(WrapWidth,WrapKeep,WrapLeft)
   ?WrapTxt{PROP:Use}=StWrap.valuePtr[1 : StWrap._DataEnd]
   DO CapRtn
-  DISPLAY
+  DISPLAY 
+!----------------
+BigBangTheory.ReplaceView PROCEDURE(StringTheory St4Rpl, string pOldValue, string pNewValue, |
+                        long pCount, long pStart, long pEnd, long pNoCase, bool pRecursive)!,Long,Proc  
+P BYTE,AUTO 
+RV LONG,AUTO
+ST StringTheory 
+    CODE !I found Replace a PITA to get NoCase=1
+  ST.SetValue(St4Rpl)
+  LOOP P=1 TO 2
+    SELF.StringView('StringTheory.Replace(' & |  
+      '<13,10>string pOldValue =>"' & pOldValue &'"'& |
+      '<13,10>string pNewValue =>"' & pNewValue &'"'& |
+      '<13,10>long   pCount=0  =>' &  pCount     & |
+      '<13,10>long   pStart=1  =>' &  pStart     & |
+      '<13,10>long   pEnd=0    =>' &  pEnd       & |
+      '<13,10>long   pNoCase=0 =>' &  pNoCase    & |
+      '<13,10>bool   pRecursive=false =>' & pRecursive & | 
+      '<13,10>={40} <13,10>' & |
+      ST.GetValue(),'Replace ' & CHOOSE(P=1,'Before Call','After, Return=' & RV) )
+      IF P=1 THEN 
+         RV=ST.Replace(pOldValue, pNewValue,pCount,pStart,pEnd,pNoCase,pRecursive)
+      END
+   END 
+   RETURN RV

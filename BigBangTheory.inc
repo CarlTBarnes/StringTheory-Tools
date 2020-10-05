@@ -23,6 +23,8 @@ LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)
 LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE ,|
                                                 bool pClip=false, bool pLeft=false, <STRING pSeparator>, long pNested=false)
 
+ReplaceView         PROCEDURE(StringTheory St4Replace, string pOldValue, string pNewValue, long pCount=0, long pStart=1, long pEnd=0, long pNoCase=0, bool pRecursive=false),Long,Proc
+
 HexDump             PROCEDURE(StringTheory InputString, StringTheory OutHexDump)
 HexDump             PROCEDURE(STRING StringToReturnHex),STRING
 HexDump             PROCEDURE(*STRING StringToReturnHex),STRING
