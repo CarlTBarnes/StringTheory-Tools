@@ -10,10 +10,12 @@
     INCLUDE('BigBangTheory.INC'),ONCE
     MAP
 TestCode    PROCEDURE()
+SaveAsNewScratch PROCEDURE()
 DB          PROCEDURE(STRING DebugMessage)   !Output Debug String
 DBClear     PROCEDURE()                      !Clear DebugView Buffer
       MODULE('api')
         OutputDebugString(*CSTRING cMsg),PASCAL,DLL(1),RAW,NAME('OutputDebugStringA')
+        DebugBreak(),PASCAL,DLL(1) 
         GetLastError(),LONG,PASCAL,DLL(1) 
       END
     END
@@ -35,6 +37,7 @@ Window WINDOW('Scratch StringTheory '),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,FONT
         BUTTON('Test 3'),AT(9,50),USE(?Test3)
         BUTTON('Test 4 - Split test Separator && Between && SerializeQueue'),AT(9,70),USE(?Test4)
         BUTTON('Test 5 - Load File, View Split'),AT(9,90),USE(?Test5)
+        BUTTON('Save As <13,10>New Scratch'),AT(350,5,45,22),USE(?SaveAsBtn),SKIP,TIP('Copy ScratchTheory Clw and CwProj to make new Project')
         TEXT,AT(1,150),FULL,USE(txt),HVSCROLL
     END
     CODE
@@ -50,7 +53,8 @@ Window WINDOW('Scratch StringTheory '),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,FONT
         OF ?Test2       ; DO Test2Rtn
         OF ?Test3       ; DO Test3Rtn
         OF ?Test4       ; DO Test4Rtn
-        OF ?Test5       ; DO Test5Rtn
+        OF ?Test5       ; DO Test5Rtn 
+        OF ?SaveAsBtn   ; SaveAsNewScratch()
         END
         CASE FIELD()
         END
@@ -141,6 +145,68 @@ Qt2     PSTRING(9)
         END
     END
     
+!========================================================================================
+SaveAsNewScratch PROCEDURE()
+Bang BigBangTheory
+ST      StringTheory
+stPrj   StringTheory
+CopyNameOnly STRING('ScratchTheory')    
+CopyPrjName  STRING('ScratchTheory.CwProj')    
+CopyClwName  STRING('ScratchTheory.clw')
+NewPrjDiskFN STRING(260),STATIC  !c:\dev\proj\NewName.cwproj  
+NewPrjPath  STRING(255)          !c:\dev\proj
+NewPrjFN    STRING(64)           !            NewName.cwproj
+NewPrjName  STRING(64)           !            NewName
+SazCls  CLASS
+Copy2New    PROCEDURE(STRING FromFN,STRING ToFN)
+        END
+    CODE
+    IF ~EXISTS(CopyClwName) THEN   
+        MESSAGE('CLW file does not exist: ' & CopyClwName,'SaveAsNewScratchRtn')
+        RETURN
+    END 
+    IF ~stPrj.LoadFile(CopyPrjName) THEN
+        Message('Failed LoadFile "' & CopyPrjName &'" Windows Error ' & stPrj.winErrorCode,'SaveAsNewScratchRtn')
+        RETURN
+    END  ! ; Bang.ValueView(Prj)
+    CASE MESSAGE('To create a new Scratch project a "Save" FileDialog will open.' & |
+                 '||Select the Folder and type the name of you new .CwProj file.', |
+                 'Save As New Scratch',ICON:Clarion,'Continue|Cancel')
+    OF 2 ; RETURN
+    END
+    IF ~NewPrjDiskFN THEN NewPrjDiskFN='ScratchST_' & FORMAT(TODAY(),@d11) &'.CwProj'.
+    IF ~FILEDIALOG('New Scratch CwProj File', NewPrjDiskFN, |
+                    'CwProj|*.cwproj|All|*.*', |
+                    FILE:Save + FILE:LongName+FILE:AddExtension+FILE:KeepDir)
+        RETURN
+    END 
+    
+    ST.SetValue(NewPrjDiskFN)
+    IF ~ST.Instring('.cwproj',1,1,,1) THEN
+        Message('Must be .CwProj') ; RETURN
+    END 
+    NewPrjPath  =ST.PathOnly()
+    NewPrjFN    =ST.FileNameOnly(,1)
+    NewPrjName  =ST.FileNameOnly(,0)
+    IF lower(NewPrjFN)=lower(CopyPrjName) THEN
+       IF lower(longpath(NewPrjPath))=lower(longpath()) THEN
+          MESSAGE('You cannot blow away |file ' & CopyPrjName &'|in ' & LongPath())
+          RETURN
+       END
+    END  
+    stPrj.Replace(CLIP(CopyClwName),CLIP(NewPrjName)&'.clw', ,,,1)   
+        !Bang.ReplaceView(stPrj,'>' & CLIP(CopyNameOnly) &'<<','>' & CLIP(NewPrjName) &'<<', ,,,1) 
+    stPrj.Replace('>' & CLIP(CopyNameOnly) &'<<','>' & CLIP(NewPrjName) &'<<', ,,,1) 
+    stPrj.SaveFile(NewPrjDiskFN)
+    SazCls.Copy2New(CopyClwName,CLIP(NewPrjName) &'.clw')
+    SazCls.Copy2New('BigBangTheory.clw','BigBangTheory.clw')
+    SazCls.Copy2New('BigBangTheory.inc','BigBangTheory.inc')
+    RETURN
+SazCls.Copy2New    PROCEDURE(STRING FromFN,STRING ToFN) 
+    CODE
+    IF ~EXISTS(CLIP(NewPrjPath) &'\'& ToFN) AND EXISTS(FromFN) THEN 
+        Copy(FromFN,CLIP(NewPrjPath) &'\'& ToFN) 
+    END     
 !========================================================================================
 DB   PROCEDURE(STRING xMessage)
 Prfx EQUATE('ScratchST: ')
