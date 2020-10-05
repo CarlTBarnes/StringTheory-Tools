@@ -2,9 +2,25 @@
  StringTheory Value and Split Viewer aka BigBangTheory
 
 To help you see what your StringTheory code is actually doing the Big Bang class allows
- you to view the GetValue string or Split Lines queue in a Window. This allows
+ you to view the GetValue() string or Split() Lines queue in a Window. This allows
  scrolling the data and digging deeper which can be easier than looking at Debug View or Message boxes.
- A Lines Split viewer allows you to specify your Split( parameters ) and see the resulting columns in a List.
+ A Lines "Split Viewer" allows you to specify your Split( parameters ) and see the resulting columns in a List.
+
+```Clarion
+BigBangTheory  CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW')
+DoNotShow         BOOL  !=True doesn't show any BBT Windows, Class is for Developers
+
+ValueView         PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
+StringView        PROCEDURE(STRING  StrValue, <STRING WindowCaption>) 
+
+WrapView          PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bool pOpenWrapped=false)
+
+LinesViewInList   PROCEDURE(StringTheory STwithLinesSplitDone, <STRING WindowCaption>)
+
+LinesViewSplitCSV PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuotes=False)  
+LinesViewSplitTAB PROCEDURE(StringTheory STwithLinesSplitDone)  
+LinesViewSplit    PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE)  
+```
 
 StringTheory makes it easy to load a CSV file and split it into columns
  with code like below (from https://www.capesoft.com/docs/StringTheory3/StringTheory.htm#ParsingCSVFile).
@@ -102,29 +118,6 @@ There is also a SystemStringClass version. That class has no ability to deal wit
 Check out the BasicFileBrowse subfolder with an example of using a BASIC file defined in the DCT and discussion of some advantages.
 https://github.com/CarlTBarnes/StringTheory-LoadFile-Split-Viewer/tree/master/BasicFileBrowse
 
-
-## BigBangTheory.INC
-
-The BigBangTheory Class has just a few methods to let you see either the StringTheory Value or the Split Lines.
- StringView allows viewing any String. WrapView allows viewing the word wrapping
-
-```Clarion
-BigBangTheory  CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW')
-DoNotShow         BOOL  !=True doesn't show any BBT Windows, Class is for Developers
-
-ValueView         PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
-StringView        PROCEDURE(STRING  StrValue, <STRING WindowCaption>) 
-
-WrapView          PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bool pOpenWrapped=false)
-
-LinesViewInList   PROCEDURE(StringTheory STwithLinesSplitDone, <STRING WindowCaption>)
-
-LinesViewSplitCSV PROCEDURE(StringTheory STwithLinesSplitDone, BYTE RemoveQuotes=False)  
-LinesViewSplitTAB PROCEDURE(StringTheory STwithLinesSplitDone)  
-LinesViewSplit    PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE)  
-```
-
-
 ## Scratch Theory
 
 The best way to learn how to use StringTheory is to actually write code to call the library, build, run
@@ -139,9 +132,6 @@ If you need to use the debugger it's much faster with a tiny scratch program to 
  If you are trying figure out how StringTheory works, what methods are being called, it can be tedious to trace through
  the code in the editor. Sometimes it's easier to step through it in the debugger and see each line execute plus
  be able to see the values of the variables.
-
-ScratchTheory has StringTheory included, defined and ready to use. It also has BingBangTheory to see StringTheory Values or Lines.
- It has a DB('Debug Text') procedure to OutputDebugString. It has a Window with a Text Control. You can have your code written and tested in a few minutes.
 
 An example included in the Scratch program is the below routine that
  Serializes a Queue loaded by Directory() then splits that by 13,10 into lines.

@@ -84,7 +84,7 @@ WrapTestRtn ROUTINE
     'While impervious to everything, they had no resistance to the microbes ' & | 
     'in our atmosphere to which we have long since become immune. After all that men ' & | 
     'could do had failed, the Trumpians were destroyed and humanity was saved by the ' & | 
-    'littlest things, which God, in His wisdom, had put upon this Earth.'
+    'littlest things, which God, in His wisdom, had put upon this Earth.')
           
  ST.SplitIntoWords()
  Bang.LinesViewInList(ST)

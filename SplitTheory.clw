@@ -95,7 +95,7 @@ Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('
         CHECK('Remove Quotes'),AT(267,108),USE(Col_QuoteRmv)
         CHECK('Nested Quotes'),AT(267,122),USE(Col_Nested),TIP('Quote and End Quote are Nested')
         CHECK('Clip'),AT(267,135),USE(Col_Clip),TIP('Remove trailing spaces')
-        CHECK('Left'),AT(297,134),USE(Col_Left),TIP('Remove leading spaces')
+        CHECK('Left'),AT(297,135),USE(Col_Left),TIP('Remove leading spaces')
         BUTTON('View Column Split'),AT(7,128),USE(?ViewColumnsBtn)
         ENTRY(@s255),AT(7,151,,11),FULL,USE(SplitCode2),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
         PANEL,AT(1,165,,2),FULL,USE(?Horz3),BEVEL(0,0,0600H)
