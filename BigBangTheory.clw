@@ -407,3 +407,44 @@ ST StringTheory
       END
    END 
    RETURN RV
+!----------------------
+BigBangTheory.ParmsView PROCEDURE(String P1,<String P2>,<String P3>,<String P4>,<String P5>,<String P6>,<String P7>,<String P8>,<String P9>)!,Long,Proc
+P    USHORT,AUTO
+PMax USHORT
+SP  ANY
+    CODE
+    LOOP P=1 TO 9 ; IF ~OMITTED(1+P) THEN PMax=P. ; END 
+    LOOP P=1 TO PMax
+        SP=SP & CHOOSE(P=1,'','<13,10>') & |
+                'Parm ' & P &' => ' & |
+                CHOOSE(~OMITTED(1+P), | 
+                        '"' & CHOOSE(P,P1,P2,P3,P4,P5,P6,P7,P8,P9) &'"', |
+                        '<<omitted>') 
+    END
+    SELF.StringView(SP,'ParmsView - Count: ' & PMax)
+    RETURN PMax 
+!----------------------
+BigBangTheory.ProtoView PROCEDURE(String Prototype, String P1,<String P2>,<String P3>,<String P4>,<String P5>,<String P6>,<String P7>,<String P8>,<String P9>)
+P    USHORT,AUTO
+PMax USHORT,AUTO
+SP   ANY
+stProt StringTheory 
+ProCnt USHORT,AUTO
+    CODE
+    stProt.SetValue(Prototype)
+    stProt.Split(',')   !Problem Arrays: *LONG[,] Current
+    ProCnt=stProt.Records() 
+    PMax=ProCnt
+    LOOP P=1 TO 9 ; IF P>PMax AND ~OMITTED(2+P) THEN PMax=P. ; END 
+    LOOP P=1 TO PMax
+        SP=SP & 'Parm ' & P &' => ' & |
+                CHOOSE(~OMITTED(2+P), | 
+                        '"' & CHOOSE(P,P1,P2,P3,P4,P5,P6,P7,P8,P9,'?#' & P) &'"', |
+                        '<<omitted>') & |
+                '   <9>' & |
+                CHOOSE(P<=ProCnt,stProt.GetLine(P),'? Prototype ?') & |
+                '<13,10>'
+    END
+    SP=SP & '<13,10>Prototype: ' & Prototype
+    SELF.StringView(SP,'ProtoView - Count: ' & PMax)
+    RETURN PMax 

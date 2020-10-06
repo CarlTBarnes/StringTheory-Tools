@@ -24,6 +24,8 @@ LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDel
                                                 bool pClip=false, bool pLeft=false, <STRING pSeparator>, long pNested=false)
 
 ReplaceView         PROCEDURE(StringTheory St4Replace, string pOldValue, string pNewValue, long pCount=0, long pStart=1, long pEnd=0, long pNoCase=0, bool pRecursive=false),Long,Proc
+ParmsView           PROCEDURE(String P1,<String P2>,<String P3>,<String P4>,<String P5>,<String P6>,<String P7>,<String P8>,<String P9>),Long,Proc
+ProtoView           PROCEDURE(String Prototype, String P1,<String P2>,<String P3>,<String P4>,<String P5>,<String P6>,<String P7>,<String P8>,<String P9>),Long,Proc
 
 HexDump             PROCEDURE(StringTheory InputString, StringTheory OutHexDump)
 HexDump             PROCEDURE(STRING StringToReturnHex),STRING

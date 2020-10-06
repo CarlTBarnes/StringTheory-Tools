@@ -21,7 +21,7 @@ lne  StringTheory
 X    LONG 
     CODE 
 !    Bang.DoNotShow=1      !When True None of the Bang windows show  
-!    DO SplitMultiQuotesTestRtn ; halt()  
+!    DO ParmsViewRtn ; halt()  
     DO CsvTestRtn
     DO TabTestRtn
     DO PipeSplitRtn
@@ -29,6 +29,7 @@ X    LONG
     DO SerializeQRtn
     DO HexTestRtn
     DO SplitMultiQuotesTestRtn
+    DO ParmsViewRtn
     HALT()
     RETURN
 
@@ -137,6 +138,16 @@ SplitMultiQuotesTestRtn ROUTINE
 !   <string pSeparator>,      Sep if QuoteStart has multiple e.g. - for  [-(  )-]
 !   Long pNested=false)       True=Ignore () around "5,6" in (1,2),(3,4),((5,6),7)
 
+ParmsViewRtn ROUTINE 
+  !ST can have many parameters so hard to figure out if you have the right commas,,,,1 e.g. NoCase
+  
+  ST.SetValue('Humanity was saved by the microbes, which God, in His wisdom, had put upon this Earth.')
+  Bang.ReplaceView(ST,'humanity','America',,,,1)   !Specific to Replace()
+  
+  Bang.ParmsView('humanity','America',,,,1)        !Generalized Parms counters
+  Bang.ProtoView('string pOldValue, string pNewValue, long pCount=0, long pStart=1, long pEnd=0, long pNoCase=0, bool pRecursive=false' , |
+                 'humanity','America',,,,1) 
+ 
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split
 Test_SystemString PROCEDURE()  
