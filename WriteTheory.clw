@@ -269,11 +269,11 @@ MethodGrp GROUP(MethodQ),PRE(MethGrp),AUTO
           END
 MethodQPtr  LONG 
 ProcName    PSTRING(64)
-MaxCnt          EQUATE(9)
+MaxCnt              EQUATE(9)
 ParmGrp GROUP,PRE() 
-Parm        STRING(40),DIM(9)   !8 is maximum 
+Parm        STRING(64),DIM(9)   !8 is maximum seen
         END
-Proto   STRING(40),DIM(9)   !8 is maximum
+Proto   STRING(40)    ,DIM(9)   !8 is maximum
 SaveQ   QUEUE,PRE(SaveQ),STATIC 
 MethQPtr   LONG                  !SaveQ:MethQPtr =MethodQPtr
 Parms      STRING(SIZE(ParmGrp)) !SaveQ:Parms    =ParmGrp
@@ -282,23 +282,26 @@ PCount  USHORT
 P  USHORT 
 X  LONG 
 Y  LONG 
-CallTxt STRING(2000)
+CallProc ANY
+CallTxt STRING(2000) 
+OnePerLine  BYTE
 
-Window WINDOW('Protype:'),AT(,,329,195),GRAY,SYSTEM,ICON(ICON:JumpPage),FONT('Segoe UI',9)
-        PROMPT('Parameter to Pass:'),AT(17,5),USE(?Heading1)
+Window WINDOW('Protype:'),AT(,,329,195),GRAY,SYSTEM,ICON(ICON:JumpPage),FONT('Segoe UI',9),RESIZE
+        PROMPT('Parameter to Pass:'),AT(17,5,136),USE(?Heading1)
         PROMPT(' Prototype:'),AT(191,5),USE(?Heading2)
+        CHECK(',&&|'),AT(163,5),USE(OnePerLine),TIP('One Parm per Line'),SKIP
         BUTTON('Close'),AT(254,3,33,12),USE(?CloseBtn),SKIP,STD(STD:Close)
         BUTTON('Help'),AT(292,3,29,12),USE(?wwwBtn),SKIP,TIP('Open Capesoft.com')
-        ENTRY(@s40),AT(19,18,164,11),USE(Parm[1]),FONT('Consolas')
-        ENTRY(@s40),AT(19,32,164,11),USE(Parm[2])
-        ENTRY(@s40),AT(19,46,164,11),USE(Parm[3])
-        ENTRY(@s40),AT(19,60,164,11),USE(Parm[4])
-        ENTRY(@s40),AT(19,74,164,11),USE(Parm[5])
-        ENTRY(@s40),AT(19,88,164,11),USE(Parm[6])
-        ENTRY(@s40),AT(19,102,164,11),USE(Parm[7])
-        ENTRY(@s40),AT(19,116,164,11),USE(Parm[8])
-        ENTRY(@s40),AT(19,130,164,11),USE(Parm[9])
-        ENTRY(@s40),AT(192,18,128,11),USE(Proto[1]),SKIP,TRN,FONT('Consolas')
+        ENTRY(@s64),AT(19,18,164,11),USE(Parm[1]),FONT('Consolas')
+        ENTRY(@s64),AT(19,32,164,11),USE(Parm[2])
+        ENTRY(@s64),AT(19,46,164,11),USE(Parm[3])
+        ENTRY(@s64),AT(19,60,164,11),USE(Parm[4])
+        ENTRY(@s64),AT(19,74,164,11),USE(Parm[5])
+        ENTRY(@s64),AT(19,88,164,11),USE(Parm[6])
+        ENTRY(@s64),AT(19,102,164,11),USE(Parm[7])
+        ENTRY(@s64),AT(19,116,164,11),USE(Parm[8])
+        ENTRY(@s64),AT(19,130,164,11),USE(Parm[9])
+        ENTRY(@s64),AT(192,18,128,11),USE(Proto[1]),SKIP,TRN,FONT('Consolas')
         ENTRY(@s40),AT(192,32,128,11),USE(Proto[2]),SKIP,TRN
         ENTRY(@s40),AT(192,46,128,11),USE(Proto[3]),SKIP,TRN
         ENTRY(@s40),AT(192,60,128,11),USE(Proto[4]),SKIP,TRN
@@ -316,7 +319,8 @@ Window WINDOW('Protype:'),AT(,,329,195),GRAY,SYSTEM,ICON(ICON:JumpPage),FONT('Se
         PROMPT('7.'),AT(6,102),USE(?PROMPTNo7)
         PROMPT('8.'),AT(6,116),USE(?PROMPTNo8)
         PROMPT('9.'),AT(6,130),USE(?PROMPTNo9)
-        BUTTON,AT(1,152,15,15),USE(?CopyBtn),SKIP,ICON(ICON:Copy),TIP('Copy Code'),FLAT
+        BUTTON,AT(2,148,14,14),USE(?CopyBtn),SKIP,ICON(ICON:Copy),TIP('Copy Call'),FLAT
+        BUTTON,AT(2,171,14,14),USE(?CopyAllBtn),SKIP,ICON(ICON:Copy),TIP('Copy All'),FLAT
         TEXT,AT(19,148,301,39),USE(CallTxt),SKIP,VSCROLL,FONT('Consolas')
     END
 Bang BigBangTheory
@@ -334,10 +338,14 @@ ST   StringTheory
     ?Heading1{PROP:Text}='Parameters for ' & ProcName &'()'
     DO WinOpenRtn
     ACCEPT
-        IF EVENT()=EVENT:Accepted THEN DO CallTxtRtn.
         CASE ACCEPTED()
-        OF ?CopyBtn ; SETCLIPBOARD(CallTxt)
-        OF ?wwwBtn  ; ShellExecuteOpen('https://www.capesoft.com/docs/StringTheory3/StringTheory.htm#st' & CLIP(ProcName))
+        OF ?CopyBtn    ; SETCLIPBOARD(CallProc)
+        OF ?CopyAllBtn ; SETCLIPBOARD(CallTxt)
+        OF ?wwwBtn     ; ShellExecuteOpen('https://www.capesoft.com/docs/StringTheory3/StringTheory.htm#st' & CLIP(ProcName))
+        OF ?Parm_1  |       
+         TO ?Parm_9    ; DO CallTxtRtn
+        OF ?OnePerLine ; ?CallTxt{PROP:HScroll}=OnePerLine 
+                         DO CallTxtRtn
         END
     END
     IF ParmGrp THEN 
@@ -371,24 +379,57 @@ WinOpenRtn ROUTINE
          HIDE(?Proto_1 +P-1)
          HIDE(?PROMPTNo1 +P-1) 
          IF P=PCount+1 THEN 
-            ?CallTxt{PROP:YPos} = (?Parm_1 +P-2){PROP:YPos} + 18
-            ?CopyBtn{PROP:YPos} = ?CallTxt{PROP:YPos} + 10
+            Y=?CallTxt{PROP:YPos}
+            ?CallTxt{PROP:YPos} = (?Parm_1 +P-2){PROP:YPos} + 18 
+            Y=Y - ?CallTxt{PROP:YPos}
+            ?CopyBtn{PROP:YPos} = ?CopyBtn{PROP:YPos} - Y !+ 10
+            ?CopyAllBtn{PROP:YPos} = ?CopyAllBtn{PROP:YPos} - Y
             0{PROP:Height} = ?CallTxt{PROP:YPos} + ?CallTxt{PROP:Height} + 8
          END
     END
-!    IF PCount=0 THEN DO CallTxtRtn.
+    0{PROP:MinWidth}=0{PROP:Width}
+   ! 0{PROP:MaxWidth}=0{PROP:Width} 
+    0{PROP:MinHeight}=0{PROP:Height}
+    ?CallTxt{PROP:NoWidth}=1
+    ?CallTxt{PROP:NoHeight}=1
+    ?CallTxt{PROP:Full}=1
     DO CallTxtRtn
     
 CallTxtRtn ROUTINE
-    CallTxt='.' & ProcName &'('
-    LOOP P=1 TO PCount
-        CallTxt=CLIP(CallTxt) & CHOOSE(P=1,'',', ')& CLIP(Parm[P]) 
+    IF OnePerLine THEN 
+       DO CallOnePerRtn
+       EXIT
     END
-    CallTxt=CLIP(CallTxt) & ')<13,10>!('& CLIP(MethGrp:Parms) &') ' & MethGrp:RV
+    CallProc='.' & ProcName &'('
+    LOOP P=1 TO PCount
+        CallProc=CallProc & CHOOSE(P=1,'',', ')& CLIP(Parm[P]) 
+    END
+    CallProc=CallProc & ')' 
+    CallTxt=CallProc & '<13,10>!('& CLIP(MethGrp:Parms) &') ' & MethGrp:RV
     DISPLAY   
-!=========
+CallOnePerRtn ROUTINE
+    DATA 
+PWidth LONG(8)
+Indent PSTRING(64)
+    CODE
+    LOOP P=1 TO PCount 
+        X=LEN(CLIP(Parm[P]))
+        IF X > PWidth THEN PWidth=X.
+    END    
+    CallProc='.' & ProcName &'('
+    Indent=ALL(' ',LEN(CallProc)) 
+    LOOP P=1 TO PCount 
+        CallProc=CallProc & |
+                 CHOOSE(P=1,'',Indent) & |
+                 SUB(Parm[P],1,PWidth) & |
+                 CHOOSE(P<PCount,' , &|',' )   ') & |
+                 ' ! ' & CLIP(Proto[P]) & '<13,10>'            
+    END
+    CallTxt=CallProc & '!('& CLIP(MethGrp:Parms) &') ' & MethGrp:RV
+    DISPLAY   
+    
 !==========================================================
-
+!Region CBLocateCls
 CBLocateCls.Init  PROCEDURE(QUEUE QRef, *STRING QStrRef, LONG ListFEQ, LONG TextFEQ, LONG NextBtn, LONG PrevBtn, BYTE Hack=0)
   CODE
   SELF.IsInit=1 
@@ -464,4 +505,4 @@ D STRING(1)
   IF SELF.PrevBtn THEN SELF.PrevBtn{PROP:Disable}=D.
   DISPLAY  
   RETURN
-!########################      
+!endRegion CBLocateCls     
