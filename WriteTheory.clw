@@ -57,6 +57,7 @@ X      LONG
 Txt    STRING(4000)
 FindName STRING(32)           
 FindInParm BYTE
+ConsolasFont BYTE
 Window WINDOW('Write Theory - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,ICON(ICON:Thumbnail),FONT('Segoe UI',10), |
             RESIZE
         BUTTON('Load'),AT(4,2,30,13),USE(?LoadIncBtn)
@@ -66,6 +67,7 @@ Window WINDOW('Write Theory - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,S
         BUTTON('&Find'),AT(102,17,23,11),USE(?FindNameNext),SKIP
         BUTTON('Pre&v'),AT(127,17,23,11),USE(?FindNamePrev),SKIP
         CHECK('Find in &Prototype'),AT(157,17,,11),USE(FindInParm),SKIP,TIP('Locate in Prototype, uncheck to for Name')
+        CHECK('Consolas'),AT(338,17,,11),USE(ConsolasFont),SKIP,FONT('Consolas')
         LIST,AT(3,31),FULL,USE(?List:MethodQ),VSCROLL,FROM(MethodQ),FORMAT('24R(2)|M~Line#~C(0)@n5@70L(2)|M~Procedure~@s' & |
                 '40@?30L(2)|M~Return~C(0)@s40@20L(2)|MP~Prototype~@s255@')
     END
@@ -86,12 +88,13 @@ LocateCls  CBLocateCls
                           IF EXISTS(StIncFile) THEN
                              PUTINI('Setup','st.inc',StIncFile,ConfigINI)     
                           END
-        OF ?PickIncBtn  ; DO PickIncRtn
+        OF ?PickIncBtn  ; DO PickIncRtn  
         OF ?FindInParm  ; IF FindInParm THEN 
                              LocateCls.QString &= MethodQ.Parms
                           ELSE
                              LocateCls.QString &= MethodQ.Name
                           END
+        OF ?ConsolasFont ; ?List:MethodQ{PROP:FontName}=CHOOSE(~ConsolasFont,'Segoe UI','Consolas')
         END
         CASE FIELD() 
         OF ?List:MethodQ
