@@ -157,12 +157,18 @@ PmzST       StringTheory
 !TODO Line Continuation - Loop in Reverse and if line ends with "|" add to previous    
     LOOP X=1 TO lfST.Records() 
          ALine=lfST.GetLine(X) 
-         IF ~ALine THEN CYCLE.  !Blank        
+         CASE ALine[1]         !Only lines with Label in column 1
+         OF 'A' TO 'Z'         !so no need [A-Z_] in Regex
+         OF 'a' TO 'z'
+         OF '_'
+         ELSE
+            CYCLE
+         END       
          ULine=UPPER(ALine)
 !TODO grab Equates into Queue to use?         
   
          !-- Label CLASS(Base) --------------------------------------
-         IF MATCH(ULine,'^[A-Z][^ ]* +CLASS[ ,(]',Match:Regular) THEN 
+         IF MATCH(ULine,'^[^ ]+ +CLASS[ ,(]',Match:Regular) THEN  
             Spc1=INSTRING(' ',ALine)    !Find "LABEL <space> CLASS
             ClassName=SUB(ALine,1,Spc1) ; ClassName[1]=UPPER(ClassName[1])
             ClassSpec=ClassName
@@ -187,7 +193,6 @@ PmzST       StringTheory
             CYCLE         
          END
          IF ~ClassIndex THEN CYCLE.
-         IF ULine[1] < 'A' OR ULine[1] > 'Z' THEN CYCLE.
          
          !MethodName        Procedure (long pAddr, long pLen),virtual 
 
@@ -227,6 +232,8 @@ PmzST       StringTheory
             st.squeeze(ST:NOPUNCTUATION)
 
             MethQ:RV=LEFT(st.GetValue()) 
+            Ins1=INSTRING('!',MethQ:RV)
+            IF Ins1 THEN MethQ:RV=SUB(MethQ:RV,1,Ins1-1).  !no !Comments
             Upper1(MethQ:RV)
             ALine=SUB(ALine,1,Paren2-1)
          END
