@@ -5,6 +5,8 @@
 !----------------------------------------------------------------------------
     INCLUDE('KEYCODES.CLW')
     INCLUDE('BigBangTheory.INC'),ONCE
+_BBT_Needs_Project_Defines EQUATE(StringTheoryLinkMode + StringTheoryDllMode)
+! StringTheoryLinkMode=>1;StringTheoryDllMode=>0  or StringTheoryLinkMode=>0;StringTheoryDllMode=>1
   MAP.
 !----------------------------------------------------------------------
 BigBangTheory.LinesViewInList PROCEDURE(StringTheory LnzST,<STRING CapTxt>)
