@@ -6,12 +6,12 @@
 !Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
 !
 !  TODO
-!10/16/20   Support Odd Job     
+!10/126/20   Support Odd Job     
 !           Frame and MDI Windiws
-!10/16/20   Store Class in Queue so can do multiple classes
-!           Sort by Name or Line# Original Order
+!10/26/20   Store Class in Queue so can do multiple classes
+!10/27/20  Sort by Name or Line# Original Order
 !           Line continuation
-!10/16/20   limit of 9 needs to be 10 for OddJob
+!10/26/20   limit of 9 needs to be 10 for OddJob
 
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
@@ -20,7 +20,7 @@
     INCLUDE('BigBangTheory.INC'),ONCE
     MAP
 PickProcedure   PROCEDURE()
-Prototype1      PROCEDURE(STRING MethodQ_Record, STRING MethodQ_Pointer)
+Prototype1      PROCEDURE(STRING MethodQ_Record, STRING MethodQ_ID)
 Upper1          PROCEDURE(*STRING InOutStr)
 ShellExecuteOpen PROCEDURE(STRING File2Do)
 DB          PROCEDURE(STRING DebugMessage)   !Output Debug String
@@ -43,8 +43,11 @@ RV              STRING(40)      !MethQ:RV
 Parms           STRING(1000)    !MethQ:Parms
 ParmsTip        STRING(1000)    !MethQ:ParmsTip
 ClassIndex      BYTE            !MethQ:ClassIndex
-ClassName       STRING(40)      !MethQ:ClassName    UPPER
-           END 
+ClassName       STRING(40)      !MethQ:ClassName    UPPER  
+ID              LONG            !MethQ:ID           Unique ID
+           END
+G:MethodID LONG
+
 CBLocateCls CLASS,TYPE
 Init          PROCEDURE(QUEUE QRef, *STRING QStrRef, LONG ListFEQ, LONG FindTextFEQ, LONG BtnNextFEQ, LONG BtnPrevFEQ, BYTE Hack=0)
 Kill          PROCEDURE()
@@ -109,12 +112,16 @@ LocateCls  CBLocateCls
                              LocateCls.QString &= MethodQ.Name
                           END
         OF ?ConsolasFont ; ?List:MethodQ{PROP:FontName}=CHOOSE(~ConsolasFont,'Segoe UI','Consolas')
-        OF ?SortBtn 
+        OF ?SortBtn
+                    GET(MethodQ,CHOICE(?List:MethodQ))
                     CASE POPUP('Procedure Name|Line Number|Class Name')
                     OF 1 ; SORT(MethodQ,MethQ:ClassIndex, MethQ:Name, MethQ:LineNo)
                     OF 2 ; SORT(MethodQ,MethQ:LineNo)
                     OF 3 ; SORT(MethodQ,MethQ:ClassName, MethQ:Name, MethQ:LineNo)
+                    ELSE ; CYCLE
                     END
+                    GET(MethodQ,MethQ:ID)
+                    SELECT(?List:MethodQ,POINTER(MethodQ))
         END
         CASE FIELD() 
         OF ?List:MethodQ
@@ -124,7 +131,7 @@ LocateCls  CBLocateCls
            OF EVENT:NewSelection  
               CASE KEYCODE()
               OF MouseLeft2 OROF EnterKey 
-                 START(Prototype1,,MethodQ, POINTER(MethodQ))
+                 START(Prototype1,,MethodQ, MethQ:Id)
               END
            END
         END
@@ -203,6 +210,8 @@ PmzST       StringTheory
          ULine=UPPER(ALine)
          
          CLEAR(MethodQ)
+         G:MethodID += 1 
+         MethQ:ID         = G:MethodID        
          MethQ:ClassSpec  = ClassSpec
          MethQ:ClassTip   = ClassSpec
          MethQ:ClassName  = UPPER(ClassName)
@@ -259,7 +268,8 @@ PmzST       StringTheory
          END 
         
     END 
-    SORT(MethodQ,MethQ:ClassIndex, MethQ:Name, MethQ:LineNo)
+    SORT(MethodQ,MethQ:ClassIndex, MethQ:Name, MethQ:LineNo) 
+    SELECT(?List:MethodQ,1)
     DISPLAY
     IF CntParms THEN
        SETCLIPBOARD(PmzCntList) ; Message('Parms Count on Clip')
@@ -316,10 +326,10 @@ DbgClear CSTRING('DBGVIEWCLEAR')
     CODE 
     OutputDebugString(DbgClear)
 !========================================================================================
-Prototype1 PROCEDURE(STRING pMethodQ_Record, STRING pMethodQ_Pointer)
+Prototype1 PROCEDURE(STRING pMethodQ_Record, STRING pMethodQ_Id)
 MethodGrp GROUP(MethodQ),PRE(MethGrp),AUTO
           END
-MethodQPtr  LONG 
+MethodQId   LONG 
 ProcName    PSTRING(64)
 MaxCnt              EQUATE(10)
 ParmGrp GROUP,PRE() 
@@ -327,7 +337,7 @@ Parm        STRING(64),DIM(10)   !8 is maximum seen
         END
 Proto   STRING(40)    ,DIM(10)   !8 is maximum
 SaveQ   QUEUE,PRE(SaveQ),STATIC 
-MethQPtr   LONG                  !SaveQ:MethQPtr =MethodQPtr
+MethQId    LONG                  !SaveQ:MethQId  =MethodQId
 Parms      STRING(SIZE(ParmGrp)) !SaveQ:Parms    =ParmGrp
         END 
 PCount  USHORT 
@@ -383,9 +393,9 @@ ST   StringTheory
     CODE
     MethodGrp = pMethodQ_Record 
     ProcName  = CLIP(MethGrp:Name) 
-    MethodQPtr= pMethodQ_Pointer 
-    SaveQ:MethQPtr =MethodQPtr
-    GET(SaveQ,SaveQ:MethQPtr)
+    MethodQId= pMethodQ_Id
+    SaveQ:MethQId =MethodQId
+    GET(SaveQ,SaveQ:MethQId)
     IF ~ERRORCODE() THEN ParmGrp=SaveQ:Parms.
 
     OPEN(Window)
@@ -408,10 +418,10 @@ ST   StringTheory
     END
     IF ParmGrp THEN 
        CLEAR(SaveQ)
-       SaveQ:MethQPtr =MethodQPtr
-       GET(SaveQ,SaveQ:MethQPtr)
+       SaveQ:MethQId =MethodQId
+       GET(SaveQ,SaveQ:MethQId)
        SaveQ:Parms=ParmGrp  
-       IF ERRORCODE() THEN ADD(SaveQ,SaveQ:MethQPtr) ELSE PUT(SaveQ).
+       IF ERRORCODE() THEN ADD(SaveQ,SaveQ:MethQId) ELSE PUT(SaveQ).
     END
     RETURN
 
