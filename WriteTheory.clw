@@ -75,7 +75,7 @@ FindName STRING(32)
 FindInParm BYTE
 ConsolasFont BYTE
 Window WINDOW('Write Theory - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,ICON(ICON:Thumbnail),FONT('Segoe UI',10), |
-            RESIZE
+            RESIZE,MAX
         BUTTON('Load'),AT(4,2,30,13),USE(?LoadIncBtn)
         BUTTON('...'),AT(37,2,15,13),USE(?PickIncBtn)
         ENTRY(@s255),AT(60,3,331,12),USE(StIncFile),SKIP
@@ -92,7 +92,7 @@ LocateCls  CBLocateCls
     CODE
     SYSTEM{PROP:PropVScroll}=1 ; SYSTEM{PROP:MsgModeDefault}=MSGMODE:CANCOPY
     StIncFile='StringTheory.Inc'  
-    StIncFile=GETINI('Setup','st.inc',StIncFile,ConfigINI)
+    StIncFile=GETINI('Setup','st.inc',StIncFile,ConfigINI) 
     OPEN(WINDOW)
     LocateCls.Init(MethodQ,MethodQ.Name,?List:MethodQ,?FindName,?FindNameNext,?FindNamePrev)
     IF EXISTS(StIncFile) THEN DO LoadIncRtn.
@@ -173,11 +173,11 @@ PmzST       StringTheory
          END       
          ULine=UPPER(ALine)
 !TODO grab Equates into Queue to use?         
-  
+
          !-- Label CLASS(Base) --------------------------------------
-         IF MATCH(ULine,'^[^ ]+ +CLASS[ ,(]',Match:Regular) THEN  
+         IF MATCH(ULine&',','^[^ ]+ +{{CLASS|INTERFACE}[ ,(]',Match:Regular) THEN   
             Spc1=INSTRING(' ',ALine)    !Find "LABEL <space> CLASS
-            ClassName=SUB(ALine,1,Spc1) ; ClassName[1]=UPPER(ClassName[1])
+            ClassName=SUB(ALine,1,Spc1) ; ClassName[1]=UPPER(ClassName[1])              
             ClassSpec=ClassName
             ClassIndex += 1
             Code1=LEFT(SUB(ALine,Spc1+1,9999))  !CLASS(base),more
@@ -203,7 +203,7 @@ PmzST       StringTheory
          
          !MethodName        Procedure (long pAddr, long pLen),virtual 
 
-         IF ~MATCH(ULine,'^[^ ]+ +'& '{{PROCEDURE|FUNCTION}[ ,(]',Match:Regular) THEN CYCLE.
+         IF ~MATCH(ULine&',','^[^ ]+ +'& '{{PROCEDURE|FUNCTION}[ ,(]',Match:Regular) THEN CYCLE.
  
          Spc1=INSTRING(' ',ALine)    !Find 1st space so can 
          ALine=SUB(ALine,1,Spc1) & LEFT(SUB(ALine,Spc1+1,9999))  !CatAddr Procedure
@@ -218,6 +218,9 @@ PmzST       StringTheory
          MethQ:ClassIndex = ClassIndex
          MethQ:Name=SUB(ALine,1,Spc1)
          MethQ:Name[1]=UPPER(MethQ:Name[1])
+            CASE UPPER(MethQ:Name[1:10])
+            OF 'CONSTRUCT' OROF 'DESTRUCT' ; CYCLE  !No need for help with
+            END
          MethQ:LineNo = X
 
          !Cutoff front "Label Procedure"
