@@ -11,7 +11,10 @@ _IFDef_BigBangTheory_  EQUATE(1)
 BigBangTheory    CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW') !,StringTheoryLinkMode),DLL(StringTheoryDllMode)
 DoNotShow           BOOL     !Class is for Developers so =True doesn't show any Windows
 
-ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
+ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)        
+SliceView           PROCEDURE(StringTheory STtoViewSlice, Long SliceStart=1, Long SliceEnd=0, <STRING CapTxt>) !View ST.Slice()
+SubView             PROCEDURE(StringTheory STtoViewSub  , Long SubStart=1,  Long SubLength=1, <STRING CapTxt>) !View ST.Sub()
+
 StringView          PROCEDURE(*STRING StrValue, <STRING WindowCaption>) 
 StringView          PROCEDURE(STRING  StrValue, <STRING WindowCaption>) 
 

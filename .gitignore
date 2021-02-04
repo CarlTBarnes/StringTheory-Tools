@@ -18,3 +18,5 @@ Cla*.dll
 *.log
 *.ini
 *.exe
+*.lnk
+StringTheory.*

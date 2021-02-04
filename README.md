@@ -6,11 +6,16 @@ To help you see what your StringTheory code is actually doing the Big Bang class
  scrolling the data and digging deeper which can be easier than looking at Debug View or Message boxes.
  A Lines "Split Viewer" allows you to specify your Split( parameters ) and see the resulting columns in a List.
 
+New 2/4/21 added SliceView() and SubView() that were used in [Find Clean CW IDE](https://github.com/CarlTBarnes/FindCleanCwIDE)
+
 ```Clarion
 BigBangTheory  CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW')
 DoNotShow         BOOL  !=True doesn't show any BBT Windows, Class is for Developers
 
 ValueView         PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)
+SliceView         PROCEDURE(StringTheory STtoViewSlice, Long SliceStart=1, Long SliceEnd=0, <STRING CapTxt>) 
+SubView           PROCEDURE(StringTheory STtoViewSub  , Long SubStart=1,  Long SubLength=1, <STRING CapTxt>) 
+
 StringView        PROCEDURE(STRING  StrValue, <STRING WindowCaption>) 
 
 WrapView          PROCEDURE(StringTheory STforWrap, <STRING WindowCaption>, Bool pOpenWrapped=false)

@@ -240,14 +240,42 @@ St StringTheory
   CODE
   IF SELF.DoNotShow THEN RETURN.
   St.setValue(StrValue)
-  SELF.ValueView(St, CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'String Value'))
-
+  SELF.ValueView(St, CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory Value'))
+!-------------------------------
+BigBangTheory.SliceView PROCEDURE(StringTheory pST, Long pStart=1, Long pEnd=0, <STRING CapTxt>) 
+SliceSt StringTheory
+  CODE                              !New 02/04/21
+  IF SELF.DoNotShow THEN RETURN.
+  IF pST._DataEnd > 0 THEN          !Set Start/End like ST.Slice() so can see in caption.
+     IF pEnd < 1 OR pEnd > pST._DataEnd THEN pEnd = pST._DataEnd .
+     IF pStart < 1 THEN pStart = 1.
+  END
+  SliceSt.setValue(pST.Slice(pStart,pEnd))
+  SELF.ValueView(SliceSt, 'Slice [' & pStart &':'& pEnd & '] of 1:'& pST._DataEnd &' -' & |
+                           CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,' StringTheory')) 
+  RETURN
+!-------------------------------
+BigBangTheory.SubView PROCEDURE(StringTheory pST, Long pStart=1, Long pLength=1, <STRING CapTxt>) 
+SubSt StringTheory
+  CODE                              !New 02/04/21
+  IF SELF.DoNotShow THEN RETURN.
+!  IF pST._DataEnd > 0 THEN          Show passed (s,l) don't correct Start/Length like ST.Sub() so can see in caption.
+!     IF pStart < 1 THEN pStart = 1.
+!     IF pStart <= self._DataEnd and pLength+pStart-1 > self._DataEnd THEN 
+!        pLength = self._DataEnd - pStart + 1 
+!     END    
+!  END
+  SubSt.setValue(pST.Sub(pStart,pLength))
+  SELF.ValueView(SubSt, 'Sub(' & pStart &','& pLength & ') of 1,'& pST._DataEnd &' -' & |
+                           CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,' StringTheory')) 
+  RETURN                            
+!-------------------------------    
 BigBangTheory.ValueView PROCEDURE(StringTheory pST, <STRING CapTxt>)
 LenTxt     LONG,AUTO
 HexTxt     StringTheory
 ShowHex    BYTE
-HScrollTxt BYTE(1)
-VScrollTxt BYTE(1)
+HScrollTxt BYTE(1),STATIC
+VScrollTxt BYTE(1),STATIC
 Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
         TOOLBAR,AT(0,0,325),USE(?TB1)
             CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
@@ -265,6 +293,7 @@ P LONG,DIM(4),STATIC
   IF ~LenTxt THEN Message('No Text','ValueView') ; RETURN.
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
+  ?Txt{PROP:HScroll}=HScrollTxt ; ?Txt{PROP:VScroll}=VScrollTxt
   IF LenTxt > 0FFF0h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k in 11.13505 - Message('Risk GPF?',LenTxt,,'No|Risk')
   ?Txt{PROP:Use}=pSt.valuePtr[1 : LenTxt]
   ?NoBang{PROP:Use}=SELF.DoNotShow
