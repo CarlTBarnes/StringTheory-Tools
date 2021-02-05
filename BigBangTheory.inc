@@ -12,8 +12,8 @@ BigBangTheory    CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW'
 DoNotShow           BOOL     !Class is for Developers so =True doesn't show any Windows
 
 ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)        
-SliceView           PROCEDURE(StringTheory STtoViewSlice, Long SliceStart=1, Long SliceEnd=0, <STRING CapTxt>) !View ST.Slice()
-SubView             PROCEDURE(StringTheory STtoViewSub  , Long SubStart=1,  Long SubLength=1, <STRING CapTxt>) !View ST.Sub()
+SliceView           PROCEDURE(StringTheory STtoViewSlice, Long SliceStart=1, Long SliceEnd=0, <STRING CapTxt>) !View Slice() of ST
+SubView             PROCEDURE(StringTheory STtoViewSub  , Long SubStart=1,  Long SubLength=1, <STRING CapTxt>) !View Sub() of ST
 
 StringView          PROCEDURE(*STRING StrValue, <STRING WindowCaption>) 
 StringView          PROCEDURE(STRING  StrValue, <STRING WindowCaption>) 

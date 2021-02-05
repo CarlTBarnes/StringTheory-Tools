@@ -243,31 +243,42 @@ St StringTheory
   SELF.ValueView(St, CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory Value'))
 !-------------------------------
 BigBangTheory.SliceView PROCEDURE(StringTheory pST, Long pStart=1, Long pEnd=0, <STRING CapTxt>) 
-SliceSt StringTheory
-  CODE                              !New 02/04/21
+SliceSt StringTheory 
+Q1 PSTRING(4)  !"?" flags Slice[] out of range in caption, ST will fixup
+Q2 PSTRING(4)
+SliceCaption PSTRING(48)
+  CODE
   IF SELF.DoNotShow THEN RETURN.
-  IF pST._DataEnd > 0 THEN          !Set Start/End like ST.Slice() so can see in caption.
-     IF pEnd < 1 OR pEnd > pST._DataEnd THEN pEnd = pST._DataEnd .
-     IF pStart < 1 THEN pStart = 1.
-  END
+  IF pStart < 1 or pStart > pEnd or pStart > pST._DataEnd THEN Q1=' ? '.
+  IF pEnd < 1   or pEnd < pStart or pEnd   > pST._DataEnd THEN Q2=' ? '.
+  SliceCaption = 'Slice ['& Q1 & pStart &':'& pEnd & Q2 &'] of 1:'& pST._DataEnd 
+!? Below is the kind of "Fix Up" of Start/End that ST does. Maybe check if that will occur and show that fixup [:] in caption?  
+!  IF pST._DataEnd > 0 THEN 
+!     IF pEnd < 1 OR pEnd > pST._DataEnd THEN pEnd = pST._DataEnd .
+!     IF pStart < 1 THEN pStart = 1.
+!  END  
   SliceSt.setValue(pST.Slice(pStart,pEnd))
-  SELF.ValueView(SliceSt, 'Slice [' & pStart &':'& pEnd & '] of 1:'& pST._DataEnd &' -' & |
-                           CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,' StringTheory')) 
+  IF SliceSt._DataEnd=0 THEN  !Was 
+     SliceSt.setValue('Invalid? ' & SliceCaption)
+  END
+  SELF.ValueView(SliceSt,SliceCaption &' - '& CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory')) 
   RETURN
 !-------------------------------
 BigBangTheory.SubView PROCEDURE(StringTheory pST, Long pStart=1, Long pLength=1, <STRING CapTxt>) 
 SubSt StringTheory
+Q1 PSTRING(4)  !"?" flags Sub() out of range, ST will fixup some
+Q2 PSTRING(4)
+SubCaption PSTRING(48)
   CODE                              !New 02/04/21
   IF SELF.DoNotShow THEN RETURN.
-!  IF pST._DataEnd > 0 THEN          Show passed (s,l) don't correct Start/Length like ST.Sub() so can see in caption.
-!     IF pStart < 1 THEN pStart = 1.
-!     IF pStart <= self._DataEnd and pLength+pStart-1 > self._DataEnd THEN 
-!        pLength = self._DataEnd - pStart + 1 
-!     END    
-!  END
+  IF pStart < 1  or pStart           > pST._DataEnd THEN Q1=' ? '. 
+  IF pLength < 1 or pLength+pStart-1 > pST._DataEnd THEN Q2=' ? '.
+  SubCaption = 'Sub('& Q1 & pStart &','& pLength & Q2 &') of 1,'& pST._DataEnd 
   SubSt.setValue(pST.Sub(pStart,pLength))
-  SELF.ValueView(SubSt, 'Sub(' & pStart &','& pLength & ') of 1,'& pST._DataEnd &' -' & |
-                           CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,' StringTheory')) 
+  IF SubSt._DataEnd=0 THEN 
+     SubSt.setValue('Invalid? ' & SubCaption)
+  END
+  SELF.ValueView(SubSt,SubCaption &' - ' & CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory')) 
   RETURN                            
 !-------------------------------    
 BigBangTheory.ValueView PROCEDURE(StringTheory pST, <STRING CapTxt>)
