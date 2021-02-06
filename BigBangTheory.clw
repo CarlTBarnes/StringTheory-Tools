@@ -249,8 +249,8 @@ Q2 PSTRING(4)
 SliceCaption PSTRING(48)
   CODE
   IF SELF.DoNotShow THEN RETURN.
-  IF pStart < 1 or pStart > pEnd or pStart > pST._DataEnd THEN Q1=' ? '.
-  IF pEnd < 1   or pEnd < pStart or pEnd   > pST._DataEnd THEN Q2=' ? '.
+  IF pStart < 1 OR pStart > pST._DataEnd OR (pStart > pEnd AND pEnd) THEN Q1=' ? '.
+  IF pEnd < 1   OR pEnd   > pST._DataEnd OR  pStart > pEnd           THEN Q2=' ? '.
   SliceCaption = 'Slice ['& Q1 & pStart &':'& pEnd & Q2 &'] of 1:'& pST._DataEnd 
 !? Below is the kind of "Fix Up" of Start/End that ST does. Maybe check if that will occur and show that fixup [:] in caption?  
 !  IF pST._DataEnd > 0 THEN 
@@ -270,9 +270,9 @@ Q1 PSTRING(4)  !"?" flags Sub() out of range, ST will fixup some
 Q2 PSTRING(4)
 SubCaption PSTRING(48)
   CODE                              !New 02/04/21
-  IF SELF.DoNotShow THEN RETURN.
-  IF pStart < 1  or pStart           > pST._DataEnd THEN Q1=' ? '. 
-  IF pLength < 1 or pLength+pStart-1 > pST._DataEnd THEN Q2=' ? '.
+  IF SELF.DoNotShow THEN RETURN. 
+  IF pStart  < 1           OR pStart > pST._DataEnd THEN Q1=' ? '. 
+  IF pLength < 1 OR pLength-1+pStart > pST._DataEnd THEN Q2=' ? '.
   SubCaption = 'Sub('& Q1 & pStart &','& pLength & Q2 &') of 1,'& pST._DataEnd 
   SubSt.setValue(pST.Sub(pStart,pLength))
   IF SubSt._DataEnd=0 THEN 
