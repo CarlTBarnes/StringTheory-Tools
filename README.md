@@ -174,7 +174,7 @@ FilesQ  FILE:Queue
 
 ## Split Theory
 
-Try out several StringTheory Split calls and view the results without writing code.  Split() has 8 parameters that on this window you can work out by just filling in the blanks. Calling SplitByMatch() requires getting your regular expression exactly right.
+Try out several StringTheory Split calls and view the results without writing code.  Split() has 8 parameters that on this window you can work out by just filling in the blanks. Calling SplitByMatch() requires getting your regular expression exactly right. This tool lets you quickly test your expressions.
 
  The test data can be loaded from a file, the clipboard, or typed into the Text control at the bottom of the windows.
  View buttons use BigBangTheory to show the String Value, Lines split, or those lines split again into Columns.
@@ -185,12 +185,12 @@ Try out several StringTheory Split calls and view the results without writing co
 
 StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (e.g. Replace), which can make it difficult to get the commas exactly right when you want to omit.
  WriteTheory will read an INC file and help you write the call by opening a Form with each Parameter as an Entry. 
- The Help button will open CapeSoft.com help for ST and OddJob. More can easily be added.
+ The Help button will open CapeSoft.com help for ST and OddJob. More can easily be added. This can be used with any INC file.
 
 ![wt1](images/writetheory1.png)
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwMzExMDQwMzMsLTM5NTI5MDA1MywtMj
-ExMTY1OTc3LDQzMzk4ODA5NV19
+eyJoaXN0b3J5IjpbMTE3MDkxNjA2MiwtMzk1MjkwMDUzLC0yMT
+ExNjU5NzcsNDMzOTg4MDk1XX0=
 -->
