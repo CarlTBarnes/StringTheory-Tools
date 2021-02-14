@@ -1,11 +1,13 @@
 # StringTheory-Tools
-This repository contains several tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
+
+This repository contains several 1 tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
  
-## BigBangTheory to View StringTheory Values and LoadFile Split-Viewer
-StringTheory Value and Split Viewer aka BigBangTheory
+## BigBangTheory to View StringTheory Value and Split
+
+What's in the StringTheory Value or Split Viewer aka BigBangTheory
 
 To help you see what your StringTheory code is actually doing the Big Bang class allows
- you to view the GetValue() string or Split() Lines queue in a Window. This allows
+ you to view the current GetValue() string or Split() Lines queue in a Window. This allows
  scrolling the data and digging deeper which can be easier than looking at Debug View or Message boxes.
  A Lines "Split Viewer" allows you to specify your Split( parameters ) and see the resulting columns in a List.
 
@@ -182,5 +184,5 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzODgwMTAyMTRdfQ==
+eyJoaXN0b3J5IjpbMTI5NzMwMjI3OF19
 -->
