@@ -1,7 +1,7 @@
 # StringTheory-Tools
-This repository contains several tools to makes it easier to code 
+This repository contains several tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
  
-# StringTheory-LoadFile-Split-Viewer
+## StringTheory LoadFile Split-Viewer
 StringTheory Value and Split Viewer aka BigBangTheory
 
 To help you see what your StringTheory code is actually doing the Big Bang class allows
@@ -182,5 +182,5 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTc5Njc0NzE2NF19
+eyJoaXN0b3J5IjpbMTI1NTg4NTcxNF19
 -->
