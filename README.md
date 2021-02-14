@@ -2,9 +2,9 @@
 
 This repository contains 2 tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
 
-[BigBangTheory Class](#BigBangTheory-Value-and-Split-Lines-Viewer) - Debug/ trace ST code by viewing ST Value or Lines in a Window
+[BigBangTheory Class](#BigBangTheory-Value-and-Split-Lines-Viewer) - Debug/ Trace ST code by viewing ST Value or Lines in a Window
 [Scratch Theory](#Scratch-Theory) - A scratch program to write and test ST code in a small program before pasting into your production code
-[Split Theory](#Split-Theory) - Try all 7 parameters of .Split() plus .SplitByMatch() or .SplitEvery(), against your data and get the call generated.
+[Split Theory](#Split-Theory) - Try all 7 parameters of .Split(), plus .SplitByMatch(2) or .SplitEvery(1), against your data and get the call code generated.
 [Split Theory](#Split-Theory) - A 
 [Split Theory](#Split-Theory) - A 
  
@@ -174,8 +174,8 @@ FilesQ  FILE:Queue
 
 ## Split Theory
 
-Try out many StringTheory Split calls and view the results without writing code.
- The test data can be loaded from a file, the clipboard, or typed int the Text control at the bottom of the windows.
+Try out many StringTheory Split calls and view the results without writing code. 
+ The test data can be loaded from a file, the clipboard, or typed into the Text control at the bottom of the windows.
  View buttons use BigBangTheory to show the String Value, Lines split, or those lines split again into Columns.
 
 ![splitcap](images/split1.png)
@@ -190,6 +190,6 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM3MjI0NjQzMCwtMjExMTY1OTc3LDQzMz
+eyJoaXN0b3J5IjpbLTM5NTI5MDA1MywtMjExMTY1OTc3LDQzMz
 k4ODA5NV19
 -->
