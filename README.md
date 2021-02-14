@@ -4,7 +4,7 @@ This repository contains 2 tools to make it easier to write and verify code usin
 
 [BigBangTheory Class](#BigBangTheory-Value-and-Split-Lines-Viewer) - Debug/ trace ST code by viewing ST Value or Lines in a Window
 [Scratch Theory](#Scratch-Theory) - A scratch program to write and test ST code in a small program before pasting into your production code
-[Split Theory](#Split-Theory) - Try 
+[Split Theory](#Split-Theory) - A fill in the Form way to try out all the parameters of .SPLIT() 
 [Split Theory](#Split-Theory) - A 
 [Split Theory](#Split-Theory) - A 
  
@@ -190,5 +190,5 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTQ2NDU3ODU5LDQzMzk4ODA5NV19
+eyJoaXN0b3J5IjpbLTIxMTE2NTk3Nyw0MzM5ODgwOTVdfQ==
 -->
