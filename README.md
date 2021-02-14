@@ -174,7 +174,7 @@ FilesQ  FILE:Queue
 
 ## Split Theory
 
-Try out several StringTheory Split calls and view the results without writing code.  Split() has 8 parameters that on this window you can work out by just filling in the blanks. 
+Try out several StringTheory Split calls and view the results without writing code.  Split() has 8 parameters that on this window you can work out by just filling in the blanks. Calling SplitByMatch() requires getting your regular expression exactly right.
 
  The test data can be loaded from a file, the clipboard, or typed into the Text control at the bottom of the windows.
  View buttons use BigBangTheory to show the String Value, Lines split, or those lines split again into Columns.
@@ -191,6 +191,6 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzcxOTQzMzg3LC0zOTUyOTAwNTMsLTIxMT
-E2NTk3Nyw0MzM5ODgwOTVdfQ==
+eyJoaXN0b3J5IjpbLTEwMzExMDQwMzMsLTM5NTI5MDA1MywtMj
+ExMTY1OTc3LDQzMzk4ODA5NV19
 -->
