@@ -2,9 +2,9 @@
 
 This repository contains several 1 tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
 
-BigBangTheory Class to debug/ trace by viewing ST Value or Lines in a Window
+[BigBangTheory Class](# ) to debug/ trace by viewing ST Value or Lines in a Window
  
-## BigBangTheory to View StringTheory Value and Split
+## BigBangTheory Value and Split Lines Viewer
 
 What's in the StringTheory Value string or Lines queue? With 1 line of code BigBangTheory will show you in a popup Window.
 
@@ -186,5 +186,5 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDMzOTg4MDk1XX0=
+eyJoaXN0b3J5IjpbMTE0ODUzMDEyNiw0MzM5ODgwOTVdfQ==
 -->
