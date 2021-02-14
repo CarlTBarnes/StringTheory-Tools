@@ -1,10 +1,12 @@
 # StringTheory-Tools
 
 This repository contains several 1 tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
+
+BigBangTheory Class to debug/ trace by viewing ST Value or Lines in a Window
  
 ## BigBangTheory to View StringTheory Value and Split
 
-What's in the StringTheory Value string or Lines queue? With 1 line of code BigBangTheory will show you in a 
+What's in the StringTheory Value string or Lines queue? With 1 line of code BigBangTheory will show you in a popup Window.
 
 To help you see what your StringTheory code is actually doing the Big Bang class allows
  you to view the current GetValue() string or Split() Lines queue in a Window. This allows
@@ -184,5 +186,5 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODc3NTI2Mzg0XX0=
+eyJoaXN0b3J5IjpbNDMzOTg4MDk1XX0=
 -->
