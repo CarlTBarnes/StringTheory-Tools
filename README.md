@@ -1,5 +1,8 @@
+# StringTheory-Tools
+This repository contains several tools to makes it easier to code 
+ 
 # StringTheory-LoadFile-Split-Viewer
- StringTheory Value and Split Viewer aka BigBangTheory
+StringTheory Value and Split Viewer aka BigBangTheory
 
 To help you see what your StringTheory code is actually doing the Big Bang class allows
  you to view the GetValue() string or Split() Lines queue in a Window. This allows
@@ -178,3 +181,6 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt1](images/writetheory1.png)
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTc5Njc0NzE2NF19
+-->
