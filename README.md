@@ -1,9 +1,9 @@
 # StringTheory-Tools
 
-This repository contains several 1 tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
+This repository contains 2 tools to make it easier to write and verify code using the StringTheory class from http://CapeSoft.com
 
 [BigBangTheory Class](#BigBangTheory-Value-and-Split-Lines-Viewer) to debug/ trace by viewing ST Value or Lines in a Window
-[Scratch Theory](#Scratch-Theory) a quick scratch program to write and test ST code
+[Scratch Theory](#Scratch-Theory) a scratch program to write and test ST code in a small program before pasting into your production code
  
 ## BigBangTheory Value and Split Lines Viewer
 
@@ -187,5 +187,5 @@ StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjEyMjc3OTk3MCw0MzM5ODgwOTVdfQ==
+eyJoaXN0b3J5IjpbMTMxNjQ5NjgxNSw0MzM5ODgwOTVdfQ==
 -->
