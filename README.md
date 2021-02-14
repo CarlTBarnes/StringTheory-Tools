@@ -185,13 +185,13 @@ Try out several StringTheory Split calls and view the results without writing co
 
 StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (e.g. Replace), which can make it difficult to get the commas exactly right when you want to omit several parameters. The Help button will open CapeSoft.com help for ST and OddJob. More can easily be added. This can be used with any INC file.
  
-WriteTheory will read an INC file and help you write the call by opening a Form with each Parameter as an Entry. 
+WriteTheory will read an INC file and help you write the call by opening a Form with each Parameter as an Entry. You can check the "&|" box to have the  code generated with one parameter per line including a ! comment with the parameter name.
  
 
 ![wt1](images/writetheory1.png)
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTYzNTgwNjgyNCwtMzk1MjkwMDUzLC0yMT
+eyJoaXN0b3J5IjpbMTIxNjMwMjU0NiwtMzk1MjkwMDUzLC0yMT
 ExNjU5NzcsNDMzOTg4MDk1XX0=
 -->
