@@ -3,8 +3,11 @@
 This repository contains 4 tools to make it easier to write and verify code using the StringTheory class from http://www.CapeSoft.com 
 
 [Big Bang Theory](#BigBangTheory-Value-and-Split-Lines-Viewer) - Debug / Trace ST code by viewing ST Value or Split Lines in a Window.
+
 [Scratch Theory](#Scratch-Theory) - A scratch program to write and test ST code. Get it working quick, then paste into your production code
+
 [Split Theory](#Split-Theory) - Try all 7 parameters of .Split() against your data without writing any code, then get the call code generated.
+
 [Write Theory](#Write-Theory) - Write ST calls the easy way in a Form with an Entry for each parameter. It generates the code and links to Help. The **best** tool here.
 
  
@@ -192,6 +195,6 @@ WriteTheory will read an INC file and help you write the call by opening a Form 
 ![wt2](images/writetheory2.png)
 ![wtoj](images/writetheoryoj.png)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTIxNjMwMjU0NiwtMzk1MjkwMDUzLC0yMT
-ExNjU5NzcsNDMzOTg4MDk1XX0=
+eyJoaXN0b3J5IjpbLTExNjAxOTIzODQsMTIxNjMwMjU0NiwtMz
+k1MjkwMDUzLC0yMTExNjU5NzcsNDMzOTg4MDk1XX0=
 -->
