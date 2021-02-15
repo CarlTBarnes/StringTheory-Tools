@@ -2,15 +2,76 @@
 
 This repository contains 4 tools to make it easier to write and verify code using the StringTheory class from http://www.CapeSoft.com 
 
-[Big Bang Theory](#BigBangTheory-Value-and-Split-Lines-Viewer) - Debug / Trace ST code by viewing ST Value or Split Lines in a Window.
-
-[Scratch Theory](#Scratch-Theory) - A scratch program to write and test ST code. Get it working quick, then paste into your production code
+[Write Theory](#Write-Theory) - Write ST calls the easy way in a Form with an Entry for each parameter. It generates the code and links to Help. The **best** tool here.
 
 [Split Theory](#Split-Theory) - Try all 7 parameters of .Split() against your data without writing any code, then get the call code generated.
 
-[Write Theory](#Write-Theory) - Write ST calls the easy way in a Form with an Entry for each parameter. It generates the code and links to Help. The **best** tool here.
+[Scratch Theory](#Scratch-Theory) - A scratch program to write and test ST code. Get it working quick, then paste into your production code
 
+[Big Bang Theory](#BigBangTheory-Value-and-Split-Lines-Viewer) - Debug / Trace ST code by viewing ST Value or Split Lines in a Window.
+
+
+## Write Theory
+
+StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (e.g. Replace), which can make it difficult to get the commas exactly right when you want to omit several parameters. The Help button will open CapeSoft.com help for ST and OddJob. More can easily be added. This can be used with any INC file.
  
+WriteTheory will read an INC file and help you write the call by opening a Form with each Parameter as an Entry. You can check the "&|" box to have the  code generated with one parameter per line including a ! comment with the parameter name.
+ 
+
+![wt1](images/writetheory1.png)
+![wt2](images/writetheory2.png)
+![wtoj](images/writetheoryoj.png)
+
+
+## Split Theory
+
+Try out several StringTheory Split calls and view the results without writing code.  Split() has 8 parameters that on this window you can work out by just filling in the blanks. Calling SplitByMatch() requires getting your regular expression exactly right. This tool lets you quickly test your expressions.
+
+ The test data can be loaded from a file, the clipboard, or typed into the Text control at the bottom of the windows.
+ View buttons use BigBangTheory to show the String Value, Lines split, or those lines split again into Columns.
+
+![splitcap](images/split1.png)
+
+
+## Scratch Theory
+
+The best way to learn how to use StringTheory is to actually write code to call the library, build, run
+ and see the results. Many times this involves pasting example code and modifying it for your needs.
+
+Included in this Repo is the ScratchTheory Project. A "Scratch Program" is a small source template ready
+ to add code snippets, build, run and test.
+ This saves reproducing all the boring parts (includes, defines, window, accept) of the program just to try a little piece of code and see the results.
+ One thing that makes Scratch programming faster is the very small size letting it build fast.
+ 
+If you need to use the debugger it's much faster with a tiny scratch program to step and set break-points.
+ If you are trying figure out how StringTheory works, what methods are being called, it can be tedious to trace through
+ the code in the editor. Sometimes it's easier to step through it in the debugger and see each line execute plus
+ be able to see the values of the variables.
+
+An example included in the Scratch program is the below routine that
+ Serializes a Queue loaded by Directory() then splits that by 13,10 into lines.
+ The BigBangTheory class is used to view the resulting String or Lines inside the StringTheory object:
+
+```Clarion
+Test4Rtn ROUTINE
+    DATA
+Bang    BigBangTheory
+ST      StringTheory
+FilesQ  FILE:Queue
+    CODE
+    DIRECTORY(FilesQ,'*.*',ff_:NORMAL)
+    st.SerializeQueue(FilesQ,'<13,10>',',','"')
+    st.Prepend('Name,Short,Date,Time,Size,Attrib<13,10>')
+       bang.ValueView(ST,'Directory SerializeQueue Value')
+    st.Split('<13,10>')
+       bang.LinesViewInList(ST,'Directory SerializeQueue Lines')
+       bang.LinesViewSplitCSV(ST)
+       EXIT
+```
+
+![scratchcap](images/scratch1.png)
+
+
 ## BigBangTheory Value and Split Lines Viewer
 
 What's in the StringTheory .GetValue() string or Lines queue? With 1 line of code BigBangTheory will show you in a popup Window.
@@ -135,66 +196,5 @@ There is also a SystemStringClass version. That class has no ability to deal wit
 
 
 Check out the BasicFileBrowse subfolder with an example of using a BASIC file defined in the DCT and discussion of some advantages.
-https://github.com/CarlTBarnes/StringTheory-LoadFile-Split-Viewer/tree/master/BasicFileBrowse
+https://github.com/CarlTBarnes/StringTheory-Tools/tree/master/BasicFileBrowse
 
-## Scratch Theory
-
-The best way to learn how to use StringTheory is to actually write code to call the library, build, run
- and see the results. Many times this involves pasting example code and modifying it for your needs.
-
-Included in this Repo is the ScratchTheory Project. A "Scratch Program" is a small source template ready
- to add code snippets, build, run and test.
- This saves reproducing all the boring parts (includes, defines, window, accept) of the program just to try a little piece of code and see the results.
- One thing that makes Scratch programming faster is the very small size letting it build fast.
- 
-If you need to use the debugger it's much faster with a tiny scratch program to step and set break-points.
- If you are trying figure out how StringTheory works, what methods are being called, it can be tedious to trace through
- the code in the editor. Sometimes it's easier to step through it in the debugger and see each line execute plus
- be able to see the values of the variables.
-
-An example included in the Scratch program is the below routine that
- Serializes a Queue loaded by Directory() then splits that by 13,10 into lines.
- The BigBangTheory class is used to view the resulting String or Lines inside the StringTheory object:
-
-```Clarion
-Test4Rtn ROUTINE
-    DATA
-Bang    BigBangTheory
-ST      StringTheory
-FilesQ  FILE:Queue
-    CODE
-    DIRECTORY(FilesQ,'*.*',ff_:NORMAL)
-    st.SerializeQueue(FilesQ,'<13,10>',',','"')
-    st.Prepend('Name,Short,Date,Time,Size,Attrib<13,10>')
-       bang.ValueView(ST,'Directory SerializeQueue Value')
-    st.Split('<13,10>')
-       bang.LinesViewInList(ST,'Directory SerializeQueue Lines')
-       bang.LinesViewSplitCSV(ST)
-       EXIT
-```
-
-![scratchcap](images/scratch1.png)
-
-## Split Theory
-
-Try out several StringTheory Split calls and view the results without writing code.  Split() has 8 parameters that on this window you can work out by just filling in the blanks. Calling SplitByMatch() requires getting your regular expression exactly right. This tool lets you quickly test your expressions.
-
- The test data can be loaded from a file, the clipboard, or typed into the Text control at the bottom of the windows.
- View buttons use BigBangTheory to show the String Value, Lines split, or those lines split again into Columns.
-
-![splitcap](images/split1.png)
-
-## Write Theory
-
-StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (e.g. Replace), which can make it difficult to get the commas exactly right when you want to omit several parameters. The Help button will open CapeSoft.com help for ST and OddJob. More can easily be added. This can be used with any INC file.
- 
-WriteTheory will read an INC file and help you write the call by opening a Form with each Parameter as an Entry. You can check the "&|" box to have the  code generated with one parameter per line including a ! comment with the parameter name.
- 
-
-![wt1](images/writetheory1.png)
-![wt2](images/writetheory2.png)
-![wtoj](images/writetheoryoj.png)
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNjAxOTIzODQsMTIxNjMwMjU0NiwtMz
-k1MjkwMDUzLC0yMTExNjU5NzcsNDMzOTg4MDk1XX0=
--->
