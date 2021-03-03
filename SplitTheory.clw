@@ -1,6 +1,9 @@
 ! SplitTheory - Try various split parameters without writing code
 !
 !Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
+! 
+!----------------------------------------------------------------------------------------
+! 03-Mar-2021   Split lines add Quote End and Quote Remove. Cosmetic/text improvements    
 
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
@@ -36,7 +39,9 @@ TmpST   StringTheory
 LoadFN  STRING(260)
 LineSpl_How    BYTE(1)
 LineSpl_Delim  STRING('<<13,10> {30}')
-LineSpl_Quote  STRING('"')
+LineSpl_Quote1 STRING('" {32}')
+LineSpl_Quote2 STRING(32)
+LineSpl_QuoteRmv BYTE
 LineSpl_Every  USHORT(80) 
 LineSpl_Match  STRING(255)
 LineSpl_NoCase BYTE(1)
@@ -51,6 +56,7 @@ Col_Left     BYTE
 Col_Sep      STRING(32)
 Col_Nested   BYTE
          END
+!Future SplitCode1  STRING(255)
 SplitCode2  STRING(255)
 Q1          EQUATE('''')
          
@@ -64,17 +70,21 @@ Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('
         STRING('ENTRY strings are Claion Literals allowing << 9 > but double << '' {{'),AT(85,23),USE(?StrLength)
         PANEL,AT(1,39,,2),FULL,USE(?Horz1),BEVEL(0,0,0600H)
         BUTTON('Split Lines'),AT(7,46),USE(?SpiltLinesBtn)
-        OPTION('Split Lines Method'),AT(72,42,220,55),USE(LineSpl_How),BOXED
+        OPTION('Split Lines Method'),AT(72,42,266,55),USE(LineSpl_How),BOXED
             RADIO('Line End'),AT(78,54),USE(?LineSpl_How:Radio1)
             RADIO('Every'),AT(78,68),USE(?LineSpl_How:Radio2),TIP('SplitEvery for fixed length records')
-            RADIO('By Match'),AT(78,82),USE(?LineSpl_How:Radio3)
+            RADIO('Match'),AT(78,82),USE(?LineSpl_How:Radio3),TIP('SplitByMatch( Regulare Expression, NoCase)')
         END
         ENTRY(@s32),AT(123,54,117,11),USE(LineSpl_Delim),TIP('Line End Delimeter as Clarion String Literal<13,10>Use << ' & |
                 '> for low ASCII.')
-        PROMPT('Quote:'),AT(245,54),USE(?LineQuote:Pmt)
-        ENTRY(@s1),AT(270,54,11,11),USE(LineSpl_Quote),TIP('Line-End inside Quotes are ignored<13,10>common for CSV')
+        PROMPT('Quotes:'),AT(245,55),USE(?LineQuote:Pmt)
+        ENTRY(@s32),AT(273,54,26,11),USE(LineSpl_Quote1),TIP('Quote Begin<13,10>Line-End inside Quotes are ignored<13>' & |
+                '<10>common for CSV')
+        ENTRY(@s32),AT(305,54,26,11),USE(LineSpl_Quote2),TIP('Quote End')
+        CHECK('Remove Quotes'),AT(272,67),USE(LineSpl_QuoteRmv),TIP('Quotes at the beginning or end of the line will be ' & |
+                'removed')
         ENTRY(@n5),AT(123,68,,11),USE(LineSpl_Every),TIP('Line Length for .SplitEvery()')
-        STRING('bytes'),AT(163,68),USE(?Bytes)
+        STRING('bytes'),AT(159,68),USE(?Bytes)
         ENTRY(@s255),AT(123,82,117,11),USE(LineSpl_Match),TIP('RegEx Match Delimeter as Clarion String Literal')
         CHECK('No Case'),AT(245,82),USE(LineSpl_NoCase),TIP('Case Insensitive Match')
         STRING('Split Lines: 0'),AT(9,68),USE(?SplitLinesCnt)
@@ -92,14 +102,15 @@ Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('
         PROMPT('Separator:'),AT(150,135),USE(?ColSep:Pmt)
         ENTRY(@s32),AT(185,135,40,11),USE(Col_Sep),TIP('Quote and End pairs are separated by this character<13,10>Usuall' & |
                 'y a single charatcer like a dash')
-        CHECK('Remove Quotes'),AT(267,108),USE(Col_QuoteRmv)
+        CHECK('Remove Quotes'),AT(267,108),USE(Col_QuoteRmv),TIP('Quotes at the beginning or end of the string will be r' & |
+                'emoved')
         CHECK('Nested Quotes'),AT(267,122),USE(Col_Nested),TIP('Quote and End Quote are Nested')
         CHECK('Clip'),AT(267,135),USE(Col_Clip),TIP('Remove trailing spaces')
         CHECK('Left'),AT(297,135),USE(Col_Left),TIP('Remove leading spaces')
         BUTTON('View Column Split'),AT(7,128),USE(?ViewColumnsBtn)
         ENTRY(@s255),AT(7,151,,11),FULL,USE(SplitCode2),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
         PANEL,AT(1,165,,2),FULL,USE(?Horz3),BEVEL(0,0,0600H)
-        PROMPT('&Text - Paste or Type text here and then press the "Load Text" button'),AT(3,168),USE(?Txt:Prompt)
+        PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'),AT(3,168),USE(?Txt:Prompt)
         BUTTON('Tests...'),AT(300,167,,11),USE(?TextTestBtn)
         TEXT,AT(2,180),FULL,USE(txt),HVSCROLL
     END
@@ -133,7 +144,7 @@ Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('
         END
         CASE FIELD()
         OF ?SplitCode2
-            IF EVENT()=EVENT:AlertKey aND KEYCODE()=MouseLeft2 THEN
+            IF EVENT()=EVENT:AlertKey AND KEYCODE()=MouseLeft2 THEN
                Message(?SplitCode2{PROP:Tip} & |
                        '<13,10,13,10>' & CLIP(SplitCode2), |
                        'Split Code',,,,MSGMODE:CANCOPY+MSGMODE:FIXEDFONT)
@@ -144,7 +155,7 @@ Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('
     CLOSE(WINDOW)
 !========================================================================
 StrLenRtn ROUTINE
-    ?StrLength{PROP:Text}='String Length: ' & FileST.Length() 
+    ?StrLength{PROP:Text}='String Length: ' & LEFT(FORMAT(FileST.Length(),@n13))
     
 CsvColsSetupBtn ROUTINE
     Col_Split=',' ; Col_Quote1='"' ; Col_Quote2='"'
@@ -172,16 +183,18 @@ SplitLinesRtn ROUTINE  !------------------------------------------------------
     END
     CASE LineSpl_How
     OF 1 ; IF ~LineSpl_Delim THEN SELECT(?LineSpl_Delim) ; EXIT.
-           FileST.Split(CLIP(UNQUOTE(LineSpl_Delim)),LineSpl_Quote) 
-
+           FileST.Split(CLIP(UNQUOTE(LineSpl_Delim)),LineSpl_Quote1,LineSpl_Quote2,LineSpl_QuoteRmv)
+           
     OF 2 ; IF ~LineSpl_Every THEN SELECT(?LineSpl_Every) ; EXIT.
            FileST.SplitEvery(LineSpl_Every)
 
     OF 3 ; IF ~LineSpl_Match THEN SELECT(?LineSpl_Match) ; EXIT.
-           FileST.SplitByMatch(CLIP(UNQUOTE(LineSpl_Match)), LineSpl_NoCase)
+           FileST.SplitByMatch(CLIP(UNQUOTE(LineSpl_Match)), LineSpl_NoCase) 
+
     ELSE ; SELECT(?LineSpl_How) ; EXIT    
     END
-    ?SplitLinesCnt{PROP:Text}='Split Lines: ' & FileST.Records()
+    ?SplitLinesCnt{PROP:Text}='Split Lines: ' & LEFT(FORMAT(FileST.Records(),@n13))
+    DISPLAY
     EXIT
   
 ViewColumnsRtn ROUTINE  !------------------------------------------------------ 
@@ -192,7 +205,7 @@ ViewColumnsRtn ROUTINE  !------------------------------------------------------
         EXIT
     END
     
-    SplitCode2='ST.Split( '      & |
+    SplitCode2='ST.Split('      & |
          Q1  & CLIP(Col_Split)   & Q1 & |      !   string pSplitStr,         Usuallay <13,10>
          ', '& ParmStr(Col_Quote1)    & |      !   <string pQuotestart>,     "
          ', '& ParmStr(Col_Quote2)    & |      !   <string pQuoteEnd>, 
@@ -205,14 +218,14 @@ ViewColumnsRtn ROUTINE  !------------------------------------------------------
     DISPLAY
 
     ?SplitCode2{PROP:Tip}='ST.Split( '      & |
-         '<13,10>     '& Q1 & CLIP(Col_Split)   & Q1 & ' <9> ! String pSplitStr,' & |
-         '<13,10>   , '& ParmStr(Col_Quote1)    &      ' <9> ! <<String pQuotestart>,' & |
-         '<13,10>   , '& ParmStr(Col_Quote2)    &      ' <9> ! <<string pQuoteEnd>,' & |
-         '<13,10>   , '& ParmBool(Col_QuoteRmv) &      ' <9> ! Bool removeQuotes=false,' & |
-         '<13,10>   , '& ParmBool(Col_Clip)     &      ' <9> ! Bool pClip = false,' & |
-         '<13,10>   , '& ParmBool(Col_Left)     &      ' <9> ! Bool pLeft=false,' & |
-         '<13,10>   , '& ParmStr(Col_Sep)       &      ' <9> ! <<String pSeparator>,' & |
-         '<13,10>   , '& ParmBool(Col_Nested)   &      ' <9> ! Long pNested=false)'
+         '<13,10>     '& Q1 & CLIP(Col_Split)   & Q1 & ' <9> ! String pSplitStr' & |
+         '<13,10>   , '& ParmStr(Col_Quote1)    &      ' <9> ! <<String pQuotestart>' & |
+         '<13,10>   , '& ParmStr(Col_Quote2)    &      ' <9> ! <<string pQuoteEnd>' & |
+         '<13,10>   , '& ParmBool(Col_QuoteRmv) &      ' <9> ! Bool<160>removeQuotes=false' & |
+         '<13,10>   , '& ParmBool(Col_Clip)     &      ' <9> ! Bool<160>pClip=false' & |
+         '<13,10>   , '& ParmBool(Col_Left)     &      ' <9> ! Bool<160>pLeft=false' & |
+         '<13,10>   , '& ParmStr(Col_Sep)       &      ' <9> ! <<String pSeparator>' & |
+         '<13,10>   , '& ParmBool(Col_Nested)   &      ' <9> ! Long<160>pNested=false)'
                
     Bang.LinesViewSplit(FileST      , |
          CLIP(UNQUOTE(Col_Split))   , |  !   string pSplitStr,         Usuallay <13,10>
