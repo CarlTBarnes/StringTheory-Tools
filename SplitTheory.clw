@@ -3,7 +3,8 @@
 !Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
 ! 
 !----------------------------------------------------------------------------------------
-! 03-Mar-2021   Split lines add Quote End and Quote Remove. Cosmetic/text improvements    
+! 03-Mar-2021   Split Lines add Quote End and Quote Remove. Cosmetic/text improvements    
+! 03-Mar-2021   Split Lines at bottom add CODE for Split() SplitEvery() SplitByMatch()
 
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
@@ -56,11 +57,11 @@ Col_Left     BYTE
 Col_Sep      STRING(32)
 Col_Nested   BYTE
          END
-!Future SplitCode1  STRING(255)
+SplitCode1  STRING(255)
 SplitCode2  STRING(255)
 Q1          EQUATE('''')
          
-Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('Segoe UI',9),RESIZE
+Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('Segoe UI',9),RESIZE
         BUTTON('Load Text'),AT(7,4,42),USE(?LoadTextBtn),TIP('SetValue() from TEXT control at bottom')
         BUTTON('Clipoard'),AT(55,4,36),USE(?LoadClipBtn),TIP('SetValue( ClipBoard() )')
         BUTTON('File...'),AT(97,4),USE(?LoadFileBtn)
@@ -89,30 +90,31 @@ Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('
         CHECK('No Case'),AT(245,82),USE(LineSpl_NoCase),TIP('Case Insensitive Match')
         STRING('Split Lines: 0'),AT(9,68),USE(?SplitLinesCnt)
         BUTTON('View Lines'),AT(7,82),USE(?ViewLinesBtn),TIP('BigBang.LinesViewInList()')
-        PANEL,AT(1,103,,2),FULL,USE(?Horz2),BEVEL(0,0,0600H)
-        BUTTON('Tab'),AT(103,135,25,11),USE(?ColAsTabBtn),SKIP
-        BUTTON('CSV'),AT(103,121,25,11),USE(?ColAsCsvBtn),SKIP
-        PROMPT('Column Split:'),AT(7,109),USE(?ColDel:Pmt)
-        ENTRY(@s32),AT(53,109,75,11),USE(Col_Split),TIP('Column Delimeter as Clarion String Literal<13,10>Use << > for l' & |
+        ENTRY(@s255),AT(7,100,,11),FULL,USE(SplitCode1),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
+        PANEL,AT(1,116,,2),FULL,USE(?Horz2),BEVEL(0,0,0600H)
+        BUTTON('Tab'),AT(103,148,25,11),USE(?ColAsTabBtn),SKIP
+        BUTTON('CSV'),AT(103,134,25,11),USE(?ColAsCsvBtn),SKIP
+        PROMPT('Column Split:'),AT(7,122),USE(?ColDel:Pmt)
+        ENTRY(@s32),AT(53,122,75,11),USE(Col_Split),TIP('Column Delimeter as Clarion String Literal<13,10>Use << > for l' & |
                 'ow ASCII.')
-        PROMPT('Quote Begin:'),AT(141,109),USE(?ColQt1:Pmt)
-        ENTRY(@s32),AT(185,109,75,11),USE(Col_Quote1)
-        PROMPT('Quote End:'),AT(147,122),USE(?ColQt2:Pmt)
-        ENTRY(@s32),AT(185,122,75,11),USE(Col_Quote2)
-        PROMPT('Separator:'),AT(150,135),USE(?ColSep:Pmt)
-        ENTRY(@s32),AT(185,135,40,11),USE(Col_Sep),TIP('Quote and End pairs are separated by this character<13,10>Usuall' & |
+        PROMPT('Quote Begin:'),AT(141,122),USE(?ColQt1:Pmt)
+        ENTRY(@s32),AT(185,122,75,11),USE(Col_Quote1)
+        PROMPT('Quote End:'),AT(147,135),USE(?ColQt2:Pmt)
+        ENTRY(@s32),AT(185,135,75,11),USE(Col_Quote2)
+        PROMPT('Separator:'),AT(150,148),USE(?ColSep:Pmt)
+        ENTRY(@s32),AT(185,148,40,11),USE(Col_Sep),TIP('Quote and End pairs are separated by this character<13,10>Usuall' & |
                 'y a single charatcer like a dash')
-        CHECK('Remove Quotes'),AT(267,108),USE(Col_QuoteRmv),TIP('Quotes at the beginning or end of the string will be r' & |
+        CHECK('Remove Quotes'),AT(267,121),USE(Col_QuoteRmv),TIP('Quotes at the beginning or end of the string will be r' & |
                 'emoved')
-        CHECK('Nested Quotes'),AT(267,122),USE(Col_Nested),TIP('Quote and End Quote are Nested')
-        CHECK('Clip'),AT(267,135),USE(Col_Clip),TIP('Remove trailing spaces')
-        CHECK('Left'),AT(297,135),USE(Col_Left),TIP('Remove leading spaces')
-        BUTTON('View Column Split'),AT(7,128),USE(?ViewColumnsBtn)
-        ENTRY(@s255),AT(7,151,,11),FULL,USE(SplitCode2),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
-        PANEL,AT(1,165,,2),FULL,USE(?Horz3),BEVEL(0,0,0600H)
-        PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'),AT(3,168),USE(?Txt:Prompt)
-        BUTTON('Tests...'),AT(300,167,,11),USE(?TextTestBtn)
-        TEXT,AT(2,180),FULL,USE(txt),HVSCROLL
+        CHECK('Nested Quotes'),AT(267,135),USE(Col_Nested),TIP('Quote and End Quote are Nested')
+        CHECK('Clip'),AT(267,148),USE(Col_Clip),TIP('Remove trailing spaces')
+        CHECK('Left'),AT(297,148),USE(Col_Left),TIP('Remove leading spaces')
+        BUTTON('View Column Split'),AT(7,141),USE(?ViewColumnsBtn)
+        ENTRY(@s255),AT(7,164,,11),FULL,USE(SplitCode2),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
+        PANEL,AT(1,178,,2),FULL,USE(?Horz3),BEVEL(0,0,0600H)
+        PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'),AT(3,181),USE(?Txt:Prompt)
+        BUTTON('Tests...'),AT(300,180,,11),USE(?TextTestBtn)
+        TEXT,AT(2,194),FULL,USE(txt),HVSCROLL
     END
     CODE
     LoadFN='<<---- Click Load Text, Clipboard or File, then Split Lines, then ...' 
@@ -143,10 +145,10 @@ Window WINDOW('Split StringTheory '),AT(,,342,227),CENTER,GRAY,IMM,SYSTEM,FONT('
         OF ?TextTestBtn       ; DO TextTestRtn
         END
         CASE FIELD()
-        OF ?SplitCode2
+        OF ?SplitCode1 OROF ?SplitCode2
             IF EVENT()=EVENT:AlertKey AND KEYCODE()=MouseLeft2 THEN
-               Message(?SplitCode2{PROP:Tip} & |
-                       '<13,10,13,10>' & CLIP(SplitCode2), |
+               Message(?{PROP:Tip} & |
+                       '<13,10,13,10>' & CONTENTS(?), |
                        'Split Code',,,,MSGMODE:CANCOPY+MSGMODE:FIXEDFONT)
 
             END
@@ -184,12 +186,38 @@ SplitLinesRtn ROUTINE  !------------------------------------------------------
     CASE LineSpl_How
     OF 1 ; IF ~LineSpl_Delim THEN SELECT(?LineSpl_Delim) ; EXIT.
            FileST.Split(CLIP(UNQUOTE(LineSpl_Delim)),LineSpl_Quote1,LineSpl_Quote2,LineSpl_QuoteRmv)
-           
+
+           SplitCode1='ST.Split('      & |
+                Q1  & CLIP(LineSpl_Delim)   & Q1 & |      !   string pSplitStr,         Usuallay <13,10>
+                ', '& ParmStr(LineSpl_Quote1)    & |      !   <string pQuotestart>,     "
+                ', '& ParmStr(LineSpl_Quote2)    & |      !   <string pQuoteEnd>, 
+                ', '& ParmBool(LineSpl_QuoteRmv) & |      !   bool removeQuotes=false,  
+                ')   <13,10>! Double click to see in Message()' 
+           ?SplitCode1{PROP:Tip}='ST.Split('      & |
+                '<13,10>     '& Q1 & CLIP(LineSpl_Delim)   & Q1 & ' <9> ! String pSplitStr' & |
+                '<13,10>   , '& ParmStr(LineSpl_Quote1)    &      ' <9> ! <<String pQuotestart>' & |
+                '<13,10>   , '& ParmStr(LineSpl_Quote2)    &      ' <9> ! <<string pQuoteEnd>' & |
+                '<13,10>   , '& ParmBool(LineSpl_QuoteRmv) &      ' <9> ! Bool<160>removeQuotes=false' & |
+                '<13,10>   , '& '   '&                      ' <9> ! Bool<160>pClip=false' & |
+                '<13,10>   , '& '   '&                      ' <9> ! Bool<160>pLeft=false' & |
+                '<13,10>   , '& '   '&                      ' <9> ! <<String pSeparator>' & |
+                '<13,10>   , )'&'   '&                      ' <9> ! Long<160>pNested=false)'
+
     OF 2 ; IF ~LineSpl_Every THEN SELECT(?LineSpl_Every) ; EXIT.
            FileST.SplitEvery(LineSpl_Every)
 
+           SplitCode1='ST.SplitEvery('& LineSpl_Every &')'  
+           ?SplitCode1{PROP:Tip}='ST.SplitEvery('& LineSpl_Every & ') <9> ! Long numChars' 
+
     OF 3 ; IF ~LineSpl_Match THEN SELECT(?LineSpl_Match) ; EXIT.
            FileST.SplitByMatch(CLIP(UNQUOTE(LineSpl_Match)), LineSpl_NoCase) 
+
+           SplitCode1='ST.SplitByMatch('       & |
+                Q1  & CLIP(LineSpl_Match)      & Q1 & |
+                ', '& ParmBool(LineSpl_NoCase) & ' )' 
+           ?SplitCode1{PROP:Tip}='ST.SplitByMatch('      & |
+                '<13,10>     '& Q1 & CLIP(LineSpl_Match) & Q1 & ' <9> ! String pRegEx' & |
+                '<13,10>   , '& ParmBool(LineSpl_NoCase) & ' )'&' <9> ! Long pNoCase=0 )'
 
     ELSE ; SELECT(?LineSpl_How) ; EXIT    
     END
