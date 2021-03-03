@@ -156,6 +156,7 @@ TabColsSetupBtn ROUTINE
     DISPLAY 
     
 LoadFileRtn ROUTINE  !---------------------------------------------------
+    IF LoadFN[1]='<<' THEN LoadFN=''. !if ='<--' C10 fails to open FileDialog
     IF ~FILEDIALOG('Select LoadFile for StringTheory', LoadFN, |
                    'All files|*.*|CSV|*.CSV|Text|*.TXT', FILE:KeepDir+FILE:LongName) THEN 
         EXIT
