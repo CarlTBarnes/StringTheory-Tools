@@ -11,7 +11,8 @@
 !10/26/20   Store Class in Queue so can do multiple classes
 !10/27/20  Sort by Name or Line# Original Order
 !           Line continuation
-!10/26/20   limit of 9 needs to be 10 for OddJob
+!10/26/20   limit of 9 needs to be 10 for OddJob 
+!03/04/21   Position Prototype Window over INC window or to last moved
 
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
@@ -47,6 +48,7 @@ ClassName       STRING(40)      !MethQ:ClassName    UPPER
 ID              LONG            !MethQ:ID           Unique ID
            END
 G:MethodID LONG
+G:Pz LONG,DIM(4)
 
 CBLocateCls CLASS,TYPE
 Init          PROCEDURE(QUEUE QRef, *STRING QStrRef, LONG ListFEQ, LONG FindTextFEQ, LONG BtnNextFEQ, LONG BtnPrevFEQ, BYTE Hack=0)
@@ -90,7 +92,7 @@ Window WINDOW('Write Theory - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,S
     END
 LocateCls  CBLocateCls
     CODE
-    SYSTEM{PROP:PropVScroll}=1 ; SYSTEM{PROP:MsgModeDefault}=MSGMODE:CANCOPY
+    SYSTEM{PROP:PropVScroll}=1 ; SYSTEM{7A7Dh}=MSGMODE:CANCOPY    !C11: 7A7Dh=PROP:MsgModeDefault 
     StIncFile='StringTheory.Inc'  
     StIncFile=GETINI('Setup','st.inc',StIncFile,ConfigINI) 
     OPEN(WINDOW)
@@ -98,7 +100,8 @@ LocateCls  CBLocateCls
     IF EXISTS(StIncFile) THEN DO LoadIncRtn.
     ACCEPT
         CASE EVENT()
-        OF EVENT:OpenWindow 
+        OF   EVENT:OpenWindow 
+        OROF EVENT:Moved ; GETPOSITION(0,G:Pz[1],G:Pz[2],G:Pz[3],G:Pz[4]) 
         END
         CASE ACCEPTED()
         OF ?LoadIncBtn  ; DO LoadIncRtn
@@ -352,7 +355,7 @@ CallTxt STRING(2000)
 OnePerLine  BYTE 
 MethodInfo  STRING(128) 
 
-Window WINDOW('Protype:'),AT(,,329,209),GRAY,SYSTEM,ICON(ICON:JumpPage),FONT('Segoe UI',9),RESIZE
+Window WINDOW('Protype:'),AT(,,329,209),GRAY,IMM,SYSTEM,ICON(ICON:JumpPage),FONT('Segoe UI',9),RESIZE
         ENTRY(@s128),AT(19,5,164,11),USE(MethodInfo),SKIP,TRN,READONLY
         CHECK(',&&|'),AT(191,5),USE(OnePerLine),SKIP,TIP('One Parm per Line')
         BUTTON('&Clear'),AT(270,3,25,12),USE(?ClearBtn),SKIP
@@ -393,6 +396,7 @@ Window WINDOW('Protype:'),AT(,,329,209),GRAY,SYSTEM,ICON(ICON:JumpPage),FONT('Se
     END
 Bang BigBangTheory
 ST   StringTheory
+Pz LONG,DIM(3),STATIC
     CODE
     MethodGrp = pMethodQ_Record 
     ProcName  = CLIP(MethGrp:Name) 
@@ -400,14 +404,20 @@ ST   StringTheory
     SaveQ:MethQId =MethodQId
     GET(SaveQ,SaveQ:MethQId)
     IF ~ERRORCODE() THEN ParmGrp=SaveQ:Parms.
-
+    IF ~Pz[3] THEN 
+        Pz[1]=G:Pz[1]+20 ; Pz[2]=G:Pz[2]+40 ;  Pz[3]=1
+    END 
     OPEN(Window)
+    IF Pz[3] THEN SETPOSITION(0,Pz[1],Pz[2]).
     0{PROP:Text}=ProcName & ' - Returns: ' & CLIP(MethGrp:RV) & |
                  ' - Class: ' & MethGrp:ClassSpec 
     MethodInfo='.' & ProcName &'() in ' & MethGrp:ClassSpec
     ?MethodInfo{PROP:Tip}=MethodInfo
     DO WinOpenRtn
     ACCEPT
+        CASE EVENT()
+        OF EVENT:Moved ; GETPOSITION(0,Pz[1],Pz[2],Pz[3]) ; Pz[1] += 10 ; Pz[2] += 20
+        END 
         CASE ACCEPTED()
         OF ?CopyBtn    ; SETCLIPBOARD(CallProc)
         OF ?CopyAllBtn ; SETCLIPBOARD(CallTxt)
@@ -419,6 +429,7 @@ ST   StringTheory
                          DO CallTxtRtn
         END
     END
+    GETPOSITION(0,Pz[1],Pz[2],Pz[3])
     IF ParmGrp THEN 
        CLEAR(SaveQ)
        SaveQ:MethQId =MethodQId
