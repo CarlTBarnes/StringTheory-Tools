@@ -1,13 +1,13 @@
 ! SplitTheory - Try various split parameters without writing code
 !
 !Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
-! 
+!
 !----------------------------------------------------------------------------------------
-! 03-Mar-2021   Split Lines add Quote End and Quote Remove. Cosmetic/text improvements    
-! 03-Mar-2021   Split Lines at bottom add CODE for Split() SplitEvery() SplitByMatch()
+! 03-Mar-2021   Split Lines add Quote End and Quote Remove. Cosmetic/text improvements
+!               Split Lines at bottom add CODE for Split() SplitEvery() SplitByMatch()
 ! 04-Mar-2021   Load Text button warns if Default text
 
-  PROGRAM  
+  PROGRAM
     INCLUDE 'TplEqu.CLW'
     INCLUDE 'KeyCodes.CLW'
     INCLUDE('StringTheory.inc'),ONCE
@@ -22,12 +22,12 @@ DB          PROCEDURE(STRING DebugMessage)   !Output Debug String
 DBClear     PROCEDURE()                      !Clear DebugView Buffer
       MODULE('api')
         OutputDebugString(*CSTRING cMsg),PASCAL,DLL(1),RAW,NAME('OutputDebugStringA')
-        GetLastError(),LONG,PASCAL,DLL(1) 
+        GetLastError(),LONG,PASCAL,DLL(1)
       END
     END
 G_Bang BigBangTheory        !Global Classes
 G_ST   StringTheory
-G_Lne  StringTheory    
+G_Lne  StringTheory
     CODE
     SplitTheory()
     RETURN
@@ -35,16 +35,16 @@ G_Lne  StringTheory
 SplitTheory   PROCEDURE
 X      LONG
 Txt    STRING(40000)
-Bang    BigBangTheory 
-FileST  StringTheory 
-TmpST   StringTheory 
+Bang    BigBangTheory
+FileST  StringTheory
+TmpST   StringTheory
 LoadFN  STRING(260)
 LineSpl_How    BYTE(1)
 LineSpl_Delim  STRING('<<13,10> {30}')
 LineSpl_Quote1 STRING('" {32}')
 LineSpl_Quote2 STRING(32)
 LineSpl_QuoteRmv BYTE
-LineSpl_Every  USHORT(80) 
+LineSpl_Every  USHORT(80)
 LineSpl_Match  STRING(255)
 LineSpl_NoCase BYTE(1)
 
@@ -61,7 +61,7 @@ Col_Nested   BYTE
 SplitCode1  STRING(255)
 SplitCode2  STRING(255)
 Q1          EQUATE('''')
-         
+
 Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('Segoe UI',9),RESIZE
         BUTTON('Load Text'),AT(7,4,42),USE(?LoadTextBtn),TIP('SetValue() from TEXT control at bottom')
         BUTTON('Clipoard'),AT(55,4,36),USE(?LoadClipBtn),TIP('SetValue( ClipBoard() )')
@@ -116,39 +116,39 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
         PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'),AT(3,181),USE(?Txt:Prompt)
         BUTTON('Tests...'),AT(300,180,,11),USE(?TextTestBtn)
         TEXT,AT(2,194),FULL,USE(txt),HVSCROLL
-    END 
-TxtDefault EQUATE('Paste or type text here')    
+    END
+TxtDefault EQUATE('Paste or type text here')
     CODE
-    LoadFN='<<---- Click Load Text, Clipboard or File, then Split Lines, then ...' 
+    LoadFN='<<---- Click Load Text, Clipboard or File, then Split Lines, then ...'
     Txt=TxtDefault
-    
+
     OPEN(WINDOW)
     0{PROP:text}=clip(0{PROP:text}) &' - Library ' & system{PROP:LibVersion,2} &'.'& system{PROP:LibVersion,3}
     !      LoadFN='EmpPos2019.csv' ; FileST.LoadFile(LoadFN) ; Do StrLenRtn
     ACCEPT
         CASE EVENT()
-        OF EVENT:OpenWindow 
+        OF EVENT:OpenWindow
         OF EVENT:Timer
         END
         CASE ACCEPTED()
         OF ?ReRunBtn          ; RUN(COMMAND('0'))
-        OF ?LoadTextBtn       ; IF Txt=TxtDefault THEN 
-                                   SELECT(?Txt) 
+        OF ?LoadTextBtn       ; IF Txt=TxtDefault THEN
+                                   SELECT(?Txt)
                                    MESSAGE('Please enter your test string in the text control at the bottom.','Split',ICON:Asterisk)
                                    CYCLE
-                                END 
+                                END
                                 FileST.SetValue(CLIP(Txt))   ; DO StrLenRtn
         OF ?LoadClipBtn       ; FileST.SetValue(Clipboard()) ; DO StrLenRtn
         OF ?LoadFileBtn       ; DO LoadFileRtn               ; DO StrLenRtn
         OF ?ValueViewFileST   ; Bang.ValueView(FileST)
-        
+
         OF ?SpiltLinesBtn     ; DO SplitLinesRtn
         OF ?ViewLinesBtn      ; Bang.LinesViewInList(FileST)
-        
+
         OF ?ColAsTabBtn  ; DO TabColsSetupBtn
         OF ?ColAsCsvBtn  ; DO CsvColsSetupBtn
-        
-        OF ?ViewColumnsBtn    ; DO ViewColumnsRtn        
+
+        OF ?ViewColumnsBtn    ; DO ViewColumnsRtn
         OF ?TextTestBtn       ; DO TextTestRtn
         END
         CASE FIELD()
@@ -169,23 +169,23 @@ StrLenRtn ROUTINE  !Format ?StrLength
 CsvColsSetupBtn ROUTINE
     Col_Split=',' ; Col_Quote1='"' ; Col_Quote2='"'
     Col_Sep  =''  ; Col_Nested   =0
-    DISPLAY 
+    DISPLAY
 TabColsSetupBtn ROUTINE
     Col_Split='<<9>' ; Col_Quote1='' ; Col_Quote2=''
     Col_Sep  =''  ; Col_Nested   =0
-    DISPLAY 
-!---------------------------------------------------    
+    DISPLAY
+!---------------------------------------------------
 LoadFileRtn ROUTINE  !StringTheory .LoadFile from FileDialog Pick
     IF LoadFN[1]='<<' THEN LoadFN=''. !if ='<--' C10 fails to open FileDialog
     IF ~FILEDIALOG('Select LoadFile for StringTheory', LoadFN, |
-                   'All files|*.*|CSV|*.CSV|Text|*.TXT', FILE:KeepDir+FILE:LongName) THEN 
+                   'All files|*.*|CSV|*.CSV|Text|*.TXT', FILE:KeepDir+FILE:LongName) THEN
         EXIT
     END
     IF ~FileST.LoadFile(LoadFN) THEN
-        Message('LoadFile Windows Error ' & FileST.winErrorCode,'LoadFile') 
+        Message('LoadFile Windows Error ' & FileST.winErrorCode,'LoadFile')
         EXIT
     END
-!------------------------------------------------------     
+!------------------------------------------------------
 SplitLinesRtn ROUTINE  !SplitCode1 splits file into lines by 13,10 typically
     IF ~FileST.GetValue() THEN
         Message('Blank string, load Text, Clipboard or File') ; EXIT
@@ -197,9 +197,9 @@ SplitLinesRtn ROUTINE  !SplitCode1 splits file into lines by 13,10 typically
            SplitCode1='ST.Split('      & |
                 Q1  & CLIP(LineSpl_Delim)   & Q1 & |      !   string pSplitStr,         Usuallay <13,10>
                 ', '& ParmStr(LineSpl_Quote1)    & |      !   <string pQuotestart>,     "
-                ', '& ParmStr(LineSpl_Quote2)    & |      !   <string pQuoteEnd>, 
-                ', '& ParmBool(LineSpl_QuoteRmv) & |      !   bool removeQuotes=false,  
-                ')   <13,10>! Double click to see in Message()' 
+                ', '& ParmStr(LineSpl_Quote2)    & |      !   <string pQuoteEnd>,
+                ', '& ParmBool(LineSpl_QuoteRmv) & |      !   bool removeQuotes=false,
+                ')   <13,10>! Double click to see in Message()'
            ?SplitCode1{PROP:Tip}='ST.Split('      & |
                 '<13,10>     '& Q1 & CLIP(LineSpl_Delim)   & Q1 & ' <9> ! String pSplitStr' & |
                 '<13,10>   , '& ParmStr(LineSpl_Quote1)    &      ' <9> ! <<String pQuotestart>' & |
@@ -213,38 +213,38 @@ SplitLinesRtn ROUTINE  !SplitCode1 splits file into lines by 13,10 typically
     OF 2 ; IF ~LineSpl_Every THEN SELECT(?LineSpl_Every) ; EXIT.
            FileST.SplitEvery(LineSpl_Every)
 
-           SplitCode1='ST.SplitEvery('& LineSpl_Every &')'  
-           ?SplitCode1{PROP:Tip}='ST.SplitEvery('& LineSpl_Every & ') <9> ! Long numChars' 
+           SplitCode1='ST.SplitEvery('& LineSpl_Every &')'
+           ?SplitCode1{PROP:Tip}='ST.SplitEvery('& LineSpl_Every & ') <9> ! Long numChars'
 
     OF 3 ; IF ~LineSpl_Match THEN SELECT(?LineSpl_Match) ; EXIT.
-           FileST.SplitByMatch(CLIP(UNQUOTE(LineSpl_Match)), LineSpl_NoCase) 
+           FileST.SplitByMatch(CLIP(UNQUOTE(LineSpl_Match)), LineSpl_NoCase)
 
            SplitCode1='ST.SplitByMatch('       & |
                 Q1  & CLIP(LineSpl_Match)      & Q1 & |
-                ', '& ParmBool(LineSpl_NoCase) & ' )' 
+                ', '& ParmBool(LineSpl_NoCase) & ' )'
            ?SplitCode1{PROP:Tip}='ST.SplitByMatch('      & |
                 '<13,10>     '& Q1 & CLIP(LineSpl_Match) & Q1 & ' <9> ! String pRegEx' & |
                 '<13,10>   , '& ParmBool(LineSpl_NoCase) & ' )'&' <9> ! Long pNoCase=0 )'
 
-    ELSE ; SELECT(?LineSpl_How) ; EXIT    
+    ELSE ; SELECT(?LineSpl_How) ; EXIT
     END
     ?SplitLinesCnt{PROP:Text}='Split Lines: ' & LEFT(FORMAT(FileST.Records(),@n13))
     DISPLAY
     EXIT
-!------------------------------------------------------   
+!------------------------------------------------------
 ViewColumnsRtn ROUTINE !SplitCode2 splits lines into columns by ',' typically
-    IF ~Col_Split THEN SELECT(?Col_Split) ; EXIT. 
-    IF ~FileST.Records() THEN 
+    IF ~Col_Split THEN SELECT(?Col_Split) ; EXIT.
+    IF ~FileST.Records() THEN
         SELECT(?SpiltLinesBtn)
         Message('You must Split Lines')
         EXIT
     END
-    
+
     SplitCode2='ST.Split('      & |
          Q1  & CLIP(Col_Split)   & Q1 & |      !   string pSplitStr,         Usuallay <13,10>
          ', '& ParmStr(Col_Quote1)    & |      !   <string pQuotestart>,     "
-         ', '& ParmStr(Col_Quote2)    & |      !   <string pQuoteEnd>, 
-         ', '& ParmBool(Col_QuoteRmv) & |      !   bool removeQuotes=false,  
+         ', '& ParmStr(Col_Quote2)    & |      !   <string pQuoteEnd>,
+         ', '& ParmBool(Col_QuoteRmv) & |      !   bool removeQuotes=false,
          ', '& ParmBool(Col_Clip)     & |      !   bool pClip = false,       Trim trailing spaces
          ', '& ParmBool(Col_Left)     & |      !   bool pLeft=false,         Trim leading spaces
          ', '& ParmStr(Col_Sep)       & |      !   <string pSeparator>,      Sep if QuoteStart has multiple e.g. - for  [-(  )-]
@@ -261,12 +261,12 @@ ViewColumnsRtn ROUTINE !SplitCode2 splits lines into columns by ',' typically
          '<13,10>   , '& ParmBool(Col_Left)     &      ' <9> ! Bool<160>pLeft=false' & |
          '<13,10>   , '& ParmStr(Col_Sep)       &      ' <9> ! <<String pSeparator>' & |
          '<13,10>   , '& ParmBool(Col_Nested)   &      ' <9> ! Long<160>pNested=false)'
-               
+
     Bang.LinesViewSplit(FileST      , |
          CLIP(UNQUOTE(Col_Split))   , |  !   string pSplitStr,         Usuallay <13,10>
          CLIP(UNQUOTE(Col_Quote1))  , |  !   <string pQuotestart>,     "
-         CLIP(UNQUOTE(Col_Quote2))  , |  !   <string pQuoteEnd>, 
-         Col_QuoteRmv               , |  !   bool removeQuotes=false,  
+         CLIP(UNQUOTE(Col_Quote2))  , |  !   <string pQuoteEnd>,
+         Col_QuoteRmv               , |  !   bool removeQuotes=false,
          Col_Clip                   , |  !   bool pClip = false,       Trim trailing spaces
          Col_Left                   , |  !   bool pLeft=false,         Trim leading spaces
          CLIP(UNQUOTE(Col_Sep))     , |  !   <string pSeparator>,      Sep if QuoteStart has multiple e.g. - for  [-(  )-]
@@ -278,20 +278,20 @@ TextTestRtn ROUTINE  !Test Button code
         DO Test_Separator1_Rtn
         DO Test_DirectoryCSV_Rtn
     END
-    
-!--------------------------    
+
+!--------------------------
 Test_Separator1_Rtn ROUTINE
     DATA
-ST   StringTheory    
+ST   StringTheory
     CODE
     st.Start()
-    st.AddLine(1,'[12,24,36],Person,(PO Box 111, Plum)') 
-    st.AddLine(2,'[22,34,46],   Man,(PO Box 222, Scarlet)') 
+    st.AddLine(1,'[12,24,36],Person,(PO Box 111, Plum)')
+    st.AddLine(2,'[22,34,46],   Man,(PO Box 222, Scarlet)')
     st.AddLine(3,'[32,44,56], Woman,(PO Box 333, Mustard)')
     st.AddLine(4,'[42,55,66],Camera,(PO Box 444, Peacock)')
-    st.AddLine(5,'[52,65,76],    TV,(PO Box 555, Green)')    
+    st.AddLine(5,'[52,65,76],    TV,(PO Box 555, Green)')
     st.Join('<13,10>')
-    Txt=St.GetValue() 
+    Txt=St.GetValue()
 
     LineSpl_How   =1
     LineSpl_Delim ='<<13,10>'
@@ -309,14 +309,14 @@ ST   StringTheory
     POST(EVENT:Accepted,?LoadTextBtn)
     POST(EVENT:Accepted,?SpiltLinesBtn)
 
-!------------------------------------------------------ 
+!------------------------------------------------------
 Test_DirectoryCSV_Rtn ROUTINE
     DATA
 ST      StringTheory
-FilesQ  FILE:Queue    
+FilesQ  FILE:Queue
     CODE
     DIRECTORY(FilesQ,'c:\Windows\*.*',ff_:NORMAL+ff_:DIRECTORY)
-    st.SerializeQueue(FilesQ,'<13,10>',',','"') 
+    st.SerializeQueue(FilesQ,'<13,10>',',','"')
     st.Prepend('Name,Short,Date,Time,Size,Attrib<13,10>')
     Txt=St.GetValue()
     LineSpl_How   =1
@@ -324,45 +324,45 @@ FilesQ  FILE:Queue
     DO CsvColsSetupBtn
     DISPLAY()
     POST(EVENT:Accepted,?LoadTextBtn)
-    POST(EVENT:Accepted,?SpiltLinesBtn)   
-!------------------------------------------------------        
-Extra_1_Rtn ROUTINE  
+    POST(EVENT:Accepted,?SpiltLinesBtn)
+!------------------------------------------------------
+Extra_1_Rtn ROUTINE
     DATA
 ST   StringTheory
-Lne  StringTheory    
+Lne  StringTheory
     CODE
-!------------------------------------------------------     
+!------------------------------------------------------
 Extra_2_Rtn ROUTINE
     DATA
 ST   StringTheory
-Lne  StringTheory 
-FilesQ    FILE:Queue   
-    CODE       
+Lne  StringTheory
+FilesQ    FILE:Queue
+    CODE
 
 !========================================================================================
 ParmBool PROCEDURE(BOOL pBool, BOOL BlankZero=1) !,STRING
     CODE
-    IF ~pBool AND BlankZero THEN RETURN ''. 
+    IF ~pBool AND BlankZero THEN RETURN ''.
     IF ~pBool THEN return 'false'.
     RETURN 'true'
 ParmNum PROCEDURE(LONG pNum, BOOL BlankZero=1) !,STRING
     CODE
     IF ~pNum AND BlankZero THEN RETURN ''.
-    RETURN pNum    
+    RETURN pNum
 ParmStr PROCEDURE(STRING pStr, BOOL BlankNull=1) !,STRING
     CODE
     IF ~pStr AND BlankNull THEN RETURN ''.
     RETURN '''' & CLIP(pStr) & ''''
-    
+
 !========================================================================================
 DB   PROCEDURE(STRING xMessage)
 Prfx EQUATE('ScratchST: ')
 sz   CSTRING(SIZE(Prfx)+SIZE(xMessage)+1),AUTO
-  CODE 
+  CODE
   sz  = Prfx & CLIP(xMessage)
   OutputDebugString( sz )
 !------------------
 DBClear PROCEDURE()
 DbgClear CSTRING('DBGVIEWCLEAR')    !Message to Clear the buffer. Must UPPER and first i.e. without a Prefix
-    CODE 
+    CODE
     OutputDebugString(DbgClear)     !Call API directly, cannot have Prefix, must be first
