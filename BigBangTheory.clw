@@ -1,7 +1,7 @@
                     MEMBER()
 !----------------------------------------------------------------------------
-! BigBangTheory - View StringTheory Lines Queue and Optionally Split lines by Delimeter
-! (c)2020 by Carl T. Barnes - Released under the MIT License
+! BigBangTheory - View StringTheory Value, or Lines Queue and Optionally Split lines by Delimeter
+! (c)2020-2021 by Carl T. Barnes - Released under the MIT License
 !----------------------------------------------------------------------------
     INCLUDE('KEYCODES.CLW')
     INCLUDE('BigBangTheory.INC'),ONCE
@@ -94,6 +94,7 @@ Init   PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)!  ,VIRTUAL !<-- cann
 VLBprc PROCEDURE(LONG xRow, USHORT xCol),STRING
 Contrt PROCEDURE(USHORT ColWd=24)
 Expand PROCEDURE()
+UnHide PROCEDURE()
       END
 X LONG,AUTO
 P LONG,DIM(4),STATIC
@@ -119,6 +120,10 @@ QChanged BOOL
 Quote1 PSTRING(16)
 Quote2 PSTRING(16)
 Separator1 PSTRING(9)
+RowInCol1 EQUATE(1) !03/04/21 Put Row# in Column No 1
+CellNA    PSTRING(2)
+ColumnST  LONG
+NoUnHide  PSTRING('~')
     CODE
   IF SELF.DoNotShow THEN RETURN.
   CsvRecords = CsvST.Records()
@@ -128,6 +133,7 @@ Separator1 PSTRING(9)
   IF ~OMITTED(pSeparatr) AND SIZE(pSeparatr) AND pSeparatr THEN Separator1=pSeparatr.
   LinSTfromCsvST(1)
   ColCount = LinST.Records()  !Assume 1st line has all columns. Pass columns?
+  IF RowInCol1 THEN Fmt='20R(2)|M~Row~C(0)@n_6@'.
   LOOP X=1 TO ColCount        !Assume first row has labels
     Fmt=Fmt&'40L(2)|M~' & X & '. <13,10>'& CLIP(SUB(LinST.GetLine(X),1,30)) &'~'
   END
@@ -146,36 +152,41 @@ Separator1 PSTRING(9)
                 ' - SplitStr: ' & QUOTE(pDelim) & '  Quote: ' & QUOTE(Quote1) &'  End: ' & QUOTE(Quote2) &|
                 CHOOSE(~Separator1,'','  Separator: ' & QUOTE(Separator1) & CHOOSE(~pNested,'',' (nested)')) & |
                '   Right-Click for Options'
-  VlbCls.Init(?List:VLB, CsvRecords, ColCount)
+  VlbCls.Init(?List:VLB, CsvRecords, ColCount+RowInCol1)
   ACCEPT
     IF EVENT()=EVENT:NewSelection AND FIELD()=?List:VLB AND KEYCODE()=MouseRight THEN
        SETKEYCODE(0)
        X=?List:VLB{PROPLIST:MouseDownField}
-       EXECUTE POPUP('Copy Cell to Clipboard|View Cell Text|-|Copy Row to Clipboard|View Row Text|View Row Split...' & |
+       ColumnST=X-RowInCol1
+       CellNA=CHOOSE(ColumnST=0,'~','')
+       EXECUTE POPUP(CellNA & 'Copy Cell to Clipboard|' & CellNA & 'View Cell Text' & |
+                  '|-|Copy Row to Clipboard|View Row Text|View Row Split in Columns...' & |
                   '|-|Copy All Rows to Clipboard|View All Rows Text' & |
-                  '|-|Change @ Picture|Column Alignment{{Left|Center|Right}|-|Hide Column ' & X)
-         SETCLIPBOARD(LinST.GetLine(X))    !Correct?
-         SELF.StringView(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow) !MESSAGE(LinST.GetLine(X),'Column  ' & X & ' in Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
-         SetClipboard(CsvST.GetLine(CsvST_GotRow))
-         SELF.StringView(CsvST.GetLine(CsvST_GotRow),'View Row ' & CsvST_GotRow) ! MESSAGE(CsvST.GetLine(CsvST_GotRow),'View Row ' & CsvST_GotRow,,,,MSGMODE:CANCOPY)
-         ViewColumns()
-         SETCLIPBOARD(CsvST.GetValue())
-         SELF.ValueView(CsvST)
-         BEGIN ; Picture=?List:VLB{PROPLIST:Picture,X} ; ?Pict:Pmt{PROP:Text}='Picture Col ' & X & ':'
+                  '|-|Change @ Picture|Column Alignment{{Left|Center|Right}|-|Hide Column ' & ColumnST)
+         SETCLIPBOARD(LinST.GetLine(ColumnST))    !Correct?
+         SELF.StringView(LinST.GetLine(ColumnST),'Column  ' & ColumnST & ' in Row ' & CsvST_GotRow)
+         SetClipboard(CsvST.GetLine(CsvST_GotRow))   !Copy This Row
+         SELF.StringView(CsvST.GetLine(CsvST_GotRow),'View Row ' & CsvST_GotRow) 
+         ViewColumns()                               !Vierw Row Split into Cols
+         SETCLIPBOARD(CsvST.GetValue())              !Copy All Rows
+         SELF.ValueView(CsvST)                       !View All Rows as Text
+         BEGIN ; Picture=?List:VLB{PROPLIST:Picture,X} ; ?Pict:Pmt{PROP:Text}='Picture Col ' & ColumnST & ':'
                  ENABLE(?Picture) ; SELECT(?Picture) ; PColumn=X ; END
          ?List:VLB{PROPLIST:Left,X}=1
          ?List:VLB{PROPLIST:Center,X}=1
          ?List:VLB{PROPLIST:Right,X}=1
-         BEGIN ; ?List:VLB{PROPLIST:width,X}=0 ; IF X=PColumn THEN DISABLE(?Picture). ; END         
+         BEGIN ; ?List:VLB{PROPLIST:width,X}=0 ; IF X=PColumn THEN DISABLE(?Picture). ; NoUnHide='' ; END  !Hide Column by Width=0       
        END
     END
     CASE ACCEPTED()
     OF ?MenuBtn
         EXECUTE POPUP('Copy All to Clipboard|-|Contract Column Widths|Expand Column Widths' & |
+                        '|' & NoUnHide & 'Show Hidden Columns' & |
                         '|-|Copy VLB Format String')
          SETCLIPBOARD(CsvST.GetValue())
          VlbCls.Contrt()
          VlbCls.Expand()
+         VlbCls.UnHide()
          SETCLIPBOARD(QUOTE(?List:VLB{PROP:Format}))
         END
     OF ?LinesBtn ; SELF.LinesViewInList(CsvST)
@@ -217,19 +228,28 @@ Chg LONG,AUTO
   OF -1 ; RETURN SELF.RowCnt !Rows
   OF -2 ; RETURN SELF.ClmCnt !Columns
   OF -3 ; Chg=QChanged ; QChanged=0 ; RETURN Chg
-  END
-  IF xRow <> CsvST_GotRow THEN
+  END 
+  IF xCol=RowInCol1 THEN 
+    RETURN xRow
+  ELSIF xRow <> CsvST_GotRow THEN
     LinSTfromCsvST(xRow)
   END
   RETURN LinST.GetLine(xCol)
-VlbCls.Contrt PROCEDURE(USHORT ColWd)
+VlbCls.Contrt PROCEDURE(USHORT ColWd=24)
   CODE
   LOOP X=1 TO SELF.ClmCnt
        IF SELF.FEQ{PROPLIST:Width,X}>0 THEN SELF.FEQ{PROPLIST:Width,X}=ColWd.
   END
 VlbCls.Expand PROCEDURE()
   CODE
-  SELF.Contrt(SELF.FEQ{PROP:Width}/SELF.ClmCnt)
+  SELF.Contrt(SELF.FEQ{PROP:Width}/SELF.ClmCnt) 
+VlbCls.UnHide PROCEDURE()
+  CODE
+  LOOP X=1 TO SELF.ClmCnt
+       IF SELF.FEQ{PROPLIST:Width,X}=0 THEN SELF.FEQ{PROPLIST:Width,X}=40.
+  END
+  NoUnHide='~'
+  RETURN
 !-------------------------------
 BigBangTheory.StringView PROCEDURE(STRING StrValue, <STRING CapTxt>)
   CODE
@@ -460,7 +480,7 @@ SP  ANY
         SP=SP & CHOOSE(P=1,'','<13,10>') & |
                 'Parm ' & P &' => ' & |
                 CHOOSE(~OMITTED(1+P), | 
-                        '"' & CHOOSE(P,P1,P2,P3,P4,P5,P6,P7,P8,P9) &'"', |
+                        '"' & QUOTE(CHOOSE(P,P1,P2,P3,P4,P5,P6,P7,P8,P9)) &'"', |
                         '<<omitted>') 
     END
     SELF.StringView(SP,'ParmsView - Count: ' & PMax)
@@ -481,7 +501,7 @@ ProCnt USHORT,AUTO
     LOOP P=1 TO PMax
         SP=SP & 'Parm ' & P &' => ' & |
                 CHOOSE(~OMITTED(2+P), | 
-                        '"' & CHOOSE(P,P1,P2,P3,P4,P5,P6,P7,P8,P9,'?#' & P) &'"', |
+                        '"' & QUOTE(CHOOSE(P,P1,P2,P3,P4,P5,P6,P7,P8,P9,'?#' & P)) &'"', |
                         '<<omitted>') & |
                 '   <9>' & |
                 CHOOSE(P<=ProCnt,stProt.GetLine(P),'? Prototype ?') & |
