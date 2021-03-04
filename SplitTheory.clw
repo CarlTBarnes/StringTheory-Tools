@@ -163,7 +163,7 @@ TxtDefault EQUATE('Paste or type text here')
     END
     CLOSE(WINDOW)
 !========================================================================
-StrLenRtn ROUTINE
+StrLenRtn ROUTINE  !Format ?StrLength
     ?StrLength{PROP:Text}='String Length: ' & LEFT(FORMAT(FileST.Length(),@n13))
     DISPLAY
 CsvColsSetupBtn ROUTINE
@@ -174,8 +174,8 @@ TabColsSetupBtn ROUTINE
     Col_Split='<<9>' ; Col_Quote1='' ; Col_Quote2=''
     Col_Sep  =''  ; Col_Nested   =0
     DISPLAY 
-    
-LoadFileRtn ROUTINE  !---------------------------------------------------
+!---------------------------------------------------    
+LoadFileRtn ROUTINE  !StringTheory .LoadFile from FileDialog Pick
     IF LoadFN[1]='<<' THEN LoadFN=''. !if ='<--' C10 fails to open FileDialog
     IF ~FILEDIALOG('Select LoadFile for StringTheory', LoadFN, |
                    'All files|*.*|CSV|*.CSV|Text|*.TXT', FILE:KeepDir+FILE:LongName) THEN 
@@ -185,8 +185,8 @@ LoadFileRtn ROUTINE  !---------------------------------------------------
         Message('LoadFile Windows Error ' & FileST.winErrorCode,'LoadFile') 
         EXIT
     END
-    
-SplitLinesRtn ROUTINE  !------------------------------------------------------  
+!------------------------------------------------------     
+SplitLinesRtn ROUTINE  !SplitCode1 splits file into lines by 13,10 typically
     IF ~FileST.GetValue() THEN
         Message('Blank string, load Text, Clipboard or File') ; EXIT
     END
@@ -231,8 +231,8 @@ SplitLinesRtn ROUTINE  !------------------------------------------------------
     ?SplitLinesCnt{PROP:Text}='Split Lines: ' & LEFT(FORMAT(FileST.Records(),@n13))
     DISPLAY
     EXIT
-  
-ViewColumnsRtn ROUTINE  !------------------------------------------------------ 
+!------------------------------------------------------   
+ViewColumnsRtn ROUTINE !SplitCode2 splits lines into columns by ',' typically
     IF ~Col_Split THEN SELECT(?Col_Split) ; EXIT. 
     IF ~FileST.Records() THEN 
         SELECT(?SpiltLinesBtn)
@@ -273,7 +273,7 @@ ViewColumnsRtn ROUTINE  !------------------------------------------------------
          Col_Nested                   )  !   Long pNested=false)       True=Ignore () around "5,6" in (1,2),(3,4),((5,6),7)
 
 !===========================================================================
-TextTestRtn ROUTINE  
+TextTestRtn ROUTINE  !Test Button code
     EXECUTE POPUP('Separator [-( )-]|Directory CSV')
         DO Test_Separator1_Rtn
         DO Test_DirectoryCSV_Rtn
@@ -309,7 +309,7 @@ ST   StringTheory
     POST(EVENT:Accepted,?LoadTextBtn)
     POST(EVENT:Accepted,?SpiltLinesBtn)
 
-!--------------------------
+!------------------------------------------------------ 
 Test_DirectoryCSV_Rtn ROUTINE
     DATA
 ST      StringTheory
@@ -325,14 +325,14 @@ FilesQ  FILE:Queue
     DISPLAY()
     POST(EVENT:Accepted,?LoadTextBtn)
     POST(EVENT:Accepted,?SpiltLinesBtn)   
-       
-Extra_1_Rtn ROUTINE  !------------------------------------------------------ 
+!------------------------------------------------------        
+Extra_1_Rtn ROUTINE  
     DATA
 ST   StringTheory
 Lne  StringTheory    
     CODE
-    
-Extra_2_Rtn ROUTINE  !------------------------------------------------------ 
+!------------------------------------------------------     
+Extra_2_Rtn ROUTINE
     DATA
 ST   StringTheory
 Lne  StringTheory 
