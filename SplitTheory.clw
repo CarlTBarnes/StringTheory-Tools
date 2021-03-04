@@ -121,7 +121,7 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
 TxtDefault EQUATE('Paste or type text here')
 
 DOO CLASS                         !Created 03/04/21  9:21AM by Do2Class by Carl Barnes
-StrLenRtn             PROCEDURE() !Format ?StrLength
+StrLenRtn             PROCEDURE(STRING StrName) !Set ?StrLength Text = Length
 CsvColsSetupBtn       PROCEDURE() !Split 2 Defaults for CSV
 TabColsSetupBtn       PROCEDURE() !Split 2 Defaults for Tab Delim
 LoadFileRtn           PROCEDURE() !StringTheory .LoadFile from FileDialog Pick
@@ -152,9 +152,9 @@ Extra_2_Rtn           PROCEDURE()
                                    MESSAGE('Please enter your test string in the text control at the bottom.','Split',ICON:Asterisk)
                                    CYCLE
                                 END
-                                FileST.SetValue(CLIP(Txt))   ; DOO.StrLenRtn()
-        OF ?LoadClipBtn       ; FileST.SetValue(Clipboard()) ; DOO.StrLenRtn()
-        OF ?LoadFileBtn       ; DOO.LoadFileRtn()            ; DOO.StrLenRtn()
+                                FileST.SetValue(CLIP(Txt))   ; DOO.StrLenRtn('Text')
+        OF ?LoadClipBtn       ; FileST.SetValue(Clipboard()) ; DOO.StrLenRtn('Clipboard')
+        OF ?LoadFileBtn       ; DOO.LoadFileRtn()            ; DOO.StrLenRtn('File')
         OF ?ValueViewFileST   ; Bang.ValueView(FileST)
 
         OF ?SpiltLinesBtn     ; DOO.SplitLinesRtn()
@@ -178,9 +178,9 @@ Extra_2_Rtn           PROCEDURE()
     END
     CLOSE(WINDOW)
 !========================================================================
-DOO.StrLenRtn PROCEDURE() !Format ?StrLength
+DOO.StrLenRtn PROCEDURE(STRING StrName) !Format ?StrLength
   CODE
-    ?StrLength{PROP:Text}='String Length: ' & LEFT(FORMAT(FileST.Length(),@n13))
+    ?StrLength{PROP:Text}=StrName & ' String Length: ' & LEFT(FORMAT(FileST.Length(),@n13))
     DISPLAY
 DOO.CsvColsSetupBtn PROCEDURE() !Split 2 Defaults for CSV
   CODE
