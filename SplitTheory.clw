@@ -5,6 +5,7 @@
 !----------------------------------------------------------------------------------------
 ! 03-Mar-2021   Split Lines add Quote End and Quote Remove. Cosmetic/text improvements    
 ! 03-Mar-2021   Split Lines at bottom add CODE for Split() SplitEvery() SplitByMatch()
+! 04-Mar-2021   Load Text button warns if Default text
 
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
@@ -115,10 +116,11 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
         PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'),AT(3,181),USE(?Txt:Prompt)
         BUTTON('Tests...'),AT(300,180,,11),USE(?TextTestBtn)
         TEXT,AT(2,194),FULL,USE(txt),HVSCROLL
-    END
+    END 
+TxtDefault EQUATE('Paste or type text here')    
     CODE
     LoadFN='<<---- Click Load Text, Clipboard or File, then Split Lines, then ...' 
-    Txt='Paste or type text here' 
+    Txt=TxtDefault
     
     OPEN(WINDOW)
     0{PROP:text}=clip(0{PROP:text}) &' - Library ' & system{PROP:LibVersion,2} &'.'& system{PROP:LibVersion,3}
@@ -130,7 +132,12 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
         END
         CASE ACCEPTED()
         OF ?ReRunBtn          ; RUN(COMMAND('0'))
-        OF ?LoadTextBtn       ; FileST.SetValue(CLIP(Txt))   ; DO StrLenRtn
+        OF ?LoadTextBtn       ; IF Txt=TxtDefault THEN 
+                                   SELECT(?Txt) 
+                                   MESSAGE('Please enter your test string in the text control at the bottom.','Split',ICON:Asterisk)
+                                   CYCLE
+                                END 
+                                FileST.SetValue(CLIP(Txt))   ; DO StrLenRtn
         OF ?LoadClipBtn       ; FileST.SetValue(Clipboard()) ; DO StrLenRtn
         OF ?LoadFileBtn       ; DO LoadFileRtn               ; DO StrLenRtn
         OF ?ValueViewFileST   ; Bang.ValueView(FileST)
@@ -158,7 +165,7 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
 !========================================================================
 StrLenRtn ROUTINE
     ?StrLength{PROP:Text}='String Length: ' & LEFT(FORMAT(FileST.Length(),@n13))
-    
+    DISPLAY
 CsvColsSetupBtn ROUTINE
     Col_Split=',' ; Col_Quote1='"' ; Col_Quote2='"'
     Col_Sep  =''  ; Col_Nested   =0
