@@ -234,7 +234,7 @@ Chg LONG,AUTO
   ELSIF xRow <> CsvST_GotRow THEN
     LinSTfromCsvST(xRow)
   END
-  RETURN LinST.GetLine(xCol)
+  RETURN LinST.GetLine(xCol-RowInCol1)
 VlbCls.Contrt PROCEDURE(USHORT ColWd=24)
   CODE
   LOOP X=1 TO SELF.ClmCnt
