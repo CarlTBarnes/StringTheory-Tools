@@ -13,6 +13,7 @@
 !           Line continuation
 !10/26/20   limit of 9 needs to be 10 for OddJob 
 !03/04/21   Position Prototype Window over INC window or to last moved
+!03/21/21   Correct ShellExecute parms
 
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
@@ -30,7 +31,7 @@ DBClear     PROCEDURE()                      !Clear DebugView Buffer
         OutputDebugString(*CSTRING cMsg),PASCAL,DLL(1),RAW,NAME('OutputDebugStringA')
         DebugBreak(),PASCAL,DLL(1) 
         GetLastError(),LONG,PASCAL,DLL(1)
-        ShellExecute(UNSIGNED,LONG,LONG,LONG,LONG,SIGNED),UNSIGNED,PASCAL,DLL(1),PROC,NAME('ShellExecuteA') 
+        ShellExecute(LONG,<*CSTRING>,*CSTRING,LONG,LONG,LONG),LONG,RAW,PASCAL,DLL(1),PROC,NAME('ShellExecuteA') 
       END
     END
    
@@ -310,13 +311,13 @@ Upper1 PROCEDURE(*STRING Str)
     RETURN
 !======================================================================================== 
 ShellExecuteOpen PROCEDURE(STRING File2Do) 
-ShellCmnd           CSTRING(1000),AUTO
-ShRetErr            LONG,AUTO
-lpOperation     cstring('open')    !only one operation support so far
-  CODE                                                     ! Begin processed code
+ShellCmnd CSTRING(1000),AUTO
+ShRetErr  LONG,AUTO
+OpenOp    CSTRING('open')    !only one operation support so far
+  CODE
     ShellCmnd = CLIP(File2Do)
     SETCURSOR(CURSOR:Wait)
-    ShRetErr = ShellExecute(0, lpOperation, ADDRESS(ShellCmnd),0,0,5)  !5=SW_SHOW
+    ShRetErr = ShellExecute(0,OpenOp,ShellCmnd,0,0,5)  !5=SW_SHOW
     SETCURSOR
     RETURN
 !========================================================================================

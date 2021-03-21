@@ -7,6 +7,8 @@
 !               Split Lines at bottom add CODE for Split() SplitEvery() SplitByMatch()
 ! 04-Mar-2021   Load Text button warns if Default text
 !               Do2Class change ROUTINE to CLASS named DOO ... I gave you that name and I said goodbye, I knew you'd either git tuff or die
+! 21-Mar-2021   Help button opens Capesoft.com String Theory Split Related topics
+!               Window control Tips try to show specific ST code
 
   PROGRAM
     INCLUDE 'TplEqu.CLW'
@@ -18,10 +20,11 @@ SplitTheory PROCEDURE()
 ParmBool    PROCEDURE(BOOL pBool, BOOL BlankZero=1),STRING
 ParmNum     PROCEDURE(LONG pNum, BOOL BlankZero=1),STRING
 ParmStr     PROCEDURE(STRING pStr, BOOL BlankNull=1),STRING
-
+ShellExecuteOpen PROCEDURE(STRING File2Open)
 DB          PROCEDURE(STRING DebugMessage)   !Output Debug String
 DBClear     PROCEDURE()                      !Clear DebugView Buffer
       MODULE('api')
+        ShellExecute(LONG,<*CSTRING>,*CSTRING,LONG,LONG,LONG),LONG,RAW,PASCAL,DLL(1),PROC,NAME('ShellExecuteA') 
         OutputDebugString(*CSTRING cMsg),PASCAL,DLL(1),RAW,NAME('OutputDebugStringA')
         GetLastError(),LONG,PASCAL,DLL(1)
       END
@@ -64,19 +67,20 @@ SplitCode2  STRING(255)
 Q1          EQUATE('''')
 
 Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('Segoe UI',9),RESIZE
-        BUTTON('Load Text'),AT(7,4,42),USE(?LoadTextBtn),TIP('SetValue() from TEXT control at bottom')
-        BUTTON('Clipoard'),AT(55,4,36),USE(?LoadClipBtn),TIP('SetValue( ClipBoard() )')
+        BUTTON('Load Text'),AT(7,4,42),USE(?LoadTextBtn)
+        BUTTON('Clipoard'),AT(55,4,36),USE(?LoadClipBtn)
         BUTTON('File...'),AT(97,4),USE(?LoadFileBtn)
-        BUTTON('ReR&un'),AT(301,21),USE(?ReRunBtn),SKIP,TIP('Run another')
+        BUTTON('Help'),AT(273,21,29),USE(?HelpBtn),SKIP,TIP('Open Capesoft Help')
+        BUTTON('ReR&un'),AT(306,21,31),USE(?ReRunBtn),SKIP,TIP('Run another')
         ENTRY(@s255),AT(136,6,,11),FULL,USE(LoadFN),SKIP,TRN,READONLY
-        BUTTON('ValueView(ST)'),AT(7,21),USE(?ValueViewFileST),TIP('View FileST.GetValue')
-        STRING('ENTRY strings are Claion Literals allowing << 9 > but double << '' {{'),AT(85,23),USE(?StrLength)
+        BUTTON('ValueView(ST)'),AT(7,21),USE(?ValueViewFileST)
+        STRING('ENTRY''s are Claion Literals allowing << 9 > but double << '' {{'),AT(85,23),USE(?StrLength)
         PANEL,AT(1,39,,2),FULL,USE(?Horz1),BEVEL(0,0,0600H)
-        BUTTON('Split Lines'),AT(7,46),USE(?SpiltLinesBtn)
+        BUTTON('Split Lines'),AT(7,46),USE(?SpiltLinesBtn),TIP('Split using selected Method')
         OPTION('Split Lines Method'),AT(72,42,266,55),USE(LineSpl_How),BOXED
-            RADIO('Line End'),AT(78,54),USE(?LineSpl_How:Radio1)
-            RADIO('Every'),AT(78,68),USE(?LineSpl_How:Radio2),TIP('SplitEvery for fixed length records')
-            RADIO('Match'),AT(78,82),USE(?LineSpl_How:Radio3),TIP('SplitByMatch( Regulare Expression, NoCase)')
+            RADIO('Line End'),AT(78,54),USE(?LineSpl_How:Radio1),TIP('Split(eol) with specified Line End<13,10>View file as Hex by pressing "ValueView(ST)"')
+            RADIO('Every'),AT(78,68),USE(?LineSpl_How:Radio2),TIP('SplitEvery(len) for fixed length records')
+            RADIO('Match'),AT(78,82),USE(?LineSpl_How:Radio3),TIP('SplitByMatch( Regular Expression, NoCase)')
         END
         ENTRY(@s32),AT(123,54,117,11),USE(LineSpl_Delim),TIP('Line End Delimeter as Clarion String Literal<13,10>Use << ' & |
                 '> for low ASCII.')
@@ -94,8 +98,8 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
         BUTTON('View Lines'),AT(7,82),USE(?ViewLinesBtn),TIP('BigBang.LinesViewInList()')
         ENTRY(@s255),AT(7,100,,11),FULL,USE(SplitCode1),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
         PANEL,AT(1,116,,2),FULL,USE(?Horz2),BEVEL(0,0,0600H)
-        BUTTON('Tab'),AT(103,148,25,11),USE(?ColAsTabBtn),SKIP
-        BUTTON('CSV'),AT(103,134,25,11),USE(?ColAsCsvBtn),SKIP
+        BUTTON('Tab'),AT(103,148,25,11),USE(?ColAsTabBtn),SKIP,TIP('Set to Tab delimeter and no quotes')
+        BUTTON('CSV'),AT(103,134,25,11),USE(?ColAsCsvBtn),SKIP,TIP('Set to Comma delimeter and "Quotes"')
         PROMPT('Column Split:'),AT(7,122),USE(?ColDel:Pmt)
         ENTRY(@s32),AT(53,122,75,11),USE(Col_Split),TIP('Column Delimeter as Clarion String Literal<13,10>Use << > for l' & |
                 'ow ASCII.')
@@ -111,11 +115,11 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
         CHECK('Nested Quotes'),AT(267,135),USE(Col_Nested),TIP('Quote and End Quote are Nested')
         CHECK('Clip'),AT(267,148),USE(Col_Clip),TIP('Remove trailing spaces')
         CHECK('Left'),AT(297,148),USE(Col_Left),TIP('Remove leading spaces')
-        BUTTON('View Column Split'),AT(7,141),USE(?ViewColumnsBtn)
+        BUTTON('View Column Split'),AT(7,141),USE(?ViewColumnsBtn),TIP('Show ST.Split() code<13,10>View with BigBang.LinesViewSplit()')
         ENTRY(@s255),AT(7,164,,11),FULL,USE(SplitCode2),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
         PANEL,AT(1,178,,2),FULL,USE(?Horz3),BEVEL(0,0,0600H)
         PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'),AT(3,181),USE(?Txt:Prompt)
-        BUTTON('Tests...'),AT(300,180,,11),USE(?TextTestBtn)
+        BUTTON('Tests...'),AT(300,180,,11),USE(?TextTestBtn),TIP('Carl''s Tests Popup')
         TEXT,AT(2,194),FULL,USE(txt),HVSCROLL
     END
 TxtDefault EQUATE('Paste or type text here')
@@ -132,6 +136,8 @@ Test_Separator1_Rtn   PROCEDURE()
 Test_DirectoryCSV_Rtn PROCEDURE()
 Extra_1_Rtn           PROCEDURE()
 Extra_2_Rtn           PROCEDURE()
+WindowIsOpen          PROCEDURE() 
+HelpButton            PROCEDURE()
     END
     CODE
     LoadFN='<<---- Click Load Text, Clipboard or File, then Split Lines, then ...'
@@ -140,13 +146,13 @@ Extra_2_Rtn           PROCEDURE()
     OPEN(WINDOW)
     0{PROP:text}=clip(0{PROP:text}) &' - Library ' & system{PROP:LibVersion,2} &'.'& system{PROP:LibVersion,3}
     !      LoadFN='EmpPos2019.csv' ; FileST.LoadFile(LoadFN) ; DOO.StrLenRtn()
+    DOO.WindowIsOpen()
     ACCEPT
         CASE EVENT()
         OF EVENT:OpenWindow
         OF EVENT:Timer
         END
         CASE ACCEPTED()
-        OF ?ReRunBtn          ; RUN(COMMAND('0'))
         OF ?LoadTextBtn       ; IF Txt=TxtDefault THEN
                                    SELECT(?Txt)
                                    MESSAGE('Please enter your test string in the text control at the bottom.','Split',ICON:Asterisk)
@@ -165,6 +171,8 @@ Extra_2_Rtn           PROCEDURE()
 
         OF ?ViewColumnsBtn    ; DOO.ViewColumnsRtn()
         OF ?TextTestBtn       ; DOO.TextTestRtn()
+        OF ?ReRunBtn          ; RUN(COMMAND('0'))
+        OF ?HelpBtn           ; DOO.HelpButton()
         END
         CASE FIELD()
         OF ?SplitCode1 OROF ?SplitCode2
@@ -178,6 +186,20 @@ Extra_2_Rtn           PROCEDURE()
     END
     CLOSE(WINDOW)
 !========================================================================
+DOO.WindowIsOpen PROCEDURE()
+SplitHlp EQUATE('<13,10>-{40}<13,10,9>Split(<13,10,9>1 String Boundary, <13,10,9>2 [String Quote],<13,10,9>3 [String QuoteEnd],<13,10,9>4 [RemoveQuotes=false],<13,10,9>5 [Bool Clip = false],<13,10,9>6 [Bool Left = false],<13,10,9>7 [String Separator],<13,10,9>8 [Bool Nested = false])')
+    CODE
+    ?LoadTextBtn{PROP:Tip}='ST.SetValue(string) from TEXT control at bottom'
+    ?LoadClipBtn{PROP:Tip}='ST.SetValue( ClipBoard() )'
+    ?LoadFileBtn{PROP:Tip}='IF Not ST.LoadFile(FileName) THEN ' & |
+                    '<13,10>       Message(''Load Error '' & ST.winErrorCode ) ...' 
+    ?ValueViewFileST{PROP:Tip}='View ST String Value with BigBang.ValueView( ST_Object )' & |
+                        '<13,10>Use to view File Line End in Hex or Column Delimeters' 
+    ?LineSpl_How:Radio1{PROP:Tip}=?LineSpl_How:Radio1{PROP:Tip} & SplitHlp
+    ?ViewColumnsBtn{PROP:Tip}=?ViewColumnsBtn{PROP:Tip} & SplitHlp
+    
+    RETURN
+   
 DOO.StrLenRtn PROCEDURE(STRING StrName) !Format ?StrLength
   CODE
     ?StrLength{PROP:Text}=StrName & ' String Length: ' & LEFT(FORMAT(FileST.Length(),@n13))
@@ -360,7 +382,50 @@ DOO.Extra_2_Rtn PROCEDURE()
 ST   StringTheory
 Lne  StringTheory
     CODE
-
+!------------------------------------------------------
+DOO.HelpButton PROCEDURE()
+Url STRING(255)
+BookMark PSTRING(32)
+ST_Home  EQUATE('https://www.capesoft.com/accessories/StringTheorysp.htm')    
+ST_Docs  EQUATE('https://www.capesoft.com/docs/StringTheory3/StringTheory.htm')    
+    CODE 
+    url=ST_Home 
+    EXECUTE POPUP('~[31763(4796)]StringTheory Help on CapeSoft.com' & |
+              '|-|Parsing CSV Files Help Topic' & |
+                '|Split, Manipulate and Join string Help Index' & |
+              '|-|Methods Used Here' & |
+                   '{{ST.LoadFile()' & |
+                    '|ST.Split()' & |
+                    '|ST.SplitEvery()' & |
+                    '|ST.SplitByMatch()' & |
+                    '|ST.Records()' & |
+                    '|ST.GetLine()' & |
+             '}|-|All Methods Reference' & |
+                '|Documentation Main Page' & |
+                '|String Theory Main Page' & |
+                '|Big Bang Theory (ST Tools)' & |
+                '')
+        BEGIN ; END  !Title        
+        BookMark='#ParsingCSVFile'                
+        BookMark='#SplitEtc'        !Split Manipulate
+        BookMark='#stLoadFile'
+        BookMark='#stSplit'
+        BookMark='#stSplitEvery'
+        BookMark='#stSplitByMatch'
+        BookMark='#stRecords'
+        BookMark='#stGetLine'
+        BookMark='#StringTheoryMethods' 
+        BookMark='#' !Docs Main        
+        BookMark=''  !ST Home
+        url='https://github.com/CarlTBarnes/StringTheory-Tools#BigBangTheory-Value-and-Split-Lines-Viewer'
+    ELSE 
+        RETURN
+    END
+    IF BookMark THEN
+        Url=ST_Docs & BookMark
+    END 
+    ShellExecuteOpen(Url)   
+    
 !========================================================================================
 ParmBool PROCEDURE(BOOL pBool, BOOL BlankZero=1) !,STRING
     CODE
@@ -375,7 +440,17 @@ ParmStr PROCEDURE(STRING pStr, BOOL BlankNull=1) !,STRING
     CODE
     IF ~pStr AND BlankNull THEN RETURN ''.
     RETURN '''' & CLIP(pStr) & ''''
-
+!======================================================================================== 
+ShellExecuteOpen PROCEDURE(STRING File2Open) 
+ShellCmnd CSTRING(1000),AUTO
+ShRetErr  LONG,AUTO
+OpenOp    CSTRING('open')    !only one operation support so far
+  CODE
+    ShellCmnd = CLIP(File2Open)
+    SETCURSOR(CURSOR:Wait)
+    ShRetErr = ShellExecute(0,OpenOp,ShellCmnd,0,0,5)  !5=SW_SHOW
+    SETCURSOR
+    RETURN
 !========================================================================================
 DB   PROCEDURE(STRING xMessage)
 Prfx EQUATE('ScratchST: ')
