@@ -6,14 +6,14 @@
 !Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
 !
 !  TODO
-!10/126/20   Support Odd Job     
-!           Frame and MDI Windiws
+!10/26/20   Support Odd Job     
 !10/26/20   Store Class in Queue so can do multiple classes
-!10/27/20  Sort by Name or Line# Original Order
+!10/27/20   Sort by Name or Line# Original Order
 !           Line continuation
-!10/26/20   limit of 9 needs to be 10 for OddJob 
+!10/26/20   Limit of 9 needs to be 10 for OddJob 
 !03/04/21   Position Prototype Window over INC window or to last moved
 !03/21/21   Correct ShellExecute parms
+!04/02/21   Add Help button to List INC Window
 
   PROGRAM  
     INCLUDE 'TplEqu.CLW'
@@ -77,19 +77,22 @@ Txt    STRING(4000)
 FindName STRING(32)           
 FindInParm BYTE
 ConsolasFont BYTE
-Window WINDOW('Write Theory - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,ICON(ICON:Thumbnail),FONT('Segoe UI',10), |
-            RESIZE,MAX
-        BUTTON('Load'),AT(4,2,30,13),USE(?LoadIncBtn)
+Window WINDOW('Write Theory - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,MAX, |
+            ICON(ICON:Thumbnail),FONT('Segoe UI',10),RESIZE
+        BUTTON('&Load'),AT(4,2,30,13),USE(?LoadIncBtn)
         BUTTON('...'),AT(37,2,15,13),USE(?PickIncBtn)
         ENTRY(@s255),AT(60,3,331,12),USE(StIncFile),SKIP
         ENTRY(@s32),AT(3,18,109,10),USE(FindName),SKIP,FONT('Consolas',9,,FONT:regular)
         BUTTON('&Find'),AT(117,17,23,11),USE(?FindNameNext),SKIP
         BUTTON('Pre&v'),AT(142,17,23,11),USE(?FindNamePrev),SKIP
-        CHECK('Find in &Prototype'),AT(172,17,,11),USE(FindInParm),SKIP,TIP('Locate in Prototype, uncheck to for Name')
-        BUTTON('Sort'),AT(270,17,,11),USE(?SortBtn),SKIP
-        CHECK('Consolas'),AT(338,17,,11),USE(ConsolasFont),SKIP,FONT('Consolas')
-        LIST,AT(3,31),FULL,USE(?List:MethodQ),VSCROLL,FROM(MethodQ),FORMAT('24R(2)|M~Line#~C(0)@n5@41L(2)|MP~Class~@s64@' & |
-                '?70L(2)|M~Procedure~@s40@?30L(2)|M~Return~C(0)@s40@20L(2)|MP~Prototype~@s255@')
+        CHECK('Find in &Prototype'),AT(172,17,,11),USE(FindInParm),SKIP,TIP('Locate in Prototype, un' & |
+                'check to for Name')
+        BUTTON('&Sort'),AT(262,17,29,11),USE(?SortBtn),SKIP
+        BUTTON('&Help'),AT(300,17,29,11),USE(?HelpMainBtn),SKIP,TIP('Open Capesoft Help')
+        CHECK('Consolas'),AT(342,17,,11),USE(ConsolasFont),SKIP,FONT('Consolas')
+        LIST,AT(3,31),FULL,USE(?List:MethodQ),VSCROLL,FROM(MethodQ),FORMAT('24R(2)|M~Line#~C(0)@n5@4' & |
+                '1L(2)|MP~Class~@s64@?70L(2)|M~Procedure~@s40@?30L(2)|M~Return~C(0)@s40@20L(2)|MP~Pr' & |
+                'ototype~@s255@')
     END
 LocateCls  CBLocateCls
     CODE
@@ -126,6 +129,7 @@ LocateCls  CBLocateCls
                     END
                     GET(MethodQ,MethQ:ID)
                     SELECT(?List:MethodQ,POINTER(MethodQ))
+        OF ?HelpMainBtn    ; DO HelpMainRtn
         END
         CASE FIELD() 
         OF ?List:MethodQ
@@ -297,6 +301,61 @@ Bang BigBangTheory
 ST   StringTheory
 Lne  StringTheory    
     CODE
+
+HelpMainRtn ROUTINE  !------------------------------------------------------
+    DATA
+Url STRING(255)
+BookMark PSTRING(32)
+ST_Home  EQUATE('https://www.capesoft.com/accessories/StringTheorysp.htm')    
+ST_Docs  EQUATE('https://www.capesoft.com/docs/StringTheory3/StringTheory.htm')    
+    CODE 
+    url=ST_Home   
+!    name="FormatEtc"  in <td colspan="2" class="highlighted"><a href="#formating">
+!    name="HexEtc"     in <td colspan="2" class="highlighted"><a href="#hex">Base  -crlf-  Conversion, ...
+!    name="UnicodeEtc" in <td colspan="2" class="highlighted"><a href="#Unicode">Unicode  -crlf-  Encoding, ...
+!    name="EncodeEtc"  in <td colspan="2" class="highlighted">Other Encodings</td>
+!    name="ZipEtc"     in <td colspan="2" class="highlighted">Compression and Decompression</td>    
+    EXECUTE POPUP('~[31763(4796)]StringTheory Help on CapeSoft.com|-' & |
+                '|Documentation Main Page' & |
+                '|All Methods Reference' & |
+                '|Method Topics' & |
+                  '{{Split, Manipulate and Join string Help Index' & |
+                   '|Formatting and Deformatting' & |
+                   '|Base Conversion, Hexadecimal Encoding and Byte Ordering' & |
+                   '|Unicode Encoding, Conversion and Handling' & |
+                   '|Other Encodings' & |
+                   '|Binary Data handling and storage' & |
+                   '|Compression and Decompression' & |
+                 '|-|Parsing CSV Files ' & |
+                   '|File Name Manipulation ' & |
+               '}|String Theory Main Page' & |
+                '|Big Bang Theory (ST Tools)' & |
+                '')
+        BEGIN ; END  !Title        
+        BookMark='#' !Docs Main                
+        BookMark='#StringTheoryMethods'         
+        BookMark='#SplitEtc'        !Split Manipulate
+        BookMark='#FormatEtc'       !Formating        Bruce has to add theses
+        BookMark='#HexEtc'          !Base Conversion   
+        BookMark='#UnicodeEtc'      !Unicode Encoding
+        BookMark='#EncodeEtc'       !Other Encodings
+        BookMark='#Unicode'         !Binary Data
+        BookMark='#ZipEtc'          !Compression
+        BookMark='#ParsingCSVFile'                
+        BookMark='#FileNameManipulation'                
+        BookMark=''  !ST Home
+        url='https://github.com/CarlTBarnes/StringTheory-Tools#BigBangTheory-Value-and-Split-Lines-Viewer'
+    ELSE 
+        EXIT
+    END
+    IF BookMark THEN
+        Url=ST_Docs & BookMark
+    END 
+    IF BAND(KEYSTATE(),0200h) THEN   !Ctrl+
+       SetClipboard(Url)
+    ELSE 
+       ShellExecuteOpen(Url)
+    END    
     
 !========================================================================================
 Upper1 PROCEDURE(*STRING Str) 
@@ -360,7 +419,7 @@ Window WINDOW('Protype:'),AT(,,329,209),GRAY,IMM,SYSTEM,ICON(ICON:JumpPage),FONT
         ENTRY(@s128),AT(19,5,164,11),USE(MethodInfo),SKIP,TRN,READONLY
         CHECK(',&&|'),AT(191,5),USE(OnePerLine),SKIP,TIP('One Parm per Line')
         BUTTON('&Clear'),AT(270,3,25,12),USE(?ClearBtn),SKIP
-        BUTTON('Help'),AT(300,3,23,12),USE(?HelpBtn),SKIP,TIP('Open Capesoft.com')
+        BUTTON('Help'),AT(300,3,23,12),USE(?HelpBtn),SKIP,TIP('Open Capesoft.com<13,10>Ctrl+Click to Copy URL')
         ENTRY(@s64),AT(19,18,164,11),USE(Parm[1]),FONT('Consolas')
         ENTRY(@s64),AT(19,32,164,11),USE(Parm[2])
         ENTRY(@s64),AT(19,46,164,11),USE(Parm[3])
@@ -535,7 +594,11 @@ CS_OJm EQUATE('https://www.capesoft.com/docs/OddJob/OddJob.htm')
         OF 'CONSOLECLASS'   ; Url=CS_OJm 
 
     END
-    ShellExecuteOpen(Url)
+    IF BAND(KEYSTATE(),0200h) THEN   !Ctrl+
+       SetClipboard(Url)
+    ELSE 
+       ShellExecuteOpen(Url)
+    END
 
 !==========================================================
 !Region CBLocateCls
