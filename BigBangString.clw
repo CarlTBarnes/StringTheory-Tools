@@ -19,7 +19,7 @@ HexTxt     &String
 ShowHex    BYTE
 HScrollTxt BYTE(1),STATIC
 VScrollTxt BYTE(1),STATIC
-Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE ,center
+Window WINDOW('S'),AT(,,310,170),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE ,center
         TOOLBAR,AT(0,0,325),USE(?TB1)
             CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
             CHECK('HScroll'),AT(74,0),USE(HScrollTxt)
