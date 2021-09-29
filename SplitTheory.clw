@@ -9,7 +9,8 @@
 !               Do2Class change ROUTINE to CLASS named DOO ... I gave you that name and I said goodbye, I knew you'd either git tuff or die
 ! 21-Mar-2021   Help button opens Capesoft.com String Theory Split Related topics
 !               Window control Tips try to show specific ST code
-
+! 29-Sep-2021   Quote() the Parameters so Single Quotes get doubled. Window ENTRY in Consolas for easier to see.
+!
   PROGRAM
     INCLUDE 'TplEqu.CLW'
     INCLUDE 'KeyCodes.CLW'
@@ -74,53 +75,62 @@ Window WINDOW('Split StringTheory '),AT(,,342,242),CENTER,GRAY,IMM,SYSTEM,FONT('
         BUTTON('ReR&un'),AT(306,21,31),USE(?ReRunBtn),SKIP,TIP('Run another')
         ENTRY(@s255),AT(136,6,,11),FULL,USE(LoadFN),SKIP,TRN,READONLY
         BUTTON('ValueView(ST)'),AT(7,21),USE(?ValueViewFileST)
-        STRING('ENTRY''s are Claion Literals allowing << 9 > but double << '' {{'),AT(85,23),USE(?StrLength)
+        STRING('ENTRY''s are Claion Literals allowing << 9 > but double << '' {{'),AT(85,23), |
+                USE(?StrLength)
         PANEL,AT(1,39,,2),FULL,USE(?Horz1),BEVEL(0,0,0600H)
         BUTTON('Split Lines'),AT(7,46),USE(?SpiltLinesBtn),TIP('Split using selected Method')
         OPTION('Split Lines Method'),AT(72,42,266,55),USE(LineSpl_How),BOXED
-            RADIO('Line End'),AT(78,54),USE(?LineSpl_How:Radio1),TIP('Split(eol) with specified Line End<13,10>View file as Hex by pressing "ValueView(ST)"')
-            RADIO('Every'),AT(78,68),USE(?LineSpl_How:Radio2),TIP('SplitEvery(len) for fixed length records')
-            RADIO('Match'),AT(78,82),USE(?LineSpl_How:Radio3),TIP('SplitByMatch( Regular Expression, NoCase)')
+            RADIO('Line End'),AT(78,54),USE(?LineSpl_How:Radio1),TIP('Split(eol) with specified Line' & |
+                    ' End<13,10>View file as Hex by pressing "ValueView(ST)"')
+            RADIO('Every'),AT(78,68),USE(?LineSpl_How:Radio2),TIP('SplitEvery(len) for fixed length ' & |
+                    'records')
+            RADIO('Match'),AT(78,82),USE(?LineSpl_How:Radio3),TIP('SplitByMatch( Regular Expression,' & |
+                    ' NoCase)')
         END
-        ENTRY(@s32),AT(123,54,117,11),USE(LineSpl_Delim),TIP('Line End Delimeter as Clarion String Literal<13,10>Use << ' & |
-                '> for low ASCII.')
+        ENTRY(@s32),AT(123,54,117,11),USE(LineSpl_Delim),FONT('Consolas'),TIP('Line End Delimeter as' & |
+                ' Clarion String Literal<13,10>Use << > for low ASCII.')
         PROMPT('Quotes:'),AT(245,55),USE(?LineQuote:Pmt)
-        ENTRY(@s32),AT(273,54,26,11),USE(LineSpl_Quote1),TIP('Quote Begin<13,10>Line-End inside Quotes are ignored<13>' & |
-                '<10>common for CSV')
-        ENTRY(@s32),AT(305,54,26,11),USE(LineSpl_Quote2),TIP('Quote End')
-        CHECK('Remove Quotes'),AT(272,67),USE(LineSpl_QuoteRmv),TIP('Quotes at the beginning or end of the line will be ' & |
-                'removed')
-        ENTRY(@n5),AT(123,68,,11),USE(LineSpl_Every),TIP('Line Length for .SplitEvery()')
+        ENTRY(@s32),AT(273,54,26,11),USE(LineSpl_Quote1),FONT('Consolas'),TIP('Quote Begin<13,10>Lin' & |
+                'e-End inside Quotes are ignored<13><10>common for CSV')
+        ENTRY(@s32),AT(305,54,26,11),USE(LineSpl_Quote2),FONT('Consolas'),TIP('Quote End')
+        CHECK('Remove Quotes'),AT(272,67),USE(LineSpl_QuoteRmv),TIP('Quotes at the beginning or end ' & |
+                'of the line will be removed')
+        ENTRY(@n5),AT(123,68,,11),USE(LineSpl_Every),FONT('Consolas'),TIP('Line Length for .SplitEvery()')
         STRING('bytes'),AT(159,68),USE(?Bytes)
-        ENTRY(@s255),AT(123,82,117,11),USE(LineSpl_Match),TIP('RegEx Match Delimeter as Clarion String Literal')
+        ENTRY(@s255),AT(123,82,117,11),USE(LineSpl_Match),FONT('Consolas'),TIP('RegEx Match Delimete' & |
+                'r as Clarion String Literal')
         CHECK('No Case'),AT(245,82),USE(LineSpl_NoCase),TIP('Case Insensitive Match')
         STRING('Split Lines: 0'),AT(9,68),USE(?SplitLinesCnt)
         BUTTON('View Lines'),AT(7,82),USE(?ViewLinesBtn),TIP('BigBang.LinesViewInList()')
-        ENTRY(@s255),AT(7,100,,11),FULL,USE(SplitCode1),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
+        ENTRY(@s255),AT(7,100,,11),FULL,USE(SplitCode1),SKIP,TRN,FONT('Consolas'),READONLY, |
+                ALRT(MouseLeft2)
         PANEL,AT(1,116,,2),FULL,USE(?Horz2),BEVEL(0,0,0600H)
         BUTTON('Tab'),AT(103,148,25,11),USE(?ColAsTabBtn),SKIP,TIP('Set to Tab delimeter and no quotes')
         BUTTON('CSV'),AT(103,134,25,11),USE(?ColAsCsvBtn),SKIP,TIP('Set to Comma delimeter and "Quotes"')
         PROMPT('Column Split:'),AT(7,122),USE(?ColDel:Pmt)
-        ENTRY(@s32),AT(53,122,75,11),USE(Col_Split),TIP('Column Delimeter as Clarion String Literal<13,10>Use << > for l' & |
-                'ow ASCII.')
+        ENTRY(@s32),AT(53,122,75,11),USE(Col_Split),FONT('Consolas'),TIP('Column Delimeter as Clario' & |
+                'n String Literal<13,10>Use << > for low ASCII.')
         PROMPT('Quote Begin:'),AT(141,122),USE(?ColQt1:Pmt)
-        ENTRY(@s32),AT(185,122,75,11),USE(Col_Quote1)
+        ENTRY(@s32),AT(185,122,75,11),USE(Col_Quote1),FONT('Consolas')
         PROMPT('Quote End:'),AT(147,135),USE(?ColQt2:Pmt)
-        ENTRY(@s32),AT(185,135,75,11),USE(Col_Quote2)
+        ENTRY(@s32),AT(185,135,75,11),USE(Col_Quote2),FONT('Consolas')
         PROMPT('Separator:'),AT(150,148),USE(?ColSep:Pmt)
-        ENTRY(@s32),AT(185,148,40,11),USE(Col_Sep),TIP('Quote and End pairs are separated by this character<13,10>Usuall' & |
-                'y a single charatcer like a dash')
-        CHECK('Remove Quotes'),AT(267,121),USE(Col_QuoteRmv),TIP('Quotes at the beginning or end of the string will be r' & |
-                'emoved')
+        ENTRY(@s32),AT(185,148,40,11),USE(Col_Sep),FONT('Consolas'),TIP('Quote and End pairs are sep' & |
+                'arated by this character<13,10>Usually a single charatcer like a dash')
+        CHECK('Remove Quotes'),AT(267,121),USE(Col_QuoteRmv),TIP('Quotes at the beginning or end of ' & |
+                'the string will be removed')
         CHECK('Nested Quotes'),AT(267,135),USE(Col_Nested),TIP('Quote and End Quote are Nested')
         CHECK('Clip'),AT(267,148),USE(Col_Clip),TIP('Remove trailing spaces')
         CHECK('Left'),AT(297,148),USE(Col_Left),TIP('Remove leading spaces')
-        BUTTON('View Column Split'),AT(7,141),USE(?ViewColumnsBtn),TIP('Show ST.Split() code<13,10>View with BigBang.LinesViewSplit()')
-        ENTRY(@s255),AT(7,164,,11),FULL,USE(SplitCode2),SKIP,TRN,FONT('Consolas'),READONLY,ALRT(MouseLeft2)
+        BUTTON('View Column Split'),AT(7,141),USE(?ViewColumnsBtn),TIP('Show ST.Split() code<13,10>V' & |
+                'iew with BigBang.LinesViewSplit()')
+        ENTRY(@s255),AT(7,164,,11),FULL,USE(SplitCode2),SKIP,TRN,FONT('Consolas'),READONLY, |
+                ALRT(MouseLeft2)
         PANEL,AT(1,178,,2),FULL,USE(?Horz3),BEVEL(0,0,0600H)
-        PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'),AT(3,181),USE(?Txt:Prompt)
+        PROMPT('&Text - Paste or Type text here and then press the "Load Text" button at top left'), |
+                AT(3,181),USE(?Txt:Prompt)
         BUTTON('Tests...'),AT(300,180,,11),USE(?TextTestBtn),TIP('Carl''s Tests Popup')
-        TEXT,AT(2,194),FULL,USE(txt),HVSCROLL
+        TEXT,AT(2,194),FULL,USE(txt),HVSCROLL,FONT('Consolas')
     END
 TxtDefault EQUATE('Paste or type text here')
 
@@ -439,7 +449,7 @@ ParmNum PROCEDURE(LONG pNum, BOOL BlankZero=1) !,STRING
 ParmStr PROCEDURE(STRING pStr, BOOL BlankNull=1) !,STRING
     CODE
     IF ~pStr AND BlankNull THEN RETURN ''.
-    RETURN '''' & CLIP(pStr) & ''''
+    RETURN '''' & QUOTE(CLIP(pStr)) & ''''
 !======================================================================================== 
 ShellExecuteOpen PROCEDURE(STRING File2Open) 
 ShellCmnd CSTRING(1000),AUTO
