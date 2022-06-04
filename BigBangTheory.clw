@@ -3,6 +3,9 @@
 ! BigBangTheory - View StringTheory Value, or Lines Queue and Optionally Split lines by Delimeter
 ! (c)2020-2021 by Carl T. Barnes - Released under the MIT License
 !----------------------------------------------------------------------------
+! 01-June-22    New property "LineViewInConsolas  BOOL" view Lines in Colsolas handy for Code files   
+!               LinesViewInList Enter/Mouse2 views line (was on Popup), also Ctrl+C to Copy
+!----------------------------------------------------------------------------
     INCLUDE('KEYCODES.CLW')
     INCLUDE('BigBangTheory.INC'),ONCE
 _BBT_Needs_Project_Defines EQUATE(StringTheoryLinkMode + StringTheoryDllMode)
@@ -18,7 +21,7 @@ Init   PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)
 VLBprc PROCEDURE(LONG xRow, USHORT xCol),STRING
       END
 Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
-        LIST,AT(1,2),FULL,USE(?List:LinesQ),FLAT,HVSCROLL,VCR,FORMAT('24R(2)|M~Row~C(0)@n_6@999L(2)~Lines Q~')
+        LIST,AT(1,2),FULL,USE(?List:LinesQ),FLAT,HVSCROLL,VCR,FORMAT('24R(2)|M~Row~C(0)@n_6@999L(2)~Lines Q~'),ALRT(CtrlC),ALRT(EnterKey)
     END
 X LONG,AUTO
 P LONG,DIM(4),STATIC
@@ -35,22 +38,35 @@ LnzRecords LONG,AUTO
   X=LOG10(LnzRecords)+1 ; IF X<4 THEN X=4.
   ?List:LinesQ{PROPLIST:Picture,1}='n_' & X
   ?List:LinesQ{PROPLIST:Width,1}  =2 + 4*X
+  IF SELF.LineViewInConsolas THEN ?List:LinesQ{PROP:FontName}='Consolas'. !06/01/22 
   VlbLines.Init(?List:LinesQ, LnzRecords, 2)
   ACCEPT
-    IF EVENT()=EVENT:NewSelection AND FIELD()=?List:LinesQ AND KEYCODE()=MouseRight THEN
-       SETKEYCODE(0)
+    IF FIELD()=?List:LinesQ THEN
        X=CHOICE(?List:LinesQ)
-       EXECUTE POPUP('Copy Row to Clipboard|View Row Text|-|Copy All Rows Text|View All Rows Text' & |
-                    CHOOSE(~SELF.DoNotShow,'|-|-','|-|+') & 'Do Not Show BigBang Views')
-         SetClipboard(LnzST.GetLine(X))
-         SELF.StringView(LnzST.GetLine(X),'Row ' & X) ! MESSAGE(LnzST.GetLine(X),'Row ' & X,,,,MSGMODE:CANCOPY)
-         SetClipboard(LnzST.GetValue())
-         SELF.ValueView(LnzST)
-         SELF.DoNotShow=1-SELF.DoNotShow
-       END
-    END
-    CASE ACCEPTED()
-    END
+       CASE EVENT()
+       OF EVENT:AlertKey
+          CASE KEYCODE()
+          OF EnterKey OROF CtrlC ; POST(EVENT:NewSelection,?)
+          END 
+       OF EVENT:NewSelection 
+          CASE KEYCODE()
+          OF MouseRight
+             SETKEYCODE(0)
+             CASE POPUP('Copy Row to Clipboard <9>Ctrl+C|View Row Text  <9>Enter / Click 2' & |
+                     '|-|Copy All Rows Text to Clipboard|View All Rows Text (ST Value)' & |
+                          CHOOSE(~SELF.DoNotShow,'|-|-','|-|+') & 'Do Not Show BigBang Views (No Bang)')
+             OF 1; SetClipboard(LnzST.GetLine(X))
+             OF 2; SETKEYCODE(EnterKey) ; POST(EVENT:NewSelection,?List:LinesQ)
+             OF 3; SetClipboard(LnzST.GetValue())
+             OF 4; SELF.ValueView(LnzST)
+             OF 5; SELF.DoNotShow=1-SELF.DoNotShow
+             END
+          OF CtrlC         ; SetClipboard(LnzST.GetLine(X))
+          OF MouseLeft2 
+          OROF EnterKey    ; SELF.StringView(LnzST.GetLine(X),'Row ' & X)  !06/01/22 Double click or Enter views     
+          END !CASE KEYCODE()
+       END !CASE Event
+    END !IF FIELD()=?List:LinesQ
   END
   GETPOSITION(0,P[1],P[2],P[3],P[4])
   RETURN
@@ -139,6 +155,7 @@ NoUnHide  PSTRING('~')
   END
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
+  IF SELF.LineViewInConsolas THEN ?List:VLB{PROP:FontName}='Consolas'. !06/01/22
   ?List:VLB{PROP:Format}=Fmt ; CLEAR(Fmt)
   ?List:VLB{PROP:LineHeight}=1+?List:VLB{PROP:LineHeight}
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
@@ -307,16 +324,17 @@ HexTxt     StringTheory
 ShowHex    BYTE
 HScrollTxt BYTE(1),STATIC
 VScrollTxt BYTE(1),STATIC
-Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
-        TOOLBAR,AT(0,0,325),USE(?TB1)
+Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
+        TOOLBAR,AT(0,0),USE(?TB1)
             CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
             CHECK('HScroll'),AT(74,0),USE(HScrollTxt)
             CHECK('VScroll'),AT(126,0),USE(VScrollTxt)
             CHECK('No Bang'),AT(196,0),USE(?NoBang),TIP('Do Not show BigBang Views')
+            BUTTON('Copy'),AT(266,0,30,9),USE(?Copy),TIP('Copy text to Clipboard'),FLAT
         END
-        TEXT,AT(0,2),FULL,USE(?Txt),HVSCROLL,READONLY,FLAT
-        TEXT,AT(0,2),FULL,USE(?HexTxt),HIDE,HVSCROLL,READONLY,FLAT
-    END
+        TEXT,AT(0,2),FULL,USE(?Txt),FLAT,HVSCROLL,READONLY,FONT('Consolas',10)
+        TEXT,AT(0,2),FULL,USE(?HexTxt),FLAT,HIDE,HVSCROLL,READONLY,FONT('Consolas',10)
+    END    
 P LONG,DIM(4),STATIC
   CODE
   IF SELF.DoNotShow THEN RETURN.
@@ -339,6 +357,7 @@ P LONG,DIM(4),STATIC
            ?HexTxt{PROP:Use}=HexTxt.valuePtr[1 : HexTxt._DataEnd]
         END
         ?Txt{PROP:Hide}=ShowHex ; ?HexTxt{PROP:Hide}=1-ShowHex
+    OF ?Copy ; IF ShowHex THEN SETCLIPBOARD(HexTxt.GetValue()) ELSE SETCLIPBOARD(pSt.GetValue()).
     END
   END
   GETPOSITION(0,P[1],P[2],P[3],P[4])
@@ -509,4 +528,4 @@ ProCnt USHORT,AUTO
     END
     SP=SP & '<13,10>Prototype: ' & Prototype
     SELF.StringView(SP,'ProtoView - Count: ' & PMax)
-    RETURN PMax 
+    RETURN PMax

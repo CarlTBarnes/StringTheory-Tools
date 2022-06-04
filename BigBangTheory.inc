@@ -10,6 +10,7 @@ _IFDef_BigBangTheory_  EQUATE(1)
 !----------------- BigBangTheory -----------------
 BigBangTheory    CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW') !,StringTheoryLinkMode),DLL(StringTheoryDllMode)
 DoNotShow           BOOL     !Class is for Developers so =True doesn't show any Windows
+LineViewInConsolas  BOOL     !Use Consolas fixed width font for LinesView... nice for files where columns of data align   06/01/22
 
 ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)        
 SliceView           PROCEDURE(StringTheory STtoViewSlice, Long SliceStart=1, Long SliceEnd=0, <STRING CapTxt>) !View Slice() of ST
@@ -32,7 +33,7 @@ ProtoView           PROCEDURE(String Prototype, String P1,<String P2>,<String P3
 
 HexDump             PROCEDURE(StringTheory InputString, StringTheory OutHexDump)
 HexDump             PROCEDURE(STRING StringToReturnHex),STRING
-HexDump             PROCEDURE(*STRING StringToReturnHex),STRING
+HexDump             PROCEDURE(*STRING StringToReturnHex),STRING 
      END
 !-------------------------- How to Use: ------------------------------------
 !
