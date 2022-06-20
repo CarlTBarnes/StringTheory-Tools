@@ -6,6 +6,7 @@
 ! 01-June-22    New property "LineViewInConsolas  BOOL" view Lines in Colsolas handy for Code files   
 !               LinesViewInList Enter/Mouse2 views line (was on Popup), also Ctrl+C to Copy
 ! 04-June-22    New "Reflection method to view all ST Properties. Call some ST Functions Sub() Slice(). Bang functions ValueView() LinesView() etc
+! 20-June-22    Consolas Font as option on ListView Popup and Column View Checkbox. Value View checkbox for Segoe Font
 !----------------------------------------------------------------------------
     INCLUDE('KEYCODES.CLW')
     INCLUDE('BigBangTheory.INC'),ONCE
@@ -65,12 +66,15 @@ LnzRecords LONG,AUTO
              SETKEYCODE(0)
              CASE POPUP('Copy Row to Clipboard <9>Ctrl+C|View Row Text  <9>Enter / Click 2' & |
                      '|-|Copy All Rows Text to Clipboard|View All Rows Text (ST Value)' & |
-                          CHOOSE(~SELF.DoNotShow,'|-|-','|-|+') & 'Do Not Show BigBang Views (No Bang)')
+                          CHOOSE(~SELF.DoNotShow,'|-|-','|-|+') & 'Do Not Show BigBang Views (No Bang)' & |
+                          CHOOSE(~SELF.LineViewInConsolas,'|-','|+') & 'Consolas Font for List')
              OF 1; SetClipboard(LnzST.GetLine(X))
              OF 2; SETKEYCODE(EnterKey) ; POST(EVENT:NewSelection,?List:LinesQ)
              OF 3; SetClipboard(LnzST.GetValue())
              OF 4; SELF.ValueView(LnzST)
              OF 5; SELF.DoNotShow=1-SELF.DoNotShow
+             OF 6; SELF.LineViewInConsolas=1-SELF.LineViewInConsolas
+                   ?List:LinesQ{PROP:FontName}=CHOOSE(~SELF.LineViewInConsolas,'Segoe UI','Consolas')
              END
           OF CtrlC         ; SetClipboard(LnzST.GetLine(X))
           OF MouseLeft2 
@@ -137,6 +141,7 @@ Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
         COMBO(@s32),AT(238,3,59,10),USE(Picture),DISABLE,VSCROLL,TIP('Change Picture for Column'),DROP(16),FROM('@D1|@D2' & |
                 '|@D3|@D17|@N11.2|@S255|@T1|@T3|@T4|@T8')
         CHECK('No Bang'),AT(319,3),USE(?NoBang),SKIP,TIP('Do Not show BigBang Views')
+        CHECK('Consolas'),AT(368,3),USE(?ConsolasFnt),SKIP,TIP('Consolas Font for List')
         LIST,AT(1,17),FULL,USE(?List:VLB),FLAT,HVSCROLL,COLUMN,VCR,FORMAT('40L(2)|M~Col1~Q''NAME''')
     END
 LinST StringTheory
@@ -167,6 +172,7 @@ NoUnHide  PSTRING('~')
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
   IF SELF.LineViewInConsolas THEN ?List:VLB{PROP:FontName}='Consolas'. !06/01/22
+  ?ConsolasFnt{PROP:Use}=SELF.LineViewInConsolas
   ?List:VLB{PROP:Format}=Fmt ; CLEAR(Fmt)
   ?List:VLB{PROP:LineHeight}=1+?List:VLB{PROP:LineHeight}
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
@@ -220,7 +226,8 @@ NoUnHide  PSTRING('~')
     OF ?LinesBtn ; SELF.LinesViewInList(CsvST)
     OF ?NoQuotes OROF ?pLeft ; QChanged=1 ; SELECT(?List:VLB,1)
     OF ?Picture ; ?List:VLB{CHOOSE(~INSTRING(lower(picture[1:2]),'@d@t@n@e'),PROPLIST:Left,PROPLIST:Right) ,PColumn}=1
-                  ?List:VLB{PROPLIST:Picture,PColumn}=Picture ; DISPLAY
+                  ?List:VLB{PROPLIST:Picture,PColumn}=Picture ; DISPLAY 
+    OF ?ConsolasFnt ; ?List:VLB{PROP:FontName}=CHOOSE(~SELF.LineViewInConsolas,'Segoe UI','Consolas')                  
     END
   END
   GETPOSITION(0,P[1],P[2],P[3],P[4])
@@ -333,6 +340,7 @@ BigBangTheory.ValueView PROCEDURE(StringTheory pST, <STRING CapTxt>)
 LenTxt     LONG,AUTO
 HexTxt     StringTheory
 ShowHex    BYTE
+SegoeFnt   BYTE
 HScrollTxt BYTE(1),STATIC
 VScrollTxt BYTE(1),STATIC
 Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
@@ -340,7 +348,8 @@ Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
             CHECK('Show HEX'),AT(2,0),USE(ShowHex),TIP('See Value in Hex')
             CHECK('HScroll'),AT(74,0),USE(HScrollTxt)
             CHECK('VScroll'),AT(126,0),USE(VScrollTxt)
-            CHECK('No Bang'),AT(196,0),USE(?NoBang),TIP('Do Not show BigBang Views')
+            CHECK('No Bang'),AT(176,0),USE(?NoBang),TIP('Do Not show BigBang Views')
+            CHECK('Segoe'),AT(225,0),USE(SegoeFnt),SKIP,TIP('Check for Segoe<13,10>Uncheck for Consolas')
             BUTTON('Copy'),AT(266,0,30,9),USE(?Copy),TIP('Copy text to Clipboard'),FLAT
         END
         TEXT,AT(0,2),FULL,USE(?Txt),FLAT,HVSCROLL,READONLY,FONT('Consolas',10)
@@ -369,6 +378,7 @@ P LONG,DIM(4),STATIC
         END
         ?Txt{PROP:Hide}=ShowHex ; ?HexTxt{PROP:Hide}=1-ShowHex
     OF ?Copy ; IF ShowHex THEN SETCLIPBOARD(HexTxt.GetValue()) ELSE SETCLIPBOARD(pSt.GetValue()).
+    OF ?SegoeFnt ; ?Txt{PROP:FontName}=CHOOSE(~SegoeFnt,'Consolas','Segoe UI')
     END
   END
   GETPOSITION(0,P[1],P[2],P[3],P[4])
