@@ -21,7 +21,8 @@ lne  StringTheory
 X    LONG 
     CODE 
 !    Bang.DoNotShow=1      !When True None of the Bang windows show  
-!    DO ParmsViewRtn ; halt()  
+!    DO ParmsViewRtn ; halt() 
+    DO ReflectionTestRtn !; halt()  !New 06/04/22 
     DO CsvTestRtn
     DO TabTestRtn
     DO PipeSplitRtn
@@ -37,7 +38,8 @@ X    LONG
 CsvTestRtn ROUTINE    
   IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
   Bang.ValueView(ST,'ValueView ST GetValue of EmpPos2019.CSV')
-  ST.Split('<13,10>')
+  ST.Split('<13,10>')    
+    bang.LineViewInConsolas=1   !06/01/22 new option Fixed font makes Fixed Width Data or Code look better
   Bang.LinesViewInList(ST,'Split 13,10 EmpPos2019.CSV')    !See Raw Lines split by 13,10 in LIST
   Bang.LinesViewSplitCSV(ST)                  !<-- this line does below CSV split
 ! Bang.LinesViewSplit(ST ,',' ,'"','"',True)  !<-- same as above CSV function
@@ -137,7 +139,7 @@ SplitMultiQuotesTestRtn ROUTINE
 !   bool pLeft=false,         Trim leading spaces
 !   <string pSeparator>,      Sep if QuoteStart has multiple e.g. - for  [-(  )-]
 !   Long pNested=false)       True=Ignore () around "5,6" in (1,2),(3,4),((5,6),7)
-
+!-------------------------------------
 ParmsViewRtn ROUTINE 
   !ST can have many parameters so hard to figure out if you have the right commas,,,,1 e.g. NoCase
   
@@ -147,6 +149,14 @@ ParmsViewRtn ROUTINE
   Bang.ParmsView('humanity','America',,,,1)        !Generalized Parms counters
   Bang.ProtoView('string pOldValue, string pNewValue, long pCount=0, long pStart=1, long pEnd=0, long pNoCase=0, bool pRecursive=false' , |
                  'humanity','America',,,,1) 
+!-------------------------------------
+ReflectionTestRtn ROUTINE  !New 06/04/22 
+  !Reflection is one call that lets you see all properties about the ST object. There are not that many.  
+  IF ~ST.LoadFile('EmpPos2019.csv') THEN Message('LoadFile EmpPos2019.CSV Failed ' & ST.winErrorCode ).
+!  Bang.Reflection(ST,'Reflect ST without Split of EmpPos2019.CSV')
+  ST.Split('<13,10>')
+  Bang.Reflection(ST,'Reflect ST with LoadFile / Split EmpPos2019.CSV')
+  EXIT
  
 !========================================================================== 
 ! systemStringClass cannot do Quotes in Split

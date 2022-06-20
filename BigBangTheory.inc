@@ -27,6 +27,13 @@ LinesViewSplitTAB   PROCEDURE(StringTheory STwithLinesSplitDone)
 LinesViewSplit      PROCEDURE(StringTheory STwithLinesSplitDone, STRING SplitDelim, <STRING QuoteStart>,<STRING QuoteEnd>, BYTE RemoveQuotes=TRUE ,|
                                                 bool pClip=false, bool pLeft=false, <STRING pSeparator>, long pNested=false)
 
+!!! <summary>Reflection of StringTheory object to show all properties. Buttons allow accessing some methods like Value, Sub, Slice, Lines. </summary>
+!!! <param name="STtoReflect"     > 1. StringTheory object to show Reflection  </param>
+!!! <param name="WindowCaption"   > 2. STRING Caption for Window - Optional    </param>
+!!! <param name="bIgnoreDoNotShow"> 3. BOOL   Always show, ignore property .DoNotShow - Default=False  </param>
+!!! <remarks>New method added 6/4/2022. If you wonder what is inside ST this will show you. </remarks>
+Reflection          PROCEDURE(StringTheory STtoReflect, <STRING WindowCaption>, BOOL bIgnoreDoNotShow=False)
+
 ReplaceView         PROCEDURE(StringTheory St4Replace, string pOldValue, string pNewValue, long pCount=0, long pStart=1, long pEnd=0, long pNoCase=0, bool pRecursive=false),Long,Proc
 ParmsView           PROCEDURE(String P1,<String P2>,<String P3>,<String P4>,<String P5>,<String P6>,<String P7>,<String P8>,<String P9>),Long,Proc
 ProtoView           PROCEDURE(String Prototype, String P1,<String P2>,<String P3>,<String P4>,<String P5>,<String P6>,<String P7>,<String P8>,<String P9>),Long,Proc
@@ -48,9 +55,11 @@ HexDump             PROCEDURE(*STRING StringToReturnHex),STRING
 !   Bang.ValueView(ST)              !<-- View ST.GetValue() of file loaded
 !
 ! ST.Split('<13,10>')   
-!   Bang.LinesViewInList(ST)               !<-- View Lines Q split by 13,10 in LIST
+!   Bang.LinesViewInList(ST,'EmpPos2019')  !<-- View Lines Q split by 13,10 in a LIST
 !   Bang.LinesViewSplitCSV(ST)             !<-- View split again as CSV
 !   Bang.LinesViewSplit(ST,CHR(9),'','')   !<-- View using any split specs
+!
+! Bang.Reflection(ST,'EmpPos2019')  !<-- View ST Object Properties with buttons for Value, Sub, Slice and Lines. Sort of Everything.
 !
 !   Lne.SetValue(ST.GetLine(X))
 !     Bang.ValueView(Lne)           !<-- View Len.GetValue() of line

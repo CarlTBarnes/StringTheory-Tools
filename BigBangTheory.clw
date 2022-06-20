@@ -5,12 +5,19 @@
 !----------------------------------------------------------------------------
 ! 01-June-22    New property "LineViewInConsolas  BOOL" view Lines in Colsolas handy for Code files   
 !               LinesViewInList Enter/Mouse2 views line (was on Popup), also Ctrl+C to Copy
+! 04-June-22    New "Reflection method to view all ST Properties. Call some ST Functions Sub() Slice(). Bang functions ValueView() LinesView() etc
 !----------------------------------------------------------------------------
     INCLUDE('KEYCODES.CLW')
     INCLUDE('BigBangTheory.INC'),ONCE
 _BBT_Needs_Project_Defines EQUATE(StringTheoryLinkMode + StringTheoryDllMode)
 ! StringTheoryLinkMode=>1;StringTheoryDllMode=>0  or StringTheoryLinkMode=>0;StringTheoryDllMode=>1
   MAP.
+
+_CbWndPreview_  EQUATE(0)    
+!    INCLUDE('CbWndPreview.inc'),ONCE   !https://github.com/CarlTBarnes/WindowPreview
+!    COMPILE('!*cbw*',_CbWndPreview_)
+!WndPrvCls CBWndPreviewClass            !Runtime Window/Control PROP View and Modify Sizes with secret button top-left
+!             !*cbw*
 !----------------------------------------------------------------------
 BigBangTheory.LinesViewInList PROCEDURE(StringTheory LnzST,<STRING CapTxt>)
 VlbLines CLASS
@@ -29,7 +36,11 @@ LnzRecords LONG,AUTO
     CODE
   IF SELF.DoNotShow THEN RETURN.
   LnzRecords = LnzST.Records()
-  IF ~LnzRecords THEN Message('No Lines in Loaded file','LinesViewInList') ; RETURN .
+  IF ~LnzRecords THEN 
+     IF Message('No Lines in StringTheory|Split() has not been called','LinesViewInList',|
+                ICON:Asterisk,'Close|View Value')=2 THEN SELF.ValueView(LnzST,CapTxt).
+     RETURN
+  END
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
   ?List:LinesQ{PROP:LineHeight}=1+?List:LinesQ{PROP:LineHeight}
@@ -529,3 +540,177 @@ ProCnt USHORT,AUTO
     SP=SP & '<13,10>Prototype: ' & Prototype
     SELF.StringView(SP,'ProtoView - Count: ' & PMax)
     RETURN PMax
+!----------------------------------------------------------------------------
+BigBangTheory.Reflection          PROCEDURE(StringTheory ST, <STRING CapTxt>, BOOL bIgnoreDoNotShow=False)
+ClassDataQ QUEUE,PRE(ClsDatQ)
+Type         STRING(1)   !ClsDatQ:Type  D=Data M=Method
+Label        STRING(96)  !ClsDatQ:Label
+DataValue    STRING(255) !ClsDatQ:DataValue
+           END
+SubBegin LONG
+SubLength LONG
+SlcStart LONG
+SlcEnd   LONG
+
+Window WINDOW('StringTheory Reflection'),AT(,,395,235),GRAY,SYSTEM,FONT('Segoe UI',9),RESIZE
+        BUTTON('Value'),AT(3,2,27,12),USE(?ValueBtn),TIP('View ST .Value <13,10>Calls Bang.ValueView' & |
+                '() that calls ST.GetValue()')
+        BUTTON('SUB()'),AT(40,2,28,12),USE(?SubBtn),TIP('Fill in Start and Length to the right, then' & |
+                ' click SUB <13,10>Calls Bang.SubView() that calls ST.Sub()')
+        ENTRY(@n8),AT(71,4,31,9),USE(SubBegin),RIGHT,TIP('Sub String Start Position')
+        STRING(','),AT(103,4,4,9),USE(?SubCma),TRN,FONT('Consolas',9)
+        ENTRY(@n8),AT(109,4,31,9),USE(SubLength),LEFT,TIP('Sub String Length')
+        BUTTON('Slice()'),AT(150,2,30,12),USE(?SliceBtn),TIP('Fill in Begin : End Slice to the right' & |
+                ', then click SLICE <13,10>Calls Bang.SloceView() that calls ST.Slice()')
+        ENTRY(@n8),AT(183,4,31,9),USE(SlcStart),RIGHT,TIP('Slice String START Position')
+        STRING(':'),AT(215,4,4,9),USE(?SlcCln),TRN,FONT('Consolas',9)
+        ENTRY(@n_8),AT(221,4,31,9),USE(SlcEnd),LEFT,TIP('Slice String  END Position')
+        BUTTON('Lines Q'),AT(262,2,34,12),USE(?LinesBtn),TIP('View ST Lines Q from Split <13,10>Call' & |
+                's Bang.LinesViewInList() that calls ST.GetLine()')
+        BUTTON('CSV'),AT(298,2,22,12),USE(?CSVBtn),TIP('View Lines with CSV split <13,10>Calls Bang.' & |
+                'LinesViewSplitCSV() that calls ST.Split() etc')
+        BUTTON('TAB'),AT(322,2,22,12),USE(?TABBtn),TIP('View Lines with TAB split <13,10>Calls Bang.' & |
+                'LinesViewSplitTAB()')
+        CHECK('No Bang'),AT(353,3),USE(?NoBang),SKIP,FONT(,8),TIP('Do Not show BigBang Views')
+        LIST,AT(3,18),FULL,USE(?LIST:ClassDataQ),FONT('Segoe UI',10),FROM(ClassDataQ),FORMAT('18C(0)' & |
+                '|FM~DM~C(0)@s1@110L(2)|FM~Label~@s96@?200L(2)|FM~Data~@s255@'),ALRT(CtrlC), |
+                 ALRT(CtrlShiftC)
+    END
+
+ClassReflect CLASS
+Reflect   PROCEDURE(*GROUP pClass,STRING pLevelPrefix)
+SetQValue PROCEDURE(STRING pName, STRING pValue)
+             END
+    CODE
+    IF SELF.DoNotShow AND ~bIgnoreDoNotShow THEN RETURN.
+    OPEN(Window) ; DO PrepareWnd
+    ACCEPT
+        CASE ACCEPTED()
+        OF ?ValueBtn ; HIDE(0) ; SELF.ValueView(ST,CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'')) ; UNHIDE(0)
+        OF ?SubBtn   ; HIDE(0) ; SELF.SubView(ST,SubBegin,SubLength,CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'')) ; UNHIDE(0)
+        OF ?SliceBtn ; HIDE(0) ; SELF.SliceView(ST,SlcStart,SlcEnd ,CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'')) ; UNHIDE(0)
+        OF ?LinesBtn ; HIDE(0) ; SELF.LinesViewInList(ST,CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'')) ; UNHIDE(0)
+        OF ?CSVBtn   ; HIDE(0) ; SELF.LinesViewSplitCSV(ST) ; UNHIDE(0)
+        OF ?TABBtn   ; HIDE(0) ; SELF.LinesViewSplitTAB(ST) ; UNHIDE(0)
+
+        OF ?LIST:ClassDataQ
+            GET(ClassDataQ,CHOICE(?LIST:ClassDataQ))
+            CASE KeyCode()
+            OF CtrlC      ; SETCLIPBOARD(ClsDatQ:Label)
+            OF CtrlShiftC ; SETCLIPBOARD(ClsDatQ:DataValue)
+            OF MouseRight
+               SETKEYCODE(0)
+               CASE POPUP('Copy Label <9>Ctrl+C|Copy Data <9>Ctrl+Shift+C|-|Copy Both')
+               OF 1 ; SETCLIPBOARD(ClsDatQ:Label)
+               OF 2 ; SETCLIPBOARD(ClsDatQ:DataValue)
+               OF 3 ; SETCLIPBOARD(CLIP(ClsDatQ:Label)&' = '&ClsDatQ:DataValue)
+               END
+            OF MouseLeft2
+               CASE ClsDatQ:Label
+               OF   'VALUEPTR'
+               OROF 'VALUE' ; POST(EVENT:Accepted,?ValueBtn)
+               OF 'LINES'   ; POST(EVENT:Accepted,?LinesBtn)
+               END
+            END
+        END
+        CASE EVENT()
+        OF EVENT:AlertKey
+           IF FIELD()=?LIST:ClassDataQ THEN POST(EVENT:Accepted,?LIST:ClassDataQ).
+        END
+    END
+    RETURN
+
+PrepareWnd ROUTINE
+    COMPILE('!*cbw*',_CbWndPreview_)
+    WndPrvCls.Init(2) !Runtime Window design and PROPs
+             !*cbw*
+    0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt, CLIP(CapTxt)&' - ','') & |
+                 ' - StringTheory Reflection - Length '& ST.Length() &' - LinesQ '& ST.Records()
+    IF ~ST.Records() THEN DISABLE(?CSVBtn,?TABBtn).
+    ?NoBang{PROP:Use}=SELF.DoNotShow
+    DISPLAY
+    ClassReflect.Reflect(ST,'')
+    EXIT
+!----------------------------------------------------------------
+ClassReflect.Reflect PROCEDURE(*GROUP pClass,STRING pLevelPrefix)
+Ndx      LONG,AUTO
+AnyData  ANY
+WhoName  PSTRING(128)
+DimArray LONG   !ManyCnt
+DimIdx   LONG
+GroupRef &GROUP !Sub Group
+GroupPfx PSTRING(128)
+AnyStr   STRING(4)
+AnyLong  LONG,OVER(AnyStr)
+StrRef   ANY
+    CODE
+    LOOP Ndx = 1 to 999
+         AnyData &= WHAT(pClass,Ndx)
+         IF AnyData &= NULL THEN BREAK.
+         WhoName = pLevelPrefix & WHO(pClass,Ndx)
+
+         CLEAR(ClassDataQ)
+         ClsDatQ:Type          =  'D'
+         ClsDatQ:Label         =  WhoName
+         DimArray = HowMany(pClass,Ndx)
+         IF DimArray > 1 THEN
+             ClsDatQ:Label = WhoName &' []'
+             ClsDatQ:DataValue = 'ARRAY DIM( ' & DimArray &' )'
+             IF ISGROUP(pClass,Ndx) THEN
+                ClsDatQ:DataValue = 'GROUP....  ' & CLIP(ClsDatQ:DataValue)
+                DO Add1DataQ
+                CYCLE
+             END
+             DO Add1DataQ
+             LOOP DimIdx=1 TO DimArray
+                 AnyData &= WHAT(pClass,Ndx, DimIdx)
+                 ClsDatQ:DataValue=AnyData
+                 IF ~ClsDatQ:DataValue OR ClsDatQ:DataValue='0' THEN CYCLE.
+                 ClsDatQ:Label = WhoName &' [ ' & DimIdx &' ]'
+                 DO Add1DataQ
+             END
+             CYCLE
+
+         ELSIF ISGROUP(pClass,Ndx) THEN
+             ClsDatQ:DataValue = 'GROUP.{9}'
+             GroupPfx = WhoName &'.'
+             ClsDatQ:Label = WhoName & '.{9}'
+             DO Add1DataQ
+             GroupRef &= GETGROUP(pClass,Ndx)
+             SELF.Reflect(GroupRef,GroupPfx)
+         ELSE
+             ClsDatQ:DataValue = AnyData
+             ! DO ST_StringRef_Value_Rtn  Not possible without TUFO ...
+             DO Add1DataQ
+         END
+     END
+     RETURN
+
+Add1DataQ ROUTINE   !Hack some &STRING to show value using Who 
+    CASE ClsDatQ:Label
+    OF 'VALUE'
+  OROF 'VALUEPTR'  ; ClsDatQ:DataValue = ST.GetValue() !An &String
+    OF 'LASTERROR' ; ClsDatQ:DataValue = ST.LastError  !An &String
+    OF 'LINES'     ; ClsDatQ:DataValue = 'Queue with '& ST.Records() &' Records'
+    END
+    ADD(ClassDataQ)
+    CASE ClsDatQ:Label
+    OF 'WINERRORCODE'
+       IF ST.winErrorCode <> 0 THEN
+          ClsDatQ:Type  =  'M'
+          ClsDatQ:Label =  'FormatMessage( '& ST.winErrorCode &' )'
+          ClsDatQ:DataValue = ST.winErrorCode &' = '& ST.FormatMessage(ST.winErrorCode)
+          ADD(ClassDataQ)
+       END
+    END
+    EXIT
+!---------------------
+ClassReflect.SetQValue PROCEDURE(STRING pName, STRING pValue)
+    CODE
+    ClsDatQ:Label = UPPER(pName)
+    GET(ClassDataQ,ClsDatQ:Label)
+    IF ~ERRORCODE() THEN
+        ClsDatQ:DataValue=pValue
+        PUT(ClassDataQ)
+    END
+    RETURN
