@@ -8,6 +8,7 @@
 ! 04-June-22    New "Reflection method to view all ST Properties. Call some ST Functions Sub() Slice(). Bang functions ValueView() LinesView() etc
 ! 20-June-22    Consolas Font as option on ListView Popup and Column View Checkbox. Value View checkbox for Segoe Font
 ! 26-June-22    New .ShowAlways BOOL hides/prevents .DoNotShow - For a UI you may not want it turned off.
+! 26-June-22    LinesViewInList() buttons above List instead of hiding everything in a Popup()
 !----------------------------------------------------------------------------
 ! TODO
 ! LinesViewInList() add buttons at the top instead of everything hidden under Popup
@@ -33,12 +34,18 @@ Init   PROCEDURE(SIGNED xFEQ, LONG xRowCnt, USHORT xClmCnt)
 VLBprc PROCEDURE(LONG xRow, USHORT xCol),STRING
       END
 Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
-        LIST,AT(1,2),FULL,USE(?List:LinesQ),FLAT,HVSCROLL,VCR,FORMAT('24R(2)|M~Row~C(0)@n_6@999L(2)~Lines Q~'),ALRT(CtrlC),ALRT(EnterKey)
+        BUTTON('View &Line'),AT(1,2,43,12),USE(?LineView),SKIP,TIP('Display selected Line (Row) Value.<0Dh,0Ah>Double-Cl' & |
+                'ick on Line')
+        BUTTON('&Copy Line'),AT(48,2,43,12),USE(?CopyLine),SKIP,TIP('Copy Line to Clipboard Ctrl+C')
+        BUTTON('&Value View'),AT(95,2,43,12),USE(?ValueView),SKIP,TIP('Display ST Value which was Split into Lines')
+        CHECK('No Bang'),AT(319,3),USE(?NoBang),SKIP,TIP('Do Not show BigBang Views')
+        CHECK('Consolas'),AT(368,3),USE(?ConsolasFnt),SKIP,TIP('Consolas Font for List')
+        LIST,AT(1,17,,183),FULL,USE(?List:LinesQ),FLAT,HVSCROLL,VCR,FORMAT('24R(2)|M~Row~C(0)@n_6@999L(2)~Lines Q~'), |
+                ALRT(CtrlC), ALRT(EnterKey)
     END
 X LONG,AUTO
 P LONG,DIM(4),STATIC
 LnzRecords LONG,AUTO
-NoBang STRING(1)
     CODE
   IF SELF.DoNotShow AND ~SELF.ShowAlways THEN RETURN.
   LnzRecords = LnzST.Records()
@@ -55,11 +62,19 @@ NoBang STRING(1)
   X=LOG10(LnzRecords)+1 ; IF X<4 THEN X=4.
   ?List:LinesQ{PROPLIST:Picture,1}='n_' & X
   ?List:LinesQ{PROPLIST:Width,1}  =2 + 4*X
-  IF SELF.LineViewInConsolas THEN ?List:LinesQ{PROP:FontName}='Consolas'. !06/01/22 
+  IF SELF.ShowAlways THEN HIDE(?NoBang) ELSE ?NoBang{PROP:Use}=SELF.DoNotShow.
+  IF SELF.LineViewInConsolas THEN ?List:LinesQ{PROP:FontName}='Consolas'.
+  ?ConsolasFnt{PROP:Use}=SELF.LineViewInConsolas
   VlbLines.Init(?List:LinesQ, LnzRecords, 2)
   ACCEPT
+    X=CHOICE(?List:LinesQ)
+    CASE ACCEPTED()
+    OF ?LineView    ; SELF.StringView(LnzST.GetLine(X),'Row ' & X)
+    OF ?CopyLine    ; SetClipboard(LnzST.GetLine(X))
+    OF ?ValueView   ; SELF.ValueView(LnzST)
+    OF ?ConsolasFnt ; ?List:LinesQ{PROP:FontName}=CHOOSE(~SELF.LineViewInConsolas,'Segoe UI','Consolas')                  
+    END
     IF FIELD()=?List:LinesQ THEN
-       X=CHOICE(?List:LinesQ)
        CASE EVENT()
        OF EVENT:AlertKey
           CASE KEYCODE()
@@ -69,22 +84,16 @@ NoBang STRING(1)
           CASE KEYCODE()
           OF MouseRight
              SETKEYCODE(0)
-             NoBang=CHOOSE(SELF.ShowAlways<>0,'~',CHOOSE(~SELF.DoNotShow,'-','+'))
              CASE POPUP('Copy Row to Clipboard <9>Ctrl+C|View Row Text  <9>Enter / Click 2' & |
-                     '|-|Copy All Rows Text to Clipboard|View All Rows Text (ST Value)' & |
-                          '|-|' & NoBang & 'Do Not Show BigBang Views (No Bang)' & |
-                          CHOOSE(~SELF.LineViewInConsolas,'|-','|+') & 'Consolas Font for List')
+                     '|-|Copy All Rows Text to Clipboard|View All Rows (View ST Value)')
              OF 1; SetClipboard(LnzST.GetLine(X))
-             OF 2; SETKEYCODE(EnterKey) ; POST(EVENT:NewSelection,?List:LinesQ)
+             OF 2; POST(EVENT:Accepted,?LineView)
              OF 3; SetClipboard(LnzST.GetValue())
              OF 4; SELF.ValueView(LnzST)
-             OF 5; SELF.DoNotShow=1-SELF.DoNotShow
-             OF 6; SELF.LineViewInConsolas=1-SELF.LineViewInConsolas
-                   ?List:LinesQ{PROP:FontName}=CHOOSE(~SELF.LineViewInConsolas,'Segoe UI','Consolas')
              END
           OF CtrlC         ; SetClipboard(LnzST.GetLine(X))
           OF MouseLeft2 
-          OROF EnterKey    ; SELF.StringView(LnzST.GetLine(X),'Row ' & X)  !06/01/22 Double click or Enter views     
+          OROF EnterKey    ; POST(EVENT:Accepted,?LineView)  !06/01/22 Double click or Enter views     
           END !CASE KEYCODE()
        END !CASE Event
     END !IF FIELD()=?List:LinesQ
