@@ -7,6 +7,10 @@
 !               LinesViewInList Enter/Mouse2 views line (was on Popup), also Ctrl+C to Copy
 ! 04-June-22    New "Reflection method to view all ST Properties. Call some ST Functions Sub() Slice(). Bang functions ValueView() LinesView() etc
 ! 20-June-22    Consolas Font as option on ListView Popup and Column View Checkbox. Value View checkbox for Segoe Font
+! 26-June-22    New .ShowAlways BOOL hides/prevents .DoNotShow - For a UI you may not want it turned off.
+!----------------------------------------------------------------------------
+! TODO
+! LinesViewInList() add buttons at the top instead of everything hidden under Popup
 !----------------------------------------------------------------------------
     INCLUDE('KEYCODES.CLW')
     INCLUDE('BigBangTheory.INC'),ONCE
@@ -34,8 +38,9 @@ Window WINDOW('VLB'),AT(,,450,200),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
 X LONG,AUTO
 P LONG,DIM(4),STATIC
 LnzRecords LONG,AUTO
+NoBang STRING(1)
     CODE
-  IF SELF.DoNotShow THEN RETURN.
+  IF SELF.DoNotShow AND ~SELF.ShowAlways THEN RETURN.
   LnzRecords = LnzST.Records()
   IF ~LnzRecords THEN 
      IF Message('No Lines in StringTheory|Split() has not been called','LinesViewInList',|
@@ -64,9 +69,10 @@ LnzRecords LONG,AUTO
           CASE KEYCODE()
           OF MouseRight
              SETKEYCODE(0)
+             NoBang=CHOOSE(SELF.ShowAlways<>0,'~',CHOOSE(~SELF.DoNotShow,'-','+'))
              CASE POPUP('Copy Row to Clipboard <9>Ctrl+C|View Row Text  <9>Enter / Click 2' & |
                      '|-|Copy All Rows Text to Clipboard|View All Rows Text (ST Value)' & |
-                          CHOOSE(~SELF.DoNotShow,'|-|-','|-|+') & 'Do Not Show BigBang Views (No Bang)' & |
+                          '|-|' & NoBang & 'Do Not Show BigBang Views (No Bang)' & |
                           CHOOSE(~SELF.LineViewInConsolas,'|-','|+') & 'Consolas Font for List')
              OF 1; SetClipboard(LnzST.GetLine(X))
              OF 2; SETKEYCODE(EnterKey) ; POST(EVENT:NewSelection,?List:LinesQ)
@@ -157,7 +163,7 @@ CellNA    PSTRING(2)
 ColumnST  LONG
 NoUnHide  PSTRING('~')
     CODE
-  IF SELF.DoNotShow THEN RETURN.
+  IF SELF.DoNotShow  AND ~SELF.ShowAlways THEN RETURN.
   CsvRecords = CsvST.Records()
   IF ~CsvRecords THEN Message('No Lines in Loaded file','LinesViewSplit') ; RETURN .
   IF ~OMITTED(pQuoteBegin) THEN Quote1=pQuoteBegin.
@@ -178,7 +184,7 @@ NoUnHide  PSTRING('~')
   ?List:VLB{7A58h}=1  !C11 PROP:PropVScroll
   ?Pict:Pmt{PROP:Tip}='Right click on cell to change the Picture'
   ?pLeft{PROP:Use}=pLeft
-  ?NoBang{PROP:Use}=SELF.DoNotShow
+  IF SELF.ShowAlways THEN HIDE(?NoBang) ELSE ?NoBang{PROP:Use}=SELF.DoNotShow.
   IF Quote1 THEN
      ?NoQuotes{PROP:Use}=pRemoveQuotes ; ENABLE(?NoQuotes)
   END
@@ -293,7 +299,7 @@ BigBangTheory.StringView PROCEDURE(STRING StrValue, <STRING CapTxt>)
 BigBangTheory.StringView PROCEDURE(*STRING StrValue, <STRING CapTxt>)
 St StringTheory
   CODE
-  IF SELF.DoNotShow THEN RETURN.
+  IF SELF.DoNotShow AND ~SELF.ShowAlways THEN RETURN.
   St.setValue(StrValue)
   SELF.ValueView(St, CHOOSE(~OMITTED(CapTxt) AND CapTxt,CapTxt,'StringTheory Value'))
 !-------------------------------
@@ -303,7 +309,7 @@ Q1 PSTRING(4)  !"?" flags Slice[] out of range in caption, ST will fixup
 Q2 PSTRING(4)
 SliceCaption PSTRING(48)
   CODE
-  IF SELF.DoNotShow THEN RETURN.
+  IF SELF.DoNotShow AND ~SELF.ShowAlways THEN RETURN.
   IF pStart < 1 OR pStart > pST._DataEnd OR (pStart > pEnd AND pEnd) THEN Q1=' ? '.
   IF pEnd < 1   OR pEnd   > pST._DataEnd OR  pStart > pEnd           THEN Q2=' ? '.
   SliceCaption = 'Slice ['& Q1 & pStart &':'& pEnd & Q2 &'] of 1:'& pST._DataEnd 
@@ -325,7 +331,7 @@ Q1 PSTRING(4)  !"?" flags Sub() out of range, ST will fixup some
 Q2 PSTRING(4)
 SubCaption PSTRING(48)
   CODE                              !New 02/04/21
-  IF SELF.DoNotShow THEN RETURN. 
+  IF SELF.DoNotShow AND ~SELF.ShowAlways THEN RETURN. 
   IF pStart  < 1           OR pStart > pST._DataEnd THEN Q1=' ? '. 
   IF pLength < 1 OR pLength-1+pStart > pST._DataEnd THEN Q2=' ? '.
   SubCaption = 'Sub('& Q1 & pStart &','& pLength & Q2 &') of 1,'& pST._DataEnd 
@@ -357,7 +363,7 @@ Window WINDOW('S'),AT(,,310,140),GRAY,SYSTEM,MAX,FONT('Segoe UI',9),RESIZE
     END    
 P LONG,DIM(4),STATIC
   CODE
-  IF SELF.DoNotShow THEN RETURN.
+  IF SELF.DoNotShow AND ~SELF.ShowAlways THEN RETURN.
   LenTxt=pSt.length()
   IF ~LenTxt THEN Message('No Text','ValueView') ; RETURN.
   OPEN(Window)
@@ -365,7 +371,7 @@ P LONG,DIM(4),STATIC
   ?Txt{PROP:HScroll}=HScrollTxt ; ?Txt{PROP:VScroll}=VScrollTxt
   IF LenTxt > 0FFF0h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k in 11.13505 - Message('Risk GPF?',LenTxt,,'No|Risk')
   ?Txt{PROP:Use}=pSt.valuePtr[1 : LenTxt]
-  ?NoBang{PROP:Use}=SELF.DoNotShow
+  IF SELF.ShowAlways THEN HIDE(?NoBang) ELSE ?NoBang{PROP:Use}=SELF.DoNotShow.
   0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt,CLIP(CapTxt),'StringTheory Value') & ' - Length ' & LenTxt
   ACCEPT
     CASE ACCEPTED()
@@ -450,13 +456,13 @@ Window WINDOW('S'),AT(,,400,250),GRAY,SYSTEM,MAX,FONT('Consolas',10),RESIZE
     END
 P LONG,DIM(4),STATIC
   CODE
-  IF SELF.DoNotShow THEN RETURN.
+  IF SELF.DoNotShow AND ~SELF.ShowAlways THEN RETURN.
   LenTxt=stOrig.Length()
   IF ~stOrig.clipLength() THEN Message('No Text','WrapView') ; RETURN.
   OPEN(Window)
   IF P[4] THEN SETPOSITION(0,P[1],P[2],P[3],P[4]).
   ?Txt{PROP:Use}=StOrig.valuePtr[1 : LenTxt]
-  ?NoBang{PROP:Use}=SELF.DoNotShow
+  IF SELF.ShowAlways THEN HIDE(?NoBang) ELSE ?NoBang{PROP:Use}=SELF.DoNotShow.
   IF LenTxt>0FF00h THEN DISABLE(?HScrollTxt,?VScrollTxt). !System Error @ 64k
   DO CapRtn
   WrapTheTxt=pWrap ; IF pWrap THEN POST(EVENT:Accepted,?WrapTheTxt).
@@ -592,7 +598,7 @@ Reflect   PROCEDURE(*GROUP pClass,STRING pLevelPrefix)
 SetQValue PROCEDURE(STRING pName, STRING pValue)
              END
     CODE
-    IF SELF.DoNotShow AND ~bIgnoreDoNotShow THEN RETURN.
+    IF SELF.DoNotShow AND ~SELF.ShowAlways AND ~bIgnoreDoNotShow THEN RETURN.
     OPEN(Window) ; DO PrepareWnd
     ACCEPT
         CASE ACCEPTED()
@@ -637,7 +643,7 @@ PrepareWnd ROUTINE
     0{PROP:Text}=CHOOSE(~OMITTED(CapTxt) AND CapTxt, CLIP(CapTxt)&' - ','') & |
                  ' - StringTheory Reflection - Length '& ST.Length() &' - LinesQ '& ST.Records()
     IF ~ST.Records() THEN DISABLE(?CSVBtn,?TABBtn).
-    ?NoBang{PROP:Use}=SELF.DoNotShow
+    IF SELF.ShowAlways THEN HIDE(?NoBang) ELSE ?NoBang{PROP:Use}=SELF.DoNotShow.
     DISPLAY
     ClassReflect.Reflect(ST,'')
     EXIT

@@ -10,6 +10,7 @@ _IFDef_BigBangTheory_  EQUATE(1)
 !----------------- BigBangTheory -----------------
 BigBangTheory    CLASS,TYPE,MODULE('BigBangTheory.CLW'),LINK('BigBangTheory.CLW') !,StringTheoryLinkMode),DLL(StringTheoryDllMode)
 DoNotShow           BOOL     !Class is for Developers so =True doesn't show any Windows
+ShowAlways          BOOL     !Prevent Do Not Show. So if this is a User Interface they cannot hide it.
 LineViewInConsolas  BOOL     !Use Consolas fixed width font for LinesView... nice for files where columns of data align   06/01/22
 
 ValueView           PROCEDURE(StringTheory STtoViewGetValue, <STRING WindowCaption>)        
