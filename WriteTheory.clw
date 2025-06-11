@@ -5,7 +5,7 @@
 !
 !Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
 !
-!  TODO
+! History
 !10/26/20   Support Odd Job     
 !10/26/20   Store Class in Queue so can do multiple classes
 !10/27/20   Sort by Name or Line# Original Order
@@ -14,16 +14,18 @@
 !03/04/21   Position Prototype Window over INC window or to last moved
 !03/21/21   Correct ShellExecute parms
 !04/02/21   Add Help button to List INC Window
+!06/11/25   Prototype1 Fix OnePerLine wrong had an &Amp ", &|", should be ", |"
+!06/11/25   Prototype1 Add Method Return Value Type on Call (,,,) line
 
   PROGRAM  
-    INCLUDE 'TplEqu.CLW'
-    INCLUDE 'KeyCodes.CLW'
+    INCLUDE('TplEqu.CLW')
+    INCLUDE('KeyCodes.CLW')
     INCLUDE('StringTheory.inc'),ONCE
     INCLUDE('BigBangTheory.INC'),ONCE
     MAP
-PickProcedure   PROCEDURE()
-Prototype1      PROCEDURE(STRING MethodQ_Record, STRING MethodQ_ID)
-Upper1          PROCEDURE(*STRING InOutStr)
+IncFileViewer   PROCEDURE()                                             !Window with List of INC file Methods
+Prototype1      PROCEDURE(STRING MethodQ_Record, STRING MethodQ_ID)     !Window to create call from Prototype of 1 Method
+Upper1st        PROCEDURE(*STRING InOutStr)                             !Upper 1st Letter in Type
 ShellExecuteOpen PROCEDURE(STRING File2Do)
 DB          PROCEDURE(STRING DebugMessage)   !Output Debug String
 DBClear     PROCEDURE()                      !Clear DebugView Buffer
@@ -51,7 +53,7 @@ ID              LONG            !MethQ:ID           Unique ID
 G:MethodID LONG
 G:Pz LONG,DIM(4)
 
-CBLocateCls CLASS,TYPE
+CBLocateCls CLASS,TYPE,PRIVATE
 Init          PROCEDURE(QUEUE QRef, *STRING QStrRef, LONG ListFEQ, LONG FindTextFEQ, LONG BtnNextFEQ, LONG BtnPrevFEQ, BYTE Hack=0)
 Kill          PROCEDURE()
 DisableIfNone PROCEDURE()
@@ -67,17 +69,17 @@ NextBtn LONG
 PrevBtn LONG
             END           
     CODE
-    PickProcedure()
+    IncFileViewer()
     RETURN
 !===========================================================================
-PickProcedure   PROCEDURE
+IncFileViewer   PROCEDURE
 StIncFile   STRING(260)
 X      LONG
 Txt    STRING(4000)
 FindName STRING(32)           
 FindInParm BYTE
 ConsolasFont BYTE
-Window WINDOW('Write Theory - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,MAX, |
+Window WINDOW('Write Theory 1.1 - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,MAX, |
             ICON(ICON:Thumbnail),FONT('Segoe UI',10),RESIZE
         BUTTON('&Load'),AT(4,2,30,13),USE(?LoadIncBtn)
         BUTTON('...'),AT(37,2,15,13),USE(?PickIncBtn)
@@ -254,13 +256,13 @@ PmzST       StringTheory
             MethQ:RV=LEFT(st.GetValue()) 
             Ins1=INSTRING('!',MethQ:RV)
             IF Ins1 THEN MethQ:RV=SUB(MethQ:RV,1,Ins1-1).  !no !Comments
-            Upper1(MethQ:RV)
+            Upper1st(MethQ:RV)
             ALine=SUB(ALine,1,Paren2-1)
          END
          IF ALine[1]='(' OR ALine[1]=',' THEN
             ALine=LEFT(SUB(ALine,2,999))
          END 
-         Upper1(ALine)
+         Upper1st(ALine)
          MethQ:Parms = ALine
          !MethQ:ParmsTip = ALine 
          st.SetValue(lfST.GetLine(X)) 
@@ -358,7 +360,7 @@ ST_Docs  EQUATE('https://www.capesoft.com/docs/StringTheory3/StringTheory.htm')
     END    
     
 !========================================================================================
-Upper1 PROCEDURE(*STRING Str) 
+Upper1st PROCEDURE(*STRING Str) 
     CODE        
     IF Str[1]>='A' THEN       !string  
        Str[1]=UPPER(Str[1]) 
@@ -417,7 +419,7 @@ MethodInfo  STRING(128)
 
 Window WINDOW('Protype:'),AT(,,329,209),GRAY,IMM,SYSTEM,ICON(ICON:JumpPage),FONT('Segoe UI',9),RESIZE
         ENTRY(@s128),AT(19,5,164,11),USE(MethodInfo),SKIP,TRN,READONLY
-        CHECK(',&&|'),AT(191,5),USE(OnePerLine),SKIP,TIP('One Parm per Line')
+        CHECK(', |'),AT(191,5),USE(OnePerLine),SKIP,TIP('One Parmeter Per Line')
         BUTTON('&Clear'),AT(270,3,25,12),USE(?ClearBtn),SKIP
         BUTTON('Help'),AT(300,3,23,12),USE(?HelpBtn),SKIP,TIP('Open Capesoft.com<13,10>Ctrl+Click to Copy URL')
         ENTRY(@s64),AT(19,18,164,11),USE(Parm[1]),FONT('Consolas')
@@ -510,7 +512,7 @@ WinOpenRtn ROUTINE
     END
     LOOP P=1 TO PCount
         Proto[P]=LEFT(st.GetLine(P)) 
-        Upper1(Proto[P])
+        Upper1st(Proto[P])
         Proto[P]=P & '. '& Proto[P]
         (?Parm_1  +P-1){PROP:Tip}=Proto[P]
         (?Parm_1  +P-1){PROP:FontName}='Consolas'
@@ -546,10 +548,10 @@ CallTxtRtn ROUTINE
     LOOP P=1 TO PCount
         CallProc=CallProc & CHOOSE(P=1,'',', ')& CLIP(Parm[P]) 
     END
-    CallProc=CallProc & ')' 
+    CallProc=CallProc &')'& CHOOSE(~MethGrp:RV,'',' ! ,'& CLIP(MethGrp:RV)) 
     CallTxt=CallProc & '<13,10>!('& CLIP(MethGrp:Parms) &') ' & MethGrp:RV
     DISPLAY   
-CallOnePerRtn ROUTINE
+CallOnePerRtn ROUTINE   !Process OnePerLine for each "Parameter , |  !Help Text"
     DATA 
 PWidth LONG(8)
 Indent PSTRING(64)
@@ -564,10 +566,15 @@ Indent PSTRING(64)
         CallProc=CallProc & |
                  CHOOSE(P=1,'',Indent) & |
                  SUB(Parm[P],1,PWidth) & |
-                 CHOOSE(P<PCount,' , &|',' )   ') & |
+                 CHOOSE(P<PCount,' , | ',' )   ') & |
                  ' ! ' & CLIP(Proto[P]) & '<13,10>'            
     END
-    CallTxt=CallProc & '!('& CLIP(MethGrp:Parms) &') ' & MethGrp:RV
+    IF MethGrp:RV THEN
+        CallProc=CallProc & |
+                 Indent & ALL(' ',PWidth) & |
+                 '     ' & ' ! Returns: ' & CLIP(MethGrp:RV) & '<13,10>'     
+    END
+    CallTxt=CallProc & '<13,10>!('& CLIP(MethGrp:Parms) &') ' & MethGrp:RV
     DISPLAY   
 
 HelpRtn ROUTINE
