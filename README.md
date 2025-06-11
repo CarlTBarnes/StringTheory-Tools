@@ -13,9 +13,9 @@ This repository contains 4 tools to make it easier to write and verify code usin
 
 ## Write Theory
 
-StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (e.g. Replace), which can make it difficult to get the commas exactly right when you want to omit several parameters. The Help button will open CapeSoft.com help for ST and OddJob. More can easily be added. This can be used with any INC file.
+StringTheory can have up to 8 parameters (e.g. Split), and several with 6 to 7 (e.g. Replace), which can make it difficult to get the commas exactly right when you want to omit several parameters. The Help button will open CapeSoft.com documentaton web pages for ST and OddJob. More tools can easily be added. This can be used with any INC file.
  
-WriteTheory will read an INC file and help you write the call by opening a Form with each Parameter as an Entry. You can check the "&|" box to have the  code generated with one parameter per line including a ! comment with the parameter name.
+WriteTheory will read an INC file and help you write the call code by opening a Form with each Parameter as an Entry to enter the values. You can check the ", |" box to have the code generated with one parameter per line including a ! comment with the parameter type and name. See screen captures below for examples.
  
 
 ![wt1](images/writetheory1.png)
