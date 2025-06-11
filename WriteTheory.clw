@@ -4,7 +4,7 @@
 !    7=Count 7=InLine 7=Replace 7=SerializeQueue     8=Split
 !
 !Defines: StringTheoryLinkMode=>1;StringTheoryDllMode=>0;_ABCLinkMode_=>1;_ABCDllMode_=>0
-!
+!----------------------------------------------------------------------------
 ! History
 !10/26/20   Support Odd Job     
 !10/26/20   Store Class in Queue so can do multiple classes
@@ -16,7 +16,8 @@
 !04/02/21   Add Help button to List INC Window
 !06/11/25   Prototype1 Fix OnePerLine wrong had an &Amp ", &|", should be ", |"
 !06/11/25   Prototype1 Add Method Return Value Type on Call (,,,) line
-
+!06/11/25   Add Copy button on List of Procedures to get them all into Excel. Its off Window until Resize wider.
+!----------------------------------------------------------------------------
   PROGRAM  
     INCLUDE('TplEqu.CLW')
     INCLUDE('KeyCodes.CLW')
@@ -79,7 +80,7 @@ Txt    STRING(4000)
 FindName STRING(32)           
 FindInParm BYTE
 ConsolasFont BYTE
-Window WINDOW('Write Theory 1.1 - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,MAX, |
+Window WINDOW('Write Theory 1.2 - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,MAX, |
             ICON(ICON:Thumbnail),FONT('Segoe UI',10),RESIZE
         BUTTON('&Load'),AT(4,2,30,13),USE(?LoadIncBtn)
         BUTTON('...'),AT(37,2,15,13),USE(?PickIncBtn)
@@ -88,10 +89,11 @@ Window WINDOW('Write Theory 1.1 - The Comma Killer'),AT(,,400,200),CENTER,GRAY,I
         BUTTON('&Find'),AT(117,17,23,11),USE(?FindNameNext),SKIP
         BUTTON('Pre&v'),AT(142,17,23,11),USE(?FindNamePrev),SKIP
         CHECK('Find in &Prototype'),AT(172,17,,11),USE(FindInParm),SKIP,TIP('Locate in Prototype, un' & |
-                'check to for Name')
+                'check to search Procedure Name')
         BUTTON('&Sort'),AT(262,17,29,11),USE(?SortBtn),SKIP
         BUTTON('&Help'),AT(300,17,29,11),USE(?HelpMainBtn),SKIP,TIP('Open Capesoft Help')
-        CHECK('Consolas'),AT(342,17,,11),USE(ConsolasFont),SKIP,FONT('Consolas')
+        CHECK('Consolas'),AT(342,17,,11),USE(ConsolasFont),SKIP,FONT('Consolas')              
+        BUTTON('Copy'),AT(400,17,,11),USE(?CopyMethodQBtn),SKIP,TIP('Copy List of Procedures')        
         LIST,AT(3,31),FULL,USE(?List:MethodQ),VSCROLL,FROM(MethodQ),FORMAT('24R(2)|M~Line#~C(0)@n5@4' & |
                 '1L(2)|MP~Class~@s64@?70L(2)|M~Procedure~@s40@?30L(2)|M~Return~C(0)@s40@20L(2)|MP~Pr' & |
                 'ototype~@s255@')
@@ -132,6 +134,7 @@ LocateCls  CBLocateCls
                     GET(MethodQ,MethQ:ID)
                     SELECT(?List:MethodQ,POINTER(MethodQ))
         OF ?HelpMainBtn    ; DO HelpMainRtn
+        OF ?CopyMethodQBtn ; DO CopyMethodQToClipRtn
         END
         CASE FIELD() 
         OF ?List:MethodQ
@@ -358,7 +361,24 @@ ST_Docs  EQUATE('https://www.capesoft.com/docs/StringTheory3/StringTheory.htm')
     ELSE 
        ShellExecuteOpen(Url)
     END    
-    
+
+CopyMethodQToClipRtn  ROUTINE  !------------------------------------------------------
+    DATA
+Clp ANY
+TB  EQUATE('<9>')
+    CODE
+    Clp='Line#<9>Class<9>Procedure<9>Return<9>Prototype <9>File: ' & CLIP(StIncFile)
+    LOOP X=1 TO RECORDS(MethodQ)
+        GET(MethodQ,X)
+        Clp=Clp & CLIP( |
+            '<13,10>' & MethQ:LineNo     &|
+            '<9>'& CLIP(MethQ:ClassSpec) &|
+            '<9>'& CLIP(MethQ:Name     ) &|
+            '<9>'& CLIP(MethQ:RV       ) &|
+            '<9>'&      MethQ:Parms    )
+    END
+    SETCLIPBOARD(Clp)
+    Message(RECORDS(MethodQ) &' Lines copied to the Clipboard|Tab Delimited for Paste into Excel','Copy Procedure List')
 !========================================================================================
 Upper1st PROCEDURE(*STRING Str) 
     CODE        
