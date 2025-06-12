@@ -17,6 +17,9 @@
 !06/11/25   Prototype1 Fix OnePerLine wrong had an &Amp ", &|", should be ", |"
 !06/11/25   Prototype1 Add Method Return Value Type on Call (,,,) line
 !06/11/25   Add Copy button on List of Procedures to get them all into Excel. Its off Window until Resize wider.
+!06/12/25   Add Rerun and Halt buttons (off Window until Resize wider)
+!           Window Caption show INC file name loaded.
+!           Prototype1 retain OnePerLine with Static. Save & Restore last Width.
 !----------------------------------------------------------------------------
   PROGRAM  
     INCLUDE('TplEqu.CLW')
@@ -80,6 +83,7 @@ Txt    STRING(4000)
 FindName STRING(32)           
 FindInParm BYTE
 ConsolasFont BYTE
+CapPfx EQUATE('Write Theory - ')
 Window WINDOW('Write Theory 1.2 - The Comma Killer'),AT(,,400,200),CENTER,GRAY,IMM,SYSTEM,MAX, |
             ICON(ICON:Thumbnail),FONT('Segoe UI',10),RESIZE
         BUTTON('&Load'),AT(4,2,30,13),USE(?LoadIncBtn)
@@ -92,8 +96,10 @@ Window WINDOW('Write Theory 1.2 - The Comma Killer'),AT(,,400,200),CENTER,GRAY,I
                 'check to search Procedure Name')
         BUTTON('&Sort'),AT(262,17,29,11),USE(?SortBtn),SKIP
         BUTTON('&Help'),AT(300,17,29,11),USE(?HelpMainBtn),SKIP,TIP('Open Capesoft Help')
-        CHECK('Consolas'),AT(342,17,,11),USE(ConsolasFont),SKIP,FONT('Consolas')              
-        BUTTON('Copy'),AT(400,17,,11),USE(?CopyMethodQBtn),SKIP,TIP('Copy List of Procedures')        
+        CHECK('Consolas'),AT(342,17,,11),USE(ConsolasFont),SKIP,FONT('Consolas')
+        BUTTON('Copy'),AT(400,17,32,11),USE(?CopyMethodQBtn),SKIP,TIP('Copy List of Procedures')
+        BUTTON('ReRun'),AT(400,2,32,11),USE(?ReRunBtn),SKIP,TIP('Run Another Copy')
+        BUTTON('Halt'),AT(440,2,27,11),USE(?HaltBtn),SKIP,TIP('Close All Windows')
         LIST,AT(3,31),FULL,USE(?List:MethodQ),VSCROLL,FROM(MethodQ),FORMAT('24R(2)|M~Line#~C(0)@n5@4' & |
                 '1L(2)|MP~Class~@s64@?70L(2)|M~Procedure~@s40@?30L(2)|M~Return~C(0)@s40@20L(2)|MP~Pr' & |
                 'ototype~@s255@')
@@ -135,6 +141,8 @@ LocateCls  CBLocateCls
                     SELECT(?List:MethodQ,POINTER(MethodQ))
         OF ?HelpMainBtn    ; DO HelpMainRtn
         OF ?CopyMethodQBtn ; DO CopyMethodQToClipRtn
+        OF ?ReRunBtn       ; RUN(COMMAND('0'))
+        OF ?HaltBtn        ; HALT(0,'Halt Write Theory?')
         END
         CASE FIELD() 
         OF ?List:MethodQ
@@ -172,6 +180,7 @@ PmzCntList  ANY
 PmzST       StringTheory
     CODE
     FREE(MethodQ)
+    0{PROP:Text}=CapPfx & ST.FileNameOnly(StIncFile)
     lfST.LoadFile(StIncFile)
     lfST.split('<13,10>')   ! ; Bang.LinesViewInList(st) 
 !TODO Line Continuation - Loop in Reverse and if line ends with "|" add to previous    
@@ -434,8 +443,8 @@ X  LONG
 Y  LONG 
 CallProc ANY
 CallTxt STRING(2000) 
-OnePerLine  BYTE 
-MethodInfo  STRING(128) 
+OnePerLine  BYTE,STATIC
+MethodInfo  STRING(128)
 
 Window WINDOW('Protype:'),AT(,,329,209),GRAY,IMM,SYSTEM,ICON(ICON:JumpPage),FONT('Segoe UI',9),RESIZE
         ENTRY(@s128),AT(19,5,164,11),USE(MethodInfo),SKIP,TRN,READONLY
@@ -478,7 +487,7 @@ Window WINDOW('Protype:'),AT(,,329,209),GRAY,IMM,SYSTEM,ICON(ICON:JumpPage),FONT
     END
 Bang BigBangTheory
 ST   StringTheory
-Pz LONG,DIM(3),STATIC
+Pz LONG,DIM(3),STATIC   !Stack Position of new window under Caller (G:) or Last, set to same width
     CODE
     MethodGrp = pMethodQ_Record 
     ProcName  = CLIP(MethGrp:Name) 
@@ -486,11 +495,12 @@ Pz LONG,DIM(3),STATIC
     SaveQ:MethQId =MethodQId
     GET(SaveQ,SaveQ:MethQId)
     IF ~ERRORCODE() THEN ParmGrp=SaveQ:Parms.
-    IF ~Pz[3] THEN 
-        Pz[1]=G:Pz[1]+20 ; Pz[2]=G:Pz[2]+40 ;  Pz[3]=1
-    END 
     OPEN(Window)
-    IF Pz[3] THEN SETPOSITION(0,Pz[1],Pz[2]).
+    0{PROP:MinWidth}=0{PROP:Width} ; 0{PROP:MinHeight}=0{PROP:Height}
+    IF ~Pz[3] THEN 
+        Pz[1]=G:Pz[1]+20 ; Pz[2]=G:Pz[2]+40 ;  Pz[3]=0{PROP:Width}
+    END 
+    SETPOSITION(0,Pz[1],Pz[2],Pz[3])
     0{PROP:Text}=ProcName & ' - Returns: ' & CLIP(MethGrp:RV) & |
                  ' - Class: ' & MethGrp:ClassSpec 
     MethodInfo='.' & ProcName &'() in ' & MethGrp:ClassSpec
@@ -498,7 +508,7 @@ Pz LONG,DIM(3),STATIC
     DO WinOpenRtn
     ACCEPT
         CASE EVENT()
-        OF EVENT:Moved ; GETPOSITION(0,Pz[1],Pz[2],Pz[3]) ; Pz[1] += 10 ; Pz[2] += 20
+        OF EVENT:Moved OROF EVENT:Sized ; GETPOSITION(0,Pz[1],Pz[2],Pz[3]) ; Pz[1] += 10 ; Pz[2] += 20
         END 
         CASE ACCEPTED()
         OF ?CopyBtn    ; SETCLIPBOARD(CallProc)
@@ -551,9 +561,6 @@ WinOpenRtn ROUTINE
             0{PROP:Height} = ?CallTxt{PROP:YPos} + ?CallTxt{PROP:Height} + 8
          END
     END
-    0{PROP:MinWidth}=0{PROP:Width}
-   ! 0{PROP:MaxWidth}=0{PROP:Width} 
-    0{PROP:MinHeight}=0{PROP:Height}
     ?CallTxt{PROP:NoWidth}=1
     ?CallTxt{PROP:NoHeight}=1
     ?CallTxt{PROP:Full}=1
