@@ -496,7 +496,7 @@ Pz LONG,DIM(3),STATIC   !Stack Position of new window under Caller (G:) or Last,
     GET(SaveQ,SaveQ:MethQId)
     IF ~ERRORCODE() THEN ParmGrp=SaveQ:Parms.
     OPEN(Window)
-    0{PROP:MinWidth}=0{PROP:Width} ; 0{PROP:MinHeight}=0{PROP:Height}
+    0{PROP:MinWidth}=0{PROP:Width}  !Set in WinOpenRtn--> 0{PROP:MinHeight}=
     IF ~Pz[3] THEN 
         Pz[1]=G:Pz[1]+20 ; Pz[2]=G:Pz[2]+40 ;  Pz[3]=0{PROP:Width}
     END 
@@ -561,6 +561,7 @@ WinOpenRtn ROUTINE
             0{PROP:Height} = ?CallTxt{PROP:YPos} + ?CallTxt{PROP:Height} + 8
          END
     END
+    0{PROP:MinHeight}=0{PROP:Height}    !Height was adjusted for number of parameters that each get an ENTRY
     ?CallTxt{PROP:NoWidth}=1
     ?CallTxt{PROP:NoHeight}=1
     ?CallTxt{PROP:Full}=1
