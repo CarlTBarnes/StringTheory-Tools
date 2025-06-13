@@ -20,6 +20,7 @@
 !06/12/25   Add Rerun and Halt buttons (off Window until Resize wider)
 !           Window Caption show INC file name loaded.
 !           Prototype1 retain OnePerLine with Static. Save & Restore last Width.
+!06/13/25   Resize Call Text Height when check OnePerLine to See All 
 !----------------------------------------------------------------------------
   PROGRAM  
     INCLUDE('TplEqu.CLW')
@@ -444,11 +445,12 @@ Y  LONG
 CallProc ANY
 CallTxt STRING(2000) 
 OnePerLine  BYTE,STATIC
+WasntOnePer BYTE
 MethodInfo  STRING(128)
 
 Window WINDOW('Protype:'),AT(,,329,209),GRAY,IMM,SYSTEM,ICON(ICON:JumpPage),FONT('Segoe UI',9),RESIZE
         ENTRY(@s128),AT(19,5,164,11),USE(MethodInfo),SKIP,TRN,READONLY
-        CHECK(', |'),AT(191,5),USE(OnePerLine),SKIP,TIP('One Parmeter Per Line')
+        CHECK(', |'),AT(193,5),USE(OnePerLine),SKIP,TIP('One Parmeter Per Line')
         BUTTON('&Clear'),AT(270,3,25,12),USE(?ClearBtn),SKIP
         BUTTON('Help'),AT(300,3,23,12),USE(?HelpBtn),SKIP,TIP('Open Capesoft.com<13,10>Ctrl+Click to Copy URL')
         ENTRY(@s64),AT(19,18,164,11),USE(Parm[1]),FONT('Consolas')
@@ -519,6 +521,7 @@ Pz LONG,DIM(3),STATIC   !Stack Position of new window under Caller (G:) or Last,
         OF ?ClearBtn   ; CLEAR(Parm[]) ; DO CallTxtRtn
         OF ?OnePerLine ; ?CallTxt{PROP:HScroll}=OnePerLine 
                          DO CallTxtRtn
+                         IF OnePerLine AND WasntOnePer THEN DO ReSizeCallTxtRtn ; WasntOnePer=0.
         END
     END
     GETPOSITION(0,Pz[1],Pz[2],Pz[3])
@@ -565,8 +568,24 @@ WinOpenRtn ROUTINE
     ?CallTxt{PROP:NoWidth}=1
     ?CallTxt{PROP:NoHeight}=1
     ?CallTxt{PROP:Full}=1
+    ?CallTxt{PROP:HScroll}=OnePerLine ; WasntOnePer=CHOOSE(~OnePerLine)
     DO CallTxtRtn
-    
+    DO ReSizeCallTxtRtn
+
+ReSizeCallTxtRtn ROUTINE   !When OnePerLine the Call TEXT Height needs to be taller to See All  often
+    DATA
+TextHt   LONG
+LineHt   LONG
+LineCnt  LONG 
+SeeAllHt LONG
+    CODE
+    TextHt   = ?CallTxt{Prop:Height}
+    LineHt   = ?CallTxt{Prop:LineHeight}
+    LineCnt  = ?CallTxt{Prop:LineCount}
+    SeeAllHt = (LineCnt+1) * (LineHt+1)
+    IF SeeAllHt <= TextHt THEN EXIT.
+    0{Prop:Height} = 0{Prop:Height} + (SeeAllHt-TextHt)
+
 CallTxtRtn ROUTINE
     IF OnePerLine THEN 
        DO CallOnePerRtn
